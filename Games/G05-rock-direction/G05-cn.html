@@ -1,0 +1,1834 @@
+<!doctype html>
+<html lang="zh-Hant" data-ldl-tool-id="G05-rock-direction" data-ldl-fingerprint="ldl-yfc-g05-rock-direction-v1">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Yung Fu Chuen">
+  <meta name="company" content="Yung Fu Chuen">
+  <meta name="ldl-subject" content="math">
+  <meta name="ldl-category" content="Games">
+  <meta name="ldl-access-level" content="free">
+  <meta name="ldl-tool-id" content="G05-rock-direction">
+  <meta name="ldl-chinese-name" content="滾石方向大冒險">
+  <title>滾石方向大冒險</title>
+  <style>
+    :root {
+      --bg: #f0fdf4;
+      --ink: #0f172a;
+      --muted: #64748b;
+      --line: #bbf7d0;
+      --emerald: #059669;
+      --emerald-dark: #065f46;
+      --blue: #2563eb;
+      --orange: #f97316;
+      --rose: #e11d48;
+      --slate: #1e293b;
+      --ldl-top-control-top: max(14px, env(safe-area-inset-top));
+      --ldl-top-control-left: max(14px, env(safe-area-inset-left));
+      --ldl-top-control-right: max(14px, env(safe-area-inset-right));
+      --ldl-watermark-line: max(61px, calc(env(safe-area-inset-top) + 47px));
+      --ldl-page-content-start: var(--ldl-watermark-line);
+      font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(187, 247, 208, 0.9), transparent 30rem),
+        radial-gradient(circle at 86% 18%, rgba(186, 230, 253, 0.85), transparent 28rem),
+        var(--bg);
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.5;
+      letter-spacing: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body {
+      padding: var(--ldl-page-content-start) 16px 20px;
+    }
+
+    button {
+      font: inherit;
+      letter-spacing: 0;
+      touch-action: manipulation;
+    }
+
+    html:fullscreen,
+    html:fullscreen body {
+      width: 100%;
+      min-height: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    #tool-home-link {
+      position: fixed;
+      z-index: 2147483647;
+      top: var(--ldl-top-control-top);
+      left: var(--ldl-top-control-left);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: auto;
+      min-width: 0;
+      min-height: 38px;
+      padding: 0 14px;
+      border: 1px solid rgba(255, 255, 255, 0.82);
+      border-radius: 8px;
+      color: #fff;
+      background: linear-gradient(135deg, #0f766e, #134e4a);
+      box-shadow: 0 12px 24px rgba(14, 31, 58, 0.24), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.1;
+      text-decoration: none;
+      white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 160ms ease, box-shadow 160ms ease;
+    }
+
+    #tool-home-link:hover,
+    .top-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 28px rgba(14, 31, 58, 0.28), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+    }
+
+    #tool-home-link:focus-visible,
+    .top-button:focus-visible {
+      outline: 4px solid rgba(20, 184, 166, 0.38);
+      outline-offset: 3px;
+    }
+
+    #tool-home-link:active,
+    .top-button:active {
+      transform: scale(0.97);
+    }
+
+    .ldl-fullscreen-controls {
+      position: fixed;
+      z-index: 2147483647;
+      top: var(--ldl-top-control-top);
+      right: var(--ldl-top-control-right);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      pointer-events: auto;
+    }
+
+    .top-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: auto;
+      min-width: 0;
+      min-height: 38px;
+      padding: 0 12px;
+      border: 1px solid rgba(255, 255, 255, 0.82);
+      border-radius: 8px;
+      color: #fff;
+      box-shadow: 0 12px 24px rgba(14, 31, 58, 0.24), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.1;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .exit-fullscreen {
+      background: linear-gradient(135deg, #3730a3, #1e3a8a);
+    }
+
+    .enter-fullscreen {
+      background: linear-gradient(135deg, #2563eb, #075985);
+    }
+
+    #ldl-visible-watermark {
+      position: fixed;
+      z-index: 2147483646;
+      left: max(10px, env(safe-area-inset-left));
+      top: var(--ldl-watermark-line);
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 5px;
+      max-width: min(190px, calc(100vw - 20px));
+      padding: 0;
+      border: 0;
+      color: rgba(23, 32, 51, 0.56);
+      background: transparent;
+      box-shadow: none;
+      font-size: 8px;
+      font-weight: 600;
+      line-height: 1.25;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    #ldl-visible-watermark img {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+      object-fit: contain;
+      opacity: 0.76;
+    }
+
+    .ldl-offscreen-source-reference {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      margin: -1px !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      clip: rect(0 0 0 0) !important;
+      clip-path: inset(50%) !important;
+      border: 0 !important;
+      white-space: nowrap !important;
+    }
+
+    .game-shell {
+      width: min(100%, 1040px);
+      min-height: calc(100vh - var(--ldl-page-content-start) - 24px);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .game-header {
+      min-height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 18px;
+      border: 4px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 16px 36px rgba(15, 23, 42, 0.08);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 3px solid var(--slate);
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #f8fafc, #94a3b8 58%, #475569);
+      box-shadow: inset -5px -6px 0 rgba(15, 23, 42, 0.18);
+      flex: 0 0 auto;
+    }
+
+    .brand-mark::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #334155;
+      box-shadow: 14px 2px 0 #334155, 7px 14px 0 -1px #334155;
+    }
+
+    .brand-title {
+      min-width: 0;
+    }
+
+    .brand-title h1 {
+      margin: 0;
+      color: #047857;
+      font-size: clamp(1.25rem, 3vw, 2rem);
+      font-weight: 950;
+      line-height: 1.1;
+    }
+
+    .brand-title p {
+      margin: 3px 0 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 800;
+    }
+
+    .quit-button {
+      display: none;
+      border: 0;
+      background: transparent;
+      color: #64748b;
+      font-weight: 900;
+      text-decoration: underline;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .quit-button.is-visible {
+      display: inline-flex;
+    }
+
+    .game-main {
+      position: relative;
+      flex: 1 1 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-height: 0;
+      border-radius: 8px;
+    }
+
+    .hud {
+      display: none;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hud.is-visible {
+      display: grid;
+    }
+
+    .tip,
+    .best-record,
+    .progress-card {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      border-radius: 8px;
+      font-weight: 900;
+    }
+
+    .tip {
+      justify-self: start;
+      color: #64748b;
+      font-size: 0.98rem;
+    }
+
+    .tip.hot {
+      padding: 8px 12px;
+      border: 2px solid #fb7185;
+      color: var(--rose);
+      background: #ffe4e6;
+      animation: bounceSmall 900ms ease-in-out infinite;
+    }
+
+    .best-record {
+      justify-self: center;
+      padding: 8px 12px;
+      border: 1px solid #fcd34d;
+      color: #92400e;
+      background: #fffbeb;
+      font-size: 0.92rem;
+    }
+
+    .progress-card {
+      justify-self: end;
+      gap: 9px;
+      padding: 6px 12px;
+      border: 2px solid #e2e8f0;
+      background: #fff;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+    }
+
+    .progress-icon {
+      width: 26px;
+      height: 26px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: #fff;
+      background: var(--emerald);
+      font-weight: 950;
+    }
+
+    .progress-label {
+      display: block;
+      color: #94a3b8;
+      font-size: 0.78rem;
+      font-weight: 900;
+      line-height: 1;
+      text-align: right;
+    }
+
+    .progress-value {
+      display: block;
+      color: #334155;
+      font-size: 1rem;
+      font-weight: 950;
+      text-align: right;
+    }
+
+    .question-panel {
+      display: none;
+      justify-content: center;
+    }
+
+    .question-panel.is-visible {
+      display: flex;
+    }
+
+    .question-card {
+      width: min(100%, 460px);
+      min-height: 96px;
+      display: grid;
+      place-items: center;
+      padding: 10px 28px;
+      border: 4px solid #065f46;
+      border-bottom-width: 9px;
+      border-radius: 8px;
+      color: #fff;
+      background: linear-gradient(180deg, #059669, #047857);
+      box-shadow: 0 18px 32px rgba(6, 95, 70, 0.22);
+    }
+
+    .question-card h2 {
+      margin: 0;
+      color: #fff;
+      font-size: clamp(3.3rem, 9vw, 5.6rem);
+      font-weight: 950;
+      line-height: 0.95;
+      text-shadow: 0 4px 0 rgba(0, 0, 0, 0.22);
+    }
+
+    .stage-card {
+      position: relative;
+      flex: 1 1 auto;
+      min-height: 360px;
+      max-height: 540px;
+      overflow: hidden;
+      border: 4px solid var(--line);
+      border-radius: 8px;
+      background: #0f172a;
+      box-shadow: 0 16px 36px rgba(15, 23, 42, 0.16);
+    }
+
+    #gameCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .feedback-bubble {
+      position: absolute;
+      z-index: 8;
+      top: 12px;
+      right: 12px;
+      max-width: min(410px, calc(100% - 24px));
+      padding: 9px 14px;
+      border: 2px solid var(--slate);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--slate);
+      box-shadow: 0 10px 18px rgba(15, 23, 42, 0.16);
+      font-weight: 950;
+      text-align: center;
+      pointer-events: none;
+      animation: fadeIn 180ms ease-out;
+    }
+
+    .feedback-bubble.correct {
+      background: #10b981;
+      color: #fff;
+    }
+
+    .feedback-bubble.incorrect {
+      background: #e11d48;
+      color: #fff;
+    }
+
+    .speed-badge {
+      position: absolute;
+      z-index: 7;
+      top: 12px;
+      left: 12px;
+      display: none;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 11px;
+      border: 2px solid var(--slate);
+      border-radius: 999px;
+      background: #ef4444;
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 950;
+      box-shadow: 0 8px 0 #1e293b;
+      animation: pulseSoft 1.2s ease-in-out infinite;
+    }
+
+    .speed-badge.is-visible {
+      display: inline-flex;
+    }
+
+    .controls {
+      display: none;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      padding: 16px;
+      border-top: 4px solid #e2e8f0;
+      border-radius: 8px;
+      background: #f1f5f9;
+      box-shadow: inset 0 6px 14px rgba(15, 23, 42, 0.06);
+    }
+
+    .controls.is-visible {
+      display: grid;
+    }
+
+    .choice-button {
+      min-height: 92px;
+      border: 4px solid;
+      border-radius: 8px;
+      background: #fff;
+      font-size: clamp(2.7rem, 7vw, 4.1rem);
+      font-weight: 950;
+      line-height: 1;
+      cursor: pointer;
+      transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease, opacity 120ms ease;
+    }
+
+    .choice-button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .choice-button:not(:disabled):hover {
+      transform: translateY(-2px);
+    }
+
+    .choice-button:not(:disabled):active {
+      transform: translateY(6px);
+      box-shadow: none;
+    }
+
+    .choice-a {
+      border-color: #10b981;
+      color: #059669;
+      box-shadow: 0 8px 0 #10b981;
+    }
+
+    .choice-a:not(:disabled):hover {
+      background: #ecfdf5;
+    }
+
+    .choice-b {
+      border-color: #3b82f6;
+      color: #2563eb;
+      box-shadow: 0 8px 0 #3b82f6;
+    }
+
+    .choice-b:not(:disabled):hover {
+      background: #eff6ff;
+    }
+
+    .choice-c {
+      border-color: #f97316;
+      color: #ea580c;
+      box-shadow: 0 8px 0 #f97316;
+    }
+
+    .choice-c:not(:disabled):hover {
+      background: #fff7ed;
+    }
+
+    .overlay {
+      position: absolute;
+      z-index: 20;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      border-radius: 8px;
+      background: rgba(6, 78, 59, 0.82);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .overlay.is-visible {
+      display: flex;
+    }
+
+    .dialog {
+      width: min(100%, 560px);
+      padding: clamp(24px, 5vw, 44px);
+      border: 4px solid #10b981;
+      border-radius: 8px;
+      background: #fff;
+      box-shadow: 0 26px 60px rgba(15, 23, 42, 0.32);
+      text-align: center;
+    }
+
+    .dialog h2 {
+      margin: 0 0 12px;
+      color: #059669;
+      font-size: clamp(2rem, 8vw, 4rem);
+      font-weight: 950;
+      line-height: 1.08;
+    }
+
+    .dialog p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      font-weight: 850;
+    }
+
+    #gameOverOverlay .dialog {
+      width: min(100%, 760px);
+      max-height: calc(100% - 24px);
+      overflow-y: auto;
+      padding: clamp(20px, 4vw, 36px) clamp(24px, 5vw, 48px);
+    }
+
+    #gameOverOverlay .dialog h2 {
+      font-size: clamp(2rem, 4.8vw, 3.35rem);
+      line-height: 1.05;
+    }
+
+    .primary-button,
+    .secondary-button {
+      min-height: 58px;
+      border: 4px solid var(--slate);
+      border-radius: 8px;
+      font-weight: 950;
+      cursor: pointer;
+      transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+    }
+
+    .primary-button {
+      min-width: 230px;
+      margin-top: 28px;
+      padding: 12px 28px;
+      color: #fff;
+      background: #f97316;
+      box-shadow: 0 10px 0 #c2410c;
+      font-size: clamp(1.45rem, 5vw, 2.25rem);
+    }
+
+    .primary-button:hover {
+      background: #fb923c;
+    }
+
+    .primary-button:active,
+    .secondary-button:active {
+      transform: translateY(6px);
+      box-shadow: none;
+    }
+
+    .result-icon {
+      width: 76px;
+      height: 76px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 10px;
+      border: 4px solid #fbbf24;
+      border-radius: 50%;
+      color: #92400e;
+      background: #fef3c7;
+      font-size: 2.6rem;
+      font-weight: 950;
+      animation: bounceSlow 2s ease-in-out infinite;
+    }
+
+    #gameOverOverlay .result-icon {
+      width: 64px;
+      height: 64px;
+      font-size: 2.2rem;
+    }
+
+    .score-panel {
+      margin-top: 18px;
+      padding: 16px;
+      border: 3px solid #10b981;
+      border-radius: 8px;
+      background: rgba(236, 253, 245, 0.74);
+    }
+
+    .score-panel h3 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin: 0 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #bbf7d0;
+      color: #065f46;
+      font-size: 1.18rem;
+      font-weight: 950;
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      text-align: left;
+    }
+
+    #gameOverOverlay .score-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .score-box {
+      padding: 12px;
+      border: 2px solid #d1fae5;
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    #gameOverOverlay .score-box {
+      padding: 10px;
+    }
+
+    .score-box span {
+      display: block;
+      color: #94a3b8;
+      font-size: 0.86rem;
+      font-weight: 950;
+    }
+
+    .score-box strong {
+      display: block;
+      margin-top: 2px;
+      font-size: 1.5rem;
+      font-weight: 950;
+    }
+
+    #gameOverOverlay .score-box strong {
+      font-size: clamp(1.15rem, 2vw, 1.45rem);
+      white-space: nowrap;
+    }
+
+    .rank {
+      margin-top: 14px;
+      padding: 10px 12px;
+      border: 2px solid #fcd34d;
+      border-radius: 8px;
+      background: #fef3c7;
+      color: #92400e;
+      font-weight: 950;
+    }
+
+    .result-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .result-actions .primary-button {
+      flex: 1 1 auto;
+      min-width: 0;
+      margin-top: 0;
+      background: #10b981;
+      box-shadow: 0 8px 0 #1e293b;
+      font-size: 1.25rem;
+    }
+
+    .secondary-button {
+      flex: 0 0 auto;
+      padding: 10px 20px;
+      color: #334155;
+      background: #f1f5f9;
+      font-size: 1.12rem;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes bounceSlow {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
+    @keyframes bounceSmall {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-4px);
+      }
+    }
+
+    @keyframes pulseSoft {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.04);
+        opacity: 0.92;
+      }
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .game-header {
+        align-items: flex-start;
+        padding: 10px;
+      }
+
+      .brand-title p {
+        display: none;
+      }
+
+      .hud {
+        grid-template-columns: 1fr;
+      }
+
+      .tip,
+      .best-record,
+      .progress-card {
+        justify-self: stretch;
+      }
+
+      .progress-card {
+        justify-content: space-between;
+      }
+
+      .question-card {
+        min-height: 82px;
+        padding: 8px 20px;
+      }
+
+      .question-card h2 {
+        font-size: clamp(3rem, 15vw, 4.6rem);
+      }
+
+      .stage-card {
+        min-height: 330px;
+      }
+
+      .controls {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 12px;
+      }
+
+      .choice-button {
+        min-height: 78px;
+      }
+
+      .result-actions {
+        flex-direction: column;
+      }
+
+      #gameOverOverlay .dialog {
+        width: min(100%, 560px);
+      }
+
+      #gameOverOverlay .score-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .secondary-button {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 560px) {
+      :root {
+        --ldl-top-control-left: max(8px, env(safe-area-inset-left));
+        --ldl-top-control-right: max(8px, env(safe-area-inset-right));
+        --ldl-watermark-line: max(57px, calc(env(safe-area-inset-top) + 43px));
+        --ldl-page-content-start: var(--ldl-watermark-line);
+      }
+
+      #tool-home-link {
+        width: auto;
+        min-width: 0;
+        min-height: 34px;
+        padding: 0 10px;
+        font-size: 13px;
+      }
+
+      .ldl-fullscreen-controls {
+        gap: 6px;
+      }
+
+      .top-button {
+        width: auto;
+        min-width: 0;
+        min-height: 34px;
+        padding: 0 9px;
+        font-size: 13px;
+      }
+
+      #ldl-visible-watermark {
+        left: max(8px, env(safe-area-inset-left));
+        font-size: 7px;
+      }
+
+      #ldl-visible-watermark img {
+        width: 14px;
+        height: 14px;
+      }
+
+      .brand-mark {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body data-tool-home-nav-root data-ldl-reserve-top-space="true" data-ldl-tool-id="G05-rock-direction" data-ldl-subject="math" data-ldl-category="Games" data-ldl-access-level="free" data-ldl-chinese-name="滾石方向大冒險">
+  <div class="game-shell">
+    <header class="game-header">
+      <div class="brand" aria-label="滾石方向大冒險">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div class="brand-title">
+          <h1>滾石方向大冒險</h1>
+          <p>辨認「左、右、上、下、中間」，幫小滾石選對路線。</p>
+        </div>
+      </div>
+      <button id="quitButton" class="quit-button" type="button">結束遊戲</button>
+    </header>
+
+    <main class="game-main" aria-live="polite">
+      <section id="hud" class="hud" aria-label="遊戲狀態">
+        <div id="streakTip" class="tip">小提示：看清楚上方方向大字囉</div>
+        <div id="bestRecord" class="best-record" hidden>個人最佳紀錄：0 連擊</div>
+        <div class="progress-card">
+          <span class="progress-icon" aria-hidden="true">?</span>
+          <span>
+            <span class="progress-label">累積進度</span>
+            <span id="progressValue" class="progress-value">0 / 0 題</span>
+          </span>
+        </div>
+      </section>
+
+      <section id="questionPanel" class="question-panel" aria-label="方向題目">
+        <div class="question-card">
+          <h2 id="questionText">中間</h2>
+        </div>
+      </section>
+
+      <section class="stage-card" aria-label="滾石方向遊戲場景">
+        <canvas id="gameCanvas" width="800" height="450"></canvas>
+        <div id="feedbackBubble" class="feedback-bubble">幫助小滾石選擇一條路前進吧！</div>
+        <div id="speedBadge" class="speed-badge">滾石快速奔跑中！</div>
+      </section>
+
+      <section id="controls" class="controls" aria-label="答案選擇">
+        <button id="btn-choice-a" class="choice-button choice-a" type="button" data-choice="A" aria-label="選擇 A">A</button>
+        <button id="btn-choice-b" class="choice-button choice-b" type="button" data-choice="B" aria-label="選擇 B">B</button>
+        <button id="btn-choice-c" class="choice-button choice-c" type="button" data-choice="C" aria-label="選擇 C">C</button>
+      </section>
+
+      <section id="startOverlay" class="overlay is-visible" aria-label="開始畫面">
+        <div class="dialog">
+          <h2>滾石方向大冒險</h2>
+          <p>看清楚方向文字，再按 A、B、C 幫小滾石走到正確的路。</p>
+          <button id="startButton" class="primary-button" type="button">開始遊戲</button>
+        </div>
+      </section>
+
+      <section id="gameOverOverlay" class="overlay" aria-label="遊戲結束畫面">
+        <div class="dialog">
+          <div class="result-icon" aria-hidden="true">★</div>
+          <h2>冒險任務順利結束！</h2>
+          <p>小滾石收到了你的正確引導。你的方向感真棒！</p>
+
+          <div class="score-panel">
+            <h3>成果榮譽榜</h3>
+            <div class="score-grid">
+              <div class="score-box">
+                <span>獲得總積分</span>
+                <strong id="resultScore">0 分</strong>
+              </div>
+              <div class="score-box">
+                <span>答題正確率</span>
+                <strong id="resultAccuracy">0%</strong>
+              </div>
+              <div class="score-box">
+                <span>過關題數</span>
+                <strong id="resultCorrect">0 / 0 題</strong>
+              </div>
+              <div class="score-box">
+                <span>最高連續答對</span>
+                <strong id="resultHighStreak">0 連擊</strong>
+              </div>
+            </div>
+            <div id="rankText" class="rank">榮獲探險稱號：勇敢探險小新手</div>
+          </div>
+
+          <div class="result-actions">
+            <button id="restartButton" class="primary-button" type="button">再玩一次</button>
+            <button id="homeButton" class="secondary-button" type="button">回主頁</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const canvas = document.getElementById("gameCanvas");
+      const ctx = canvas.getContext("2d");
+
+      const elements = {
+        quitButton: document.getElementById("quitButton"),
+        startButton: document.getElementById("startButton"),
+        restartButton: document.getElementById("restartButton"),
+        homeButton: document.getElementById("homeButton"),
+        startOverlay: document.getElementById("startOverlay"),
+        gameOverOverlay: document.getElementById("gameOverOverlay"),
+        hud: document.getElementById("hud"),
+        questionPanel: document.getElementById("questionPanel"),
+        questionText: document.getElementById("questionText"),
+        feedbackBubble: document.getElementById("feedbackBubble"),
+        speedBadge: document.getElementById("speedBadge"),
+        controls: document.getElementById("controls"),
+        streakTip: document.getElementById("streakTip"),
+        bestRecord: document.getElementById("bestRecord"),
+        progressValue: document.getElementById("progressValue"),
+        resultScore: document.getElementById("resultScore"),
+        resultAccuracy: document.getElementById("resultAccuracy"),
+        resultCorrect: document.getElementById("resultCorrect"),
+        resultHighStreak: document.getElementById("resultHighStreak"),
+        rankText: document.getElementById("rankText"),
+      };
+
+      const choiceButtons = Array.from(document.querySelectorAll(".choice-button"));
+      const praiseMessages = ["太棒了！", "答對了！你真聰明！", "好厲害的方向感！", "前進！一級棒！", "方向辨認大師！"];
+
+      const state = {
+        status: "start",
+        currentQuestion: null,
+        previousQuestion: null,
+        score: 0,
+        streak: 0,
+        correctCount: 0,
+        totalCount: 0,
+        highStreak: 0,
+        feedbackType: "neutral",
+        feedbackMessage: "幫助小滾石選擇一條路前進吧！",
+        isAnimating: false,
+        particles: [],
+        bgOffset: 0,
+        cloud1X: 100,
+        cloud2X: 500,
+        showCorrectPathGlow: null,
+        activeSelectedPath: null,
+        stonePos: { x: 400, y: 360, scale: 1 },
+        stoneTargetPos: { x: 400, y: 360 },
+        stoneAngle: 0,
+        stoneExpression: "happy",
+        stoneIsBouncing: false,
+        stoneBounceY: 0,
+        targetScale: 1,
+        timers: []
+      };
+
+      function schedule(callback, delay) {
+        const id = window.setTimeout(callback, delay);
+        state.timers.push(id);
+        return id;
+      }
+
+      function clearTimers() {
+        state.timers.forEach(id => window.clearTimeout(id));
+        state.timers = [];
+      }
+
+      function generateNextQuestion(previousQuestion) {
+        const category = Math.random() > 0.5 ? "HORIZONTAL" : "VERTICAL";
+        const validTexts = category === "HORIZONTAL" ? ["左", "中間", "右"] : ["上", "中間", "下"];
+
+        let selected = validTexts[Math.floor(Math.random() * validTexts.length)];
+        if (previousQuestion && previousQuestion.directionText === selected && validTexts.length > 1) {
+          const others = validTexts.filter(item => item !== selected);
+          selected = others[Math.floor(Math.random() * others.length)];
+        }
+
+        let correctChoice = "B";
+        if (category === "HORIZONTAL") {
+          if (selected === "左") correctChoice = "A";
+          if (selected === "中間") correctChoice = "B";
+          if (selected === "右") correctChoice = "C";
+        } else {
+          if (selected === "上") correctChoice = "A";
+          if (selected === "中間") correctChoice = "B";
+          if (selected === "下") correctChoice = "C";
+        }
+
+        return { category, directionText: selected, correctChoice };
+      }
+
+      function playSound(type) {
+        try {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContext) return;
+          const audio = new AudioContext();
+          const now = audio.currentTime;
+
+          if (type === "correct") {
+            const osc1 = audio.createOscillator();
+            const osc2 = audio.createOscillator();
+            const gain = audio.createGain();
+            osc1.type = "sine";
+            osc2.type = "triangle";
+            osc1.frequency.setValueAtTime(523.25, now);
+            osc1.frequency.exponentialRampToValueAtTime(1046.5, now + 0.12);
+            osc2.frequency.setValueAtTime(659.25, now);
+            osc2.frequency.exponentialRampToValueAtTime(1318.51, now + 0.12);
+            gain.gain.setValueAtTime(0.12, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+            osc1.connect(gain);
+            osc2.connect(gain);
+            gain.connect(audio.destination);
+            osc1.start(now);
+            osc2.start(now);
+            osc1.stop(now + 0.35);
+            osc2.stop(now + 0.35);
+            schedule(() => audio.close(), 430);
+            return;
+          }
+
+          if (type === "incorrect") {
+            const osc = audio.createOscillator();
+            const gain = audio.createGain();
+            osc.type = "sawtooth";
+            osc.frequency.setValueAtTime(220, now);
+            osc.frequency.linearRampToValueAtTime(90, now + 0.25);
+            gain.gain.setValueAtTime(0.15, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+            osc.connect(gain);
+            gain.connect(audio.destination);
+            osc.start(now);
+            osc.stop(now + 0.35);
+            schedule(() => audio.close(), 430);
+            return;
+          }
+
+          if (type === "gameover" || type === "start") {
+            const notes = type === "gameover"
+              ? [261.63, 311.13, 392, 523.25, 659.25]
+              : [392, 440, 523.25, 659.25, 783.99];
+            notes.forEach((freq, index) => {
+              const osc = audio.createOscillator();
+              const gain = audio.createGain();
+              osc.frequency.value = freq;
+              osc.type = type === "gameover" ? "triangle" : "sine";
+              gain.gain.setValueAtTime(0, now);
+              gain.gain.linearRampToValueAtTime(0.08, now + index * 0.06);
+              gain.gain.exponentialRampToValueAtTime(0.01, now + index * 0.06 + 0.24);
+              osc.connect(gain);
+              gain.connect(audio.destination);
+              osc.start(now + index * 0.06);
+              osc.stop(now + index * 0.06 + 0.28);
+            });
+            schedule(() => audio.close(), 700);
+            return;
+          }
+
+          const osc = audio.createOscillator();
+          const gain = audio.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(350, now);
+          osc.frequency.exponentialRampToValueAtTime(180, now + 0.06);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+          osc.connect(gain);
+          gain.connect(audio.destination);
+          osc.start(now);
+          osc.stop(now + 0.08);
+          schedule(() => audio.close(), 160);
+        } catch (error) {}
+      }
+
+      function resetStone() {
+        state.stonePos = { x: 400, y: 360, scale: 1 };
+        state.stoneTargetPos = { x: 400, y: 360 };
+        state.stoneExpression = "happy";
+        state.stoneIsBouncing = false;
+        state.stoneBounceY = 0;
+        state.targetScale = 1;
+        state.showCorrectPathGlow = null;
+        state.activeSelectedPath = null;
+        state.isAnimating = false;
+        setChoiceDisabled(false);
+      }
+
+      function startGame() {
+        clearTimers();
+        playSound("start");
+        state.status = "playing";
+        state.score = 0;
+        state.streak = 0;
+        state.correctCount = 0;
+        state.totalCount = 0;
+        state.highStreak = 0;
+        state.feedbackType = "neutral";
+        state.feedbackMessage = "看清楚方向，幫小滾石走到正確的路！";
+        state.previousQuestion = null;
+        state.currentQuestion = generateNextQuestion();
+        resetStone();
+        renderUi();
+      }
+
+      function stopGame() {
+        if (state.status !== "playing") return;
+        clearTimers();
+        playSound("gameover");
+        state.status = "gameover";
+        state.isAnimating = false;
+        setChoiceDisabled(false);
+        renderUi();
+      }
+
+      function goHomeScreen() {
+        clearTimers();
+        playSound("click");
+        state.status = "start";
+        state.feedbackType = "neutral";
+        state.feedbackMessage = "幫助小滾石選擇一條路前進吧！";
+        state.currentQuestion = null;
+        state.previousQuestion = null;
+        resetStone();
+        renderUi();
+      }
+
+      function setChoiceDisabled(disabled) {
+        choiceButtons.forEach(button => {
+          button.disabled = disabled;
+        });
+      }
+
+      function nextQuestion() {
+        state.previousQuestion = state.currentQuestion;
+        state.currentQuestion = generateNextQuestion(state.previousQuestion);
+        resetStone();
+        renderUi();
+      }
+
+      function handleAnswer(choice) {
+        if (state.status !== "playing" || state.isAnimating || !state.currentQuestion) return;
+
+        state.isAnimating = true;
+        setChoiceDisabled(true);
+        playSound("click");
+        state.totalCount += 1;
+        state.activeSelectedPath = choice;
+
+        const isCorrect = choice === state.currentQuestion.correctChoice;
+        const target = getStoneTarget(state.currentQuestion.category, choice);
+        state.stoneTargetPos = { x: target.x, y: target.y };
+        state.targetScale = target.scale;
+
+        if (isCorrect) {
+          state.stoneExpression = "happy";
+          state.score += 10;
+          state.correctCount += 1;
+          state.streak += 1;
+          state.highStreak = Math.max(state.highStreak, state.streak);
+          state.feedbackType = "correct";
+          state.feedbackMessage = praiseMessages[Math.floor(Math.random() * praiseMessages.length)] + "（" + state.streak + " 連擊）";
+          renderUi();
+
+          schedule(() => {
+            playSound("correct");
+            spawnStarParticles(target.x, target.y);
+            renderUi();
+            schedule(nextQuestion, 500);
+          }, 800);
+          return;
+        }
+
+        state.stoneExpression = "dizzy";
+        state.streak = 0;
+        state.feedbackType = "incorrect";
+        state.feedbackMessage = "再試下一題！「" + state.currentQuestion.directionText + "」應該走 " + state.currentQuestion.correctChoice + " 路。";
+        state.showCorrectPathGlow = state.currentQuestion.correctChoice;
+        renderUi();
+
+        schedule(() => {
+          playSound("incorrect");
+          spawnStarParticles((state.stonePos.x + target.x) / 2, (state.stonePos.y + target.y) / 2, "#ef4444");
+          state.stoneIsBouncing = true;
+          state.stoneBounceY = -25;
+          schedule(nextQuestion, 1200);
+        }, 400);
+      }
+
+      function getStoneTarget(category, choice) {
+        if (category === "HORIZONTAL") {
+          if (choice === "A") return { x: 150, y: 140, scale: 0.55 };
+          if (choice === "B") return { x: 400, y: 135, scale: 0.55 };
+          return { x: 650, y: 140, scale: 0.55 };
+        }
+
+        if (choice === "A") return { x: 220, y: 90, scale: 0.52 };
+        if (choice === "B") return { x: 400, y: 175, scale: 0.55 };
+        return { x: 580, y: 230, scale: 0.65 };
+      }
+
+      function spawnStarParticles(x, y, colorPreset) {
+        const colors = colorPreset ? [colorPreset] : ["#fbbf24", "#f59e0b", "#38bdf8", "#fb7185", "#34d399", "#a78bfa"];
+        const shapes = ["star", "circle", "square"];
+        for (let i = 0; i < 28; i += 1) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = Math.random() * 5 + 3;
+          state.particles.push({
+            x,
+            y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            size: Math.random() * 10 + 6,
+            alpha: 1,
+            decay: Math.random() * 0.02 + 0.015,
+            shape: shapes[Math.floor(Math.random() * shapes.length)]
+          });
+        }
+      }
+
+      function renderUi() {
+        const isPlaying = state.status === "playing";
+        const isStart = state.status === "start";
+        const isGameOver = state.status === "gameover";
+
+        elements.quitButton.classList.toggle("is-visible", isPlaying);
+        elements.hud.classList.toggle("is-visible", isPlaying);
+        elements.questionPanel.classList.toggle("is-visible", isPlaying && Boolean(state.currentQuestion));
+        elements.controls.classList.toggle("is-visible", isPlaying && Boolean(state.currentQuestion));
+        elements.startOverlay.classList.toggle("is-visible", isStart);
+        elements.gameOverOverlay.classList.toggle("is-visible", isGameOver);
+        elements.speedBadge.classList.toggle("is-visible", state.streak >= 3 && isPlaying);
+
+        if (state.currentQuestion) {
+          elements.questionText.textContent = state.currentQuestion.directionText;
+        }
+
+        elements.feedbackBubble.textContent = state.feedbackMessage;
+        elements.feedbackBubble.classList.toggle("correct", state.feedbackType === "correct");
+        elements.feedbackBubble.classList.toggle("incorrect", state.feedbackType === "incorrect");
+
+        if (state.streak >= 1) {
+          elements.streakTip.className = "tip hot";
+          elements.streakTip.textContent = "連續答對 " + state.streak + " 題！";
+        } else {
+          elements.streakTip.className = "tip";
+          elements.streakTip.textContent = "小提示：看清楚上方方向大字囉";
+        }
+
+        if (state.highStreak >= 2) {
+          elements.bestRecord.hidden = false;
+          elements.bestRecord.textContent = "個人最佳紀錄：" + state.highStreak + " 連擊";
+        } else {
+          elements.bestRecord.hidden = true;
+        }
+
+        elements.progressValue.textContent = state.correctCount + " / " + state.totalCount + " 題";
+
+        if (isGameOver) {
+          const accuracy = state.totalCount > 0 ? Math.round((state.correctCount / state.totalCount) * 100) : 0;
+          elements.resultScore.textContent = state.score + " 分";
+          elements.resultAccuracy.textContent = accuracy + "%";
+          elements.resultCorrect.textContent = state.correctCount + " / " + state.totalCount + " 題";
+          elements.resultHighStreak.textContent = state.highStreak + " 連擊";
+
+          let rank = "勇敢探險小新手";
+          if (state.score >= 100) rank = "宇宙無敵方向大師";
+          else if (state.score >= 50) rank = "前進探索達人";
+          elements.rankText.textContent = "榮獲探險稱號：" + rank;
+        }
+      }
+
+      function drawParticles() {
+        for (let i = state.particles.length - 1; i >= 0; i -= 1) {
+          const particle = state.particles[i];
+          particle.x += particle.vx;
+          particle.y += particle.vy;
+          particle.vy += 0.08;
+          particle.alpha -= particle.decay;
+
+          if (particle.alpha <= 0) {
+            state.particles.splice(i, 1);
+            continue;
+          }
+
+          ctx.save();
+          ctx.globalAlpha = particle.alpha;
+          ctx.fillStyle = particle.color;
+
+          if (particle.shape === "star") {
+            const spikes = 5;
+            const outerRadius = particle.size;
+            const innerRadius = particle.size / 2;
+            let rot = Math.PI / 2 * 3;
+            let x = particle.x;
+            let y = particle.y;
+            const step = Math.PI / spikes;
+
+            ctx.beginPath();
+            ctx.moveTo(particle.x, particle.y - outerRadius);
+            for (let j = 0; j < spikes; j += 1) {
+              x = particle.x + Math.cos(rot) * outerRadius;
+              y = particle.y + Math.sin(rot) * outerRadius;
+              ctx.lineTo(x, y);
+              rot += step;
+              x = particle.x + Math.cos(rot) * innerRadius;
+              y = particle.y + Math.sin(rot) * innerRadius;
+              ctx.lineTo(x, y);
+              rot += step;
+            }
+            ctx.closePath();
+            ctx.fill();
+          } else if (particle.shape === "square") {
+            ctx.fillRect(particle.x - particle.size / 2, particle.y - particle.size / 2, particle.size, particle.size);
+          } else {
+            ctx.beginPath();
+            ctx.arc(particle.x, particle.y, particle.size / 2, 0, Math.PI * 2);
+            ctx.fill();
+          }
+          ctx.restore();
+        }
+      }
+
+      function drawCloud(cx, cy, scale) {
+        ctx.save();
+        ctx.scale(scale, scale);
+        const ax = cx / scale;
+        const ay = cy / scale;
+        ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
+        ctx.beginPath();
+        ctx.arc(ax, ay, 20, 0, Math.PI * 2);
+        ctx.arc(ax + 25, ay - 10, 28, 0, Math.PI * 2);
+        ctx.arc(ax + 55, ay, 22, 0, Math.PI * 2);
+        ctx.arc(ax + 28, ay + 10, 20, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function drawTree(x, y, height) {
+        ctx.save();
+        ctx.fillStyle = "#15803d";
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x - height * 0.35, y + height);
+        ctx.lineTo(x + height * 0.35, y + height);
+        ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = "#78350f";
+        ctx.fillRect(x - height * 0.08, y + height, height * 0.16, height * 0.2);
+        ctx.restore();
+      }
+
+      function draw3DRoadSegment(x1, y1, w1, x2, y2, w2, color, strokeColor, borderThick) {
+        const stroke = strokeColor || "#1e293b";
+        const border = borderThick || 4;
+        const thick = 8;
+
+        ctx.beginPath();
+        ctx.moveTo(x1 - w1 / 2, y1);
+        ctx.lineTo(x2 - w2 / 2, y2);
+        ctx.lineTo(x2 + w2 / 2, y2);
+        ctx.lineTo(x1 + w1 / 2, y1);
+        ctx.closePath();
+        ctx.fillStyle = color;
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.moveTo(x1 - w1 / 2, y1);
+        ctx.lineTo(x2 - w2 / 2, y2);
+        ctx.lineTo(x2 - w2 / 2, y2 + thick);
+        ctx.lineTo(x1 - w1 / 2, y1 + thick);
+        ctx.closePath();
+        ctx.fillStyle = "#94a3b8";
+        ctx.fill();
+        ctx.strokeStyle = stroke;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(x1 + w1 / 2, y1);
+        ctx.lineTo(x2 + w2 / 2, y2);
+        ctx.lineTo(x2 + w2 / 2, y2 + thick);
+        ctx.lineTo(x1 + w1 / 2, y1 + thick);
+        ctx.closePath();
+        ctx.fillStyle = "#64748b";
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.lineWidth = border;
+        ctx.strokeStyle = stroke;
+        ctx.beginPath();
+        ctx.moveTo(x1 - w1 / 2, y1);
+        ctx.lineTo(x2 - w2 / 2, y2);
+        ctx.moveTo(x1 + w1 / 2, y1);
+        ctx.lineTo(x2 + w2 / 2, y2);
+        ctx.stroke();
+      }
+
+      function drawChoiceSignBoard(label, x, y, highlight) {
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = "#334155";
+        ctx.fillStyle = "#78350f";
+        ctx.fillRect(x - 3, y, 6, 22);
+        ctx.strokeRect(x - 3, y, 6, 22);
+
+        ctx.save();
+        if (highlight) {
+          ctx.shadowBlur = 15;
+          ctx.shadowColor = "#eab308";
+          ctx.fillStyle = "#fef08a";
+          ctx.strokeStyle = "#ca8a04";
+        } else {
+          ctx.fillStyle = "#f8fafc";
+          ctx.strokeStyle = "#334155";
+        }
+
+        ctx.beginPath();
+        ctx.arc(x, y - 10, 16, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = highlight ? "#c2410c" : "#1e293b";
+        ctx.font = "700 18px system-ui, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(label, x, y - 10);
+        ctx.restore();
+      }
+
+      function drawPathGlowEffect(xStart, yStart, xEnd, yEnd) {
+        ctx.save();
+        ctx.strokeStyle = "rgba(253, 224, 71, 0.78)";
+        ctx.lineWidth = 20;
+        ctx.lineCap = "round";
+        ctx.shadowBlur = 20;
+        ctx.shadowColor = "#fbbf24";
+        ctx.beginPath();
+        ctx.moveTo(xStart, yStart);
+        ctx.bezierCurveTo((xStart + xEnd) / 2, yStart, (xStart + xEnd) / 2, yEnd, xEnd, yEnd);
+        ctx.stroke();
+        ctx.restore();
+      }
+
+      function drawBackground() {
+        state.bgOffset = (state.bgOffset + (state.isAnimating ? 1 : 0.4)) % 1000;
+        state.cloud1X = state.cloud1X - 0.25 < -150 ? 850 : state.cloud1X - 0.25;
+        state.cloud2X = state.cloud2X - 0.15 < -150 ? 850 : state.cloud2X - 0.15;
+
+        const skyGrad = ctx.createLinearGradient(0, 0, 0, 180);
+        skyGrad.addColorStop(0, "#bae6fd");
+        skyGrad.addColorStop(1, "#e0f2fe");
+        ctx.fillStyle = skyGrad;
+        ctx.fillRect(0, 0, 800, 220);
+
+        ctx.beginPath();
+        ctx.arc(720, 50, 24, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(251, 191, 36, 0.7)";
+        ctx.fill();
+
+        drawCloud(state.cloud1X, 60, 0.9);
+        drawCloud(state.cloud2X, 40, 0.6);
+
+        ctx.beginPath();
+        ctx.moveTo(0, 220);
+        ctx.quadraticCurveTo(200, 100, 450, 220);
+        ctx.quadraticCurveTo(650, 120, 800, 220);
+        ctx.lineTo(800, 450);
+        ctx.lineTo(0, 450);
+        ctx.fillStyle = "#86efac";
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.moveTo(0, 220);
+        ctx.quadraticCurveTo(150, 160, 300, 220);
+        ctx.quadraticCurveTo(550, 150, 800, 220);
+        ctx.fillStyle = "#4ade80";
+        ctx.fill();
+
+        drawTree(80, 150, 40);
+        drawTree(220, 170, 30);
+        drawTree(620, 165, 35);
+        drawTree(710, 150, 45);
+
+        ctx.fillStyle = "#22c55e";
+        ctx.fillRect(0, 220, 800, 230);
+
+        ctx.fillStyle = "rgba(255, 255, 255, 0.62)";
+        for (let i = 0; i < 5; i += 1) {
+          const factor = (i * 150 + state.bgOffset * 0.5) % 800;
+          ctx.beginPath();
+          ctx.arc(factor, 320 + (i % 3) * 35, 4, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      function drawRoads() {
+        const category = state.currentQuestion ? state.currentQuestion.category : "HORIZONTAL";
+
+        if (category === "HORIZONTAL") {
+          if (state.showCorrectPathGlow === "A") drawPathGlowEffect(400, 270, 150, 140);
+          if (state.showCorrectPathGlow === "B") drawPathGlowEffect(400, 270, 400, 135);
+          if (state.showCorrectPathGlow === "C") drawPathGlowEffect(400, 270, 650, 140);
+          if (state.activeSelectedPath === "A") drawPathGlowEffect(400, 270, 150, 140);
+          if (state.activeSelectedPath === "B") drawPathGlowEffect(400, 270, 400, 135);
+          if (state.activeSelectedPath === "C") drawPathGlowEffect(400, 270, 650, 140);
+
+          draw3DRoadSegment(400, 270, 100, 150, 140, 52, "#cbd5e1");
+          draw3DRoadSegment(400, 270, 100, 650, 140, 52, "#cbd5e1");
+          draw3DRoadSegment(400, 270, 100, 400, 135, 52, "#94a3b8");
+          draw3DRoadSegment(400, 450, 185, 400, 270, 100, "#cbd5e1");
+
+          ctx.strokeStyle = "#e2e8f0";
+          ctx.lineWidth = 4;
+          ctx.setLineDash([15, 15]);
+          ctx.beginPath();
+          ctx.moveTo(400, 450);
+          ctx.lineTo(400, 270);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          drawChoiceSignBoard("A", 150, 115, state.showCorrectPathGlow === "A" || state.activeSelectedPath === "A");
+          drawChoiceSignBoard("B", 400, 110, state.showCorrectPathGlow === "B" || state.activeSelectedPath === "B");
+          drawChoiceSignBoard("C", 650, 115, state.showCorrectPathGlow === "C" || state.activeSelectedPath === "C");
+          return;
+        }
+
+        if (state.showCorrectPathGlow === "A") drawPathGlowEffect(400, 270, 220, 90);
+        if (state.showCorrectPathGlow === "B") drawPathGlowEffect(400, 270, 400, 175);
+        if (state.showCorrectPathGlow === "C") drawPathGlowEffect(400, 270, 580, 230);
+        if (state.activeSelectedPath === "A") drawPathGlowEffect(400, 270, 220, 90);
+        if (state.activeSelectedPath === "B") drawPathGlowEffect(400, 270, 400, 175);
+        if (state.activeSelectedPath === "C") drawPathGlowEffect(400, 270, 580, 230);
+
+        draw3DRoadSegment(400, 270, 100, 580, 230, 45, "#475569");
+        draw3DRoadSegment(400, 270, 100, 400, 175, 48, "#94a3b8");
+
+        ctx.fillStyle = "#64748b";
+        ctx.fillRect(210, 90, 8, 120);
+        ctx.fillRect(250, 125, 8, 70);
+        ctx.lineWidth = 2;
+        ctx.strokeStyle = "#1e293b";
+        ctx.strokeRect(210, 90, 8, 120);
+        ctx.strokeRect(250, 125, 8, 70);
+
+        draw3DRoadSegment(400, 270, 100, 220, 90, 48, "#e2e8f0", "#1e293b", 5);
+        draw3DRoadSegment(400, 450, 185, 400, 270, 100, "#cbd5e1");
+
+        drawChoiceSignBoard("A", 220, 65, state.showCorrectPathGlow === "A" || state.activeSelectedPath === "A");
+        drawChoiceSignBoard("B", 400, 145, state.showCorrectPathGlow === "B" || state.activeSelectedPath === "B");
+        drawChoiceSignBoard("C", 580, 205, state.showCorrectPathGlow === "C" || state.activeSelectedPath === "C");
+      }
+
+      function drawStone() {
+        const speedFactor = 0.09;
+        state.stonePos.x += (state.stoneTargetPos.x - state.stonePos.x) * speedFactor;
+        state.stonePos.y += (state.stoneTargetPos.y - state.stonePos.y) * speedFactor;
+        state.stonePos.scale += (state.targetScale - state.stonePos.scale) * speedFactor;
+
+        if (state.stoneIsBouncing) {
+          state.stoneBounceY += 1.5;
+          if (state.stoneBounceY >= 0) {
+            state.stoneBounceY = 0;
+            state.stoneIsBouncing = false;
+          }
+        }
+
+        state.stoneAngle += state.isAnimating
+          ? (state.stoneExpression === "dizzy" ? 0.04 : 0.18)
+          : 0.02;
+
+        const x = state.stonePos.x;
+        const y = state.stonePos.y + state.stoneBounceY;
+        const scale = state.stonePos.scale;
+        const baseRadius = 38 * scale;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.ellipse(x, state.stonePos.y + 4, baseRadius, baseRadius * 0.35, 0, 0, Math.PI * 2);
+        ctx.fillStyle = "rgba(15, 23, 42, " + Math.max(0.08, 0.4 - Math.abs(state.stoneBounceY) / 100) + ")";
+        ctx.fill();
+        ctx.restore();
+
+        ctx.save();
+        ctx.translate(x, y);
+        if (!state.isAnimating) {
+          ctx.translate(0, Math.sin(Date.now() * 0.007) * 2.5);
+        }
+
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = "#1e293b";
+
+        const stoneGrad = ctx.createRadialGradient(-10, -10, 5, 0, 0, baseRadius);
+        stoneGrad.addColorStop(0, "#f8fafc");
+        stoneGrad.addColorStop(0.3, "#cbd5e1");
+        stoneGrad.addColorStop(1, "#64748b");
+        ctx.fillStyle = stoneGrad;
+        ctx.beginPath();
+        ctx.arc(0, 0, baseRadius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.save();
+        ctx.rotate(state.stoneAngle);
+        ctx.fillStyle = "rgba(71, 85, 105, 0.45)";
+        drawStoneSpot(-16, -12, 6, scale);
+        drawStoneSpot(18, -15, 4, scale);
+        drawStoneSpot(-18, 16, 5, scale);
+        drawStoneSpot(15, 14, 7, scale);
+        ctx.restore();
+
+        drawStoneFace(scale, baseRadius);
+        ctx.restore();
+      }
+
+      function drawStoneSpot(x, y, radius, scale) {
+        ctx.beginPath();
+        ctx.arc(x * scale, y * scale, radius * scale, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      function drawStoneFace(scale, baseRadius) {
+        ctx.save();
+
+        if (state.stoneExpression === "dizzy") {
+          ctx.lineWidth = 3 * scale;
+          ctx.strokeStyle = "#334155";
+          ctx.beginPath();
+          ctx.moveTo(-15 * scale, -12 * scale);
+          ctx.lineTo(-5 * scale, -2 * scale);
+          ctx.moveTo(-5 * scale, -12 * scale);
+          ctx.lineTo(-15 * scale, -2 * scale);
+          ctx.moveTo(5 * scale, -12 * scale);
+          ctx.lineTo(15 * scale, -2 * scale);
+          ctx.moveTo(15 * scale, -12 * scale);
+          ctx.lineTo(5 * scale, -2 * scale);
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.arc(0, 14 * scale, 6 * scale, Math.PI, 0, false);
+          ctx.stroke();
+
+          const starTime = Date.now() * 0.008;
+          ctx.fillStyle = "#facc15";
+          ctx.beginPath();
+          ctx.arc(Math.cos(starTime) * (baseRadius + 6), Math.sin(starTime) * (baseRadius * 0.3) - (baseRadius + 5), 4 * scale, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+          return;
+        }
+
+        if (state.stoneExpression === "happy" && state.isAnimating && state.feedbackType === "correct") {
+          ctx.lineWidth = 4 * scale;
+          ctx.strokeStyle = "#1e293b";
+          ctx.lineCap = "round";
+          ctx.beginPath();
+          ctx.arc(-11 * scale, -10 * scale, 5 * scale, Math.PI, 0, false);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(11 * scale, -10 * scale, 5 * scale, Math.PI, 0, false);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.arc(0, 6 * scale, 10 * scale, 0, Math.PI, false);
+          ctx.closePath();
+          ctx.fillStyle = "#ef4444";
+          ctx.fill();
+          ctx.lineWidth = 3 * scale;
+          ctx.stroke();
+          ctx.fillStyle = "rgba(251, 113, 133, 0.7)";
+          ctx.beginPath();
+          ctx.arc(-18 * scale, 2 * scale, 5 * scale, 0, Math.PI * 2);
+          ctx.arc(18 * scale, 2 * scale, 5 * scale, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+          return;
+        }
+
+        ctx.fillStyle = "#1e293b";
+        ctx.beginPath();
+        ctx.arc(-10 * scale, -8 * scale, 6 * scale, 0, Math.PI * 2);
+        ctx.arc(10 * scale, -8 * scale, 6 * scale, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#fff";
+        ctx.beginPath();
+        ctx.arc(-12 * scale, -10 * scale, 2 * scale, 0, Math.PI * 2);
+        ctx.arc(8 * scale, -10 * scale, 2 * scale, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = "#1e293b";
+        ctx.lineWidth = 3 * scale;
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.arc(0, 5 * scale, 7 * scale, 0.1 * Math.PI, 0.9 * Math.PI, false);
+        ctx.stroke();
+
+        ctx.fillStyle = "rgba(251, 113, 133, 0.5)";
+        ctx.beginPath();
+        ctx.arc(-16 * scale, 1 * scale, 4 * scale, 0, Math.PI * 2);
+        ctx.arc(16 * scale, 1 * scale, 4 * scale, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function renderCanvas() {
+        ctx.clearRect(0, 0, 800, 450);
+        drawBackground();
+        drawRoads();
+        drawStone();
+        drawParticles();
+        window.requestAnimationFrame(renderCanvas);
+      }
+
+      elements.startButton.addEventListener("click", startGame);
+      elements.restartButton.addEventListener("click", startGame);
+      elements.quitButton.addEventListener("click", stopGame);
+      elements.homeButton.addEventListener("click", goHomeScreen);
+      choiceButtons.forEach(button => {
+        button.addEventListener("click", () => handleAnswer(button.dataset.choice));
+      });
+
+      document.addEventListener("keydown", event => {
+        if (event.defaultPrevented) return;
+        const key = event.key.toUpperCase();
+        if (key === "A" || key === "B" || key === "C") {
+          handleAnswer(key);
+        }
+        if ((key === "ENTER" || key === " ") && state.status === "start") {
+          event.preventDefault();
+          startGame();
+        }
+      });
+
+      renderUi();
+      renderCanvas();
+    })();
+  </script>
+  <script src="../../assets/tool-home-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-ldl-tool-id="T02-decimal-fraction-percent-converter" data-ldl-fingerprint="ldl-yfc-decimal-fraction-percent-converter-v1">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>小數、分數、百分數轉換器</title>
+  <meta name="author" content="Yung Fu Chuen">
+  <meta name="company" content="Yung Fu Chuen">
+  <meta name="copyright" content="© 2026 Yung Fu Chuen. All rights reserved.">
+  <meta name="license" content="Free classroom use only. Redistribution, resale, cloning, re-hosting, modification, or derivative use without written permission is prohibited.">
+  <meta name="ldl-product-name" content="小數、分數、百分數轉換器">
+  <meta name="ldl-product-name-en" content="Decimal Fraction Percent Converter">
+  <meta name="ldl-product-code" content="LDL-MATH-DFP-2026-001">
+  <meta name="ldl-tool-id" content="T02-decimal-fraction-percent-converter">
+  <meta name="ldl-module-id" content="ldl-decimal-fraction-percent-converter">
+  <meta name="ldl-release-year" content="2026">
+  <meta name="ldl-version" content="1.1.0">
+  <meta name="ldl-build-id" content="LDL-MATH-DFP-2026-001">
+  <meta name="ldl-fingerprint" content="ldl-yfc-decimal-fraction-percent-converter-v1">
+  <meta name="ldl-source-reference" content="LDL Source Reference v1.1 · Yung Fu Chuen · Yung Fu Chuen">
+  <!--
+    LDL SOURCE REFERENCE v1.1
+    Purpose: creator credit + hidden ownership/source markers.
+    Product Name: 小數、分數、百分數轉換器
+    Product Name EN: Decimal Fraction Percent Converter
+    Product Code: LDL-MATH-DFP-2026-001
+    Tool ID: decimal-fraction-percent-converter
+    Module ID: ldl-decimal-fraction-percent-converter
+    Company: Yung Fu Chuen
+    Author: Yung Fu Chuen
+    Release Year: 2026
+    Version: 1.1.0
+    Build ID: LDL-MATH-DFP-2026-001
+    Fingerprint: ldl-yfc-decimal-fraction-percent-converter-v1
+    License: Free classroom use only. Redistribution, resale, cloning, re-hosting, modification, or derivative use without written permission is prohibited.
+  -->
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --ink: #213042;
+      --muted: #667489;
+      --card: #ffffff;
+      --line: #d9e2ef;
+      --accent: #2f80ed;
+      --accent-2: #28a979;
+      --accent-3: #f2994a;
+      --soft-blue: #dbeafe;
+      --soft-green: #dcfce7;
+      --empty: #eef2f7;
+      --danger: #c2410c;
+      --shadow: 0 18px 45px rgba(39, 55, 77, 0.12);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 20% 10%, rgba(47, 128, 237, 0.14), transparent 28rem),
+        radial-gradient(circle at 90% 15%, rgba(40, 169, 121, 0.12), transparent 24rem),
+        linear-gradient(180deg, #fbfdff 0%, var(--bg) 58%, #eef3f8 100%);
+      font-family: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", Arial, sans-serif;
+      line-height: 1.5;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    .page {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 64px;
+    }
+
+    .hero {
+      display: grid;
+      gap: 12px;
+      padding: 28px;
+      border: 1px solid rgba(217, 226, 239, 0.9);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: var(--shadow);
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(2rem, 5vw, 4rem);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .hero p {
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(1.08rem, 2.5vw, 1.5rem);
+    }
+
+    .tips {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .tip {
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.76);
+      color: #31445c;
+      font-size: 1.08rem;
+      font-weight: 700;
+    }
+
+    .controls {
+      margin-top: 20px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--card);
+      box-shadow: 0 10px 28px rgba(39, 55, 77, 0.08);
+    }
+
+    .slider-panel {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .slider-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .percent-readout {
+      min-width: 6.5ch;
+      color: var(--accent);
+      text-align: right;
+      font-size: 1.5rem;
+      font-weight: 900;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--accent);
+    }
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .field label {
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .field input {
+      width: 100%;
+      min-height: 52px;
+      padding: 10px 12px;
+      border: 2px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfdff;
+      color: var(--ink);
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+
+    .field input:focus {
+      outline: 3px solid rgba(47, 128, 237, 0.18);
+      border-color: var(--accent);
+    }
+
+    .fraction-input {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 52px;
+      padding: 8px 10px;
+      border: 2px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfdff;
+    }
+
+    .fraction-input:focus-within {
+      outline: 3px solid rgba(47, 128, 237, 0.18);
+      border-color: var(--accent);
+    }
+
+    .fraction-input input {
+      width: 4.1rem;
+      min-height: 38px;
+      padding: 6px;
+      border: 1px solid #cfd9e6;
+      border-radius: 6px;
+      color: var(--ink);
+      font-size: 1.15rem;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .fraction-input .whole-input {
+      width: 4.5rem;
+    }
+
+    .fraction-input-stack {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .fraction-input-bar {
+      width: 4.4rem;
+      height: 2px;
+      background: var(--ink);
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .quick-button,
+    .tool-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25em;
+      min-height: 44px;
+      padding: 8px 14px;
+      border-radius: var(--radius);
+      background: #edf4ff;
+      color: #173a69;
+      font-size: 1.05rem;
+      font-weight: 900;
+      box-shadow: inset 0 0 0 1px rgba(47, 128, 237, 0.18);
+    }
+
+    .quick-button .fraction,
+    .quick-button .mixed-number {
+      color: inherit;
+      font-size: 1.05rem;
+    }
+
+    .quick-button:hover,
+    .tool-button:hover {
+      background: #dfeeff;
+    }
+
+    .tool-button {
+      background: #f5f7fa;
+      color: #31445c;
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+
+    .status {
+      min-height: 34px;
+      margin-top: 16px;
+      color: var(--accent-2);
+      font-size: 1.08rem;
+      font-weight: 900;
+    }
+
+    .status.error,
+    .status.clamped {
+      color: var(--danger);
+    }
+
+    .models {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .card {
+      min-height: 430px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: 0 12px 30px rgba(39, 55, 77, 0.08);
+    }
+
+    .card h2 {
+      margin: 0 0 8px;
+      font-size: 1.55rem;
+      line-height: 1.18;
+    }
+
+    .model-value {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      min-height: 52px;
+      margin: 0 0 16px;
+      color: var(--muted);
+      font-size: 1.16rem;
+      font-weight: 900;
+    }
+
+    .fraction {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 1.4em;
+      color: var(--ink);
+      font-weight: 900;
+      line-height: 1;
+      vertical-align: middle;
+    }
+
+    .fraction .numerator,
+    .fraction .denominator {
+      display: block;
+      min-width: 100%;
+      padding: 0 0.12em;
+      text-align: center;
+    }
+
+    .fraction .bar {
+      display: block;
+      width: 100%;
+      min-width: 1.15em;
+      height: 2px;
+      margin: 0.14em 0;
+      background: currentColor;
+    }
+
+    .mixed-number {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3em;
+      color: var(--ink);
+      vertical-align: middle;
+    }
+
+    .mixed-number .whole {
+      font-size: 1.18em;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .fraction-display {
+      display: inline-flex;
+      align-items: center;
+      min-height: 2.35em;
+      font-size: 1.35rem;
+    }
+
+    .numberline-wrap {
+      display: grid;
+      align-content: center;
+      min-height: 230px;
+      padding: 30px 8px 8px;
+    }
+
+    .numberline {
+      position: relative;
+      height: 92px;
+      margin: 0 10px;
+    }
+
+    .numberline-track,
+    .numberline-fill {
+      position: absolute;
+      top: 36px;
+      left: 0;
+      height: 18px;
+      border-radius: 999px;
+    }
+
+    .numberline-track {
+      width: 100%;
+      background: var(--empty);
+      box-shadow: inset 0 0 0 2px #d7e0ec;
+    }
+
+    .numberline-fill {
+      width: 0;
+      background: linear-gradient(90deg, #77b7ff, var(--accent));
+    }
+
+    .marker {
+      position: absolute;
+      top: 24px;
+      left: 0;
+      width: 40px;
+      height: 40px;
+      transform: translateX(-50%);
+      border: 5px solid #ffffff;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 8px 20px rgba(47, 128, 237, 0.32);
+    }
+
+    .tick {
+      position: absolute;
+      top: 58px;
+      transform: translateX(-50%);
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 900;
+      text-align: center;
+    }
+
+    .tick::before {
+      content: "";
+      display: block;
+      width: 3px;
+      height: 18px;
+      margin: 0 auto 4px;
+      border-radius: 999px;
+      background: #9fb0c6;
+    }
+
+    .fraction-stack {
+      display: grid;
+      gap: 14px;
+      min-height: 210px;
+      align-content: center;
+    }
+
+    .unit-bar {
+      display: grid;
+      grid-template-columns: repeat(var(--parts), minmax(0, 1fr));
+      min-height: 66px;
+      overflow: hidden;
+      border: 3px solid #7b8da6;
+      border-radius: var(--radius);
+      background: var(--empty);
+    }
+
+    .unit-piece {
+      min-width: 0;
+      border-right: 2px solid rgba(123, 141, 166, 0.7);
+      background: #f2f5f9;
+    }
+
+    .unit-piece:last-child {
+      border-right: 0;
+    }
+
+    .unit-piece.filled {
+      background: linear-gradient(180deg, #7ee0b4, var(--accent-2));
+    }
+
+    .bar-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: -8px;
+      color: var(--muted);
+      font-size: 0.96rem;
+      font-weight: 800;
+    }
+
+    .bar-label .fraction {
+      color: var(--muted);
+      font-size: 1rem;
+    }
+
+    .fraction-details {
+      display: grid;
+      gap: 10px;
+      padding: 12px;
+      border-radius: var(--radius);
+      background: var(--soft-green);
+      color: #174b36;
+      font-weight: 800;
+    }
+
+    .fraction-row {
+      display: grid;
+      grid-template-columns: 5em 1fr;
+      gap: 10px;
+      align-items: center;
+      min-height: 46px;
+      font-size: 1.05rem;
+    }
+
+    .fraction-row[hidden] {
+      display: none;
+    }
+
+    .fraction-row-label {
+      color: #174b36;
+      font-weight: 900;
+    }
+
+    .pie-area {
+      display: grid;
+      gap: 16px;
+      justify-items: center;
+      align-content: center;
+      min-height: 230px;
+    }
+
+    .pies {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 18px;
+    }
+
+    .pie-wrap {
+      display: grid;
+      gap: 8px;
+      justify-items: center;
+    }
+
+    .pie {
+      --angle: 0deg;
+      width: min(142px, 34vw);
+      aspect-ratio: 1;
+      border: 4px solid #9a7b4f;
+      border-radius: 50%;
+      background:
+        conic-gradient(var(--accent-3) 0deg var(--angle), var(--empty) var(--angle) 360deg);
+      box-shadow: inset 0 0 0 8px rgba(255, 255, 255, 0.8), 0 10px 24px rgba(242, 153, 74, 0.2);
+    }
+
+    .pie-label {
+      color: var(--muted);
+      font-weight: 900;
+    }
+
+    .watermark {
+      position: fixed;
+      right: 10px;
+      bottom: 8px;
+      z-index: 10;
+      padding: 4px 7px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.76);
+      color: rgba(33, 48, 66, 0.62);
+      font-size: 0.72rem;
+      pointer-events: none;
+    }
+
+    @media (max-width: 900px) {
+      .models,
+      .input-grid,
+      .tips {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        min-height: auto;
+      }
+
+      .slider-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .percent-readout {
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .page {
+        width: min(100% - 20px, 1180px);
+        padding-top: 10px;
+      }
+
+      .hero,
+      .controls,
+      .card {
+        padding: 16px;
+      }
+
+      .button-row {
+        gap: 8px;
+      }
+
+      .quick-button,
+      .tool-button {
+        flex: 1 1 calc(50% - 8px);
+      }
+
+      .fraction-row {
+        grid-template-columns: 4.5em 1fr;
+      }
+    }
+
+    /* LDL Source Reference v1.1: creator credit + hidden source markers. */
+    :root {
+      --ldl-product-name: "小數、分數、百分數轉換器";
+      --ldl-product-name-en: "Decimal Fraction Percent Converter";
+      --ldl-product-code: "LDL-MATH-DFP-2026-001";
+      --ldl-tool-id: "T02-decimal-fraction-percent-converter";
+      --ldl-module-id: "ldl-decimal-fraction-percent-converter";
+      --ldl-company: "Yung Fu Chuen";
+      --ldl-author: "Yung Fu Chuen";
+      --ldl-release-year: "2026";
+      --ldl-version: "1.1.0";
+      --ldl-build-id: "LDL-MATH-DFP-2026-001";
+      --ldl-fingerprint: "ldl-yfc-decimal-fraction-percent-converter-v1";
+    }
+
+    .ldl-visible-watermark {
+      position: fixed;
+      z-index: 2147483000;
+      left: max(14px, env(safe-area-inset-left));
+      right: auto;
+      top: max(70px, calc(env(safe-area-inset-top) + 66px));
+      bottom: auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 5px;
+      max-width: min(190px, calc(100vw - 20px));
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      color: rgba(23, 32, 51, 0.56);
+      background: transparent;
+      box-shadow: none;
+      font-size: 8px;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: 0;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+      backdrop-filter: none;
+    }
+
+    /* copy-cost marker: style-beta LD */
+
+    .ldl-visible-watermark img {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+      object-fit: contain;
+      opacity: 0.88;
+    }
+
+    .ldl-visible-watermark span {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .ldl-offscreen-source-reference {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      margin: -1px !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      clip: rect(0 0 0 0) !important;
+      clip-path: inset(50%) !important;
+      border: 0 !important;
+      white-space: nowrap !important;
+    }
+
+    @media (max-width: 520px) {
+      .ldl-visible-watermark {
+        left: max(8px, env(safe-area-inset-left));
+        right: auto;
+        top: max(58px, calc(env(safe-area-inset-top) + 54px));
+        bottom: auto;
+        font-size: 7px;
+      }
+
+      .ldl-visible-watermark img {
+        width: 14px;
+        height: 14px;
+      }
+    }
+
+  </style>
+</head>
+<body data-ldl-reserve-top-space="true"
+  data-ldl-product-name="小數、分數、百分數轉換器"
+  data-ldl-product-name-en="Decimal Fraction Percent Converter"
+  data-ldl-product-code="LDL-MATH-DFP-2026-001"
+  data-ldl-tool-id="T02-decimal-fraction-percent-converter"
+  data-ldl-module-id="ldl-decimal-fraction-percent-converter"
+  data-ldl-build-id="LDL-MATH-DFP-2026-001"
+  data-ldl-fingerprint="ldl-yfc-decimal-fraction-percent-converter-v1"
+>
+  <main class="page">
+    <header class="hero" aria-labelledby="tool-title">
+      <h1 id="tool-title">小數、分數、百分數轉換器</h1>
+      <p>拖動或輸入一個數值，同步觀察小數、分數和百分數。</p>
+    </header>
+
+    <section class="tips" aria-label="教學提示">
+      <div class="tip">同一個量，可以用小數、分數和百分數表示。</div>
+      <div class="tip">100% 代表 1 個完整整體；200% 代表 2 個完整整體。</div>
+    </section>
+
+    <section class="controls" aria-label="數值控制">
+      <div class="slider-panel">
+        <div>
+          <div class="slider-label">
+            <span>拖動比例條</span>
+            <span>0% 至 200%</span>
+          </div>
+          <input id="percentSlider" type="range" min="0" max="200" step="1" value="25" aria-label="百分數比例條">
+        </div>
+        <div id="sliderReadout" class="percent-readout">25%</div>
+      </div>
+
+      <div class="input-grid">
+        <div class="field">
+          <label for="decimalInput">小數輸入</label>
+          <input id="decimalInput" inputmode="decimal" autocomplete="off" value="0.25" aria-label="輸入小數">
+        </div>
+        <div class="field">
+          <label id="fractionInputLabel">分數輸入</label>
+          <div id="fractionInputGroup" class="fraction-input" role="group" aria-labelledby="fractionInputLabel">
+            <input id="fractionWholeInput" class="whole-input" inputmode="numeric" autocomplete="off" aria-label="整數部分" placeholder="整數">
+            <div class="fraction-input-stack" aria-label="分數部分">
+              <input id="fractionNumeratorInput" inputmode="numeric" autocomplete="off" aria-label="分子" value="1">
+              <span class="fraction-input-bar" aria-hidden="true"></span>
+              <input id="fractionDenominatorInput" inputmode="numeric" autocomplete="off" aria-label="分母" value="4">
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <label for="percentInput">百分數輸入</label>
+          <input id="percentInput" inputmode="decimal" autocomplete="off" value="25%" aria-label="輸入百分數">
+        </div>
+      </div>
+
+      <div class="button-row" aria-label="快捷數值">
+        <button class="quick-button" type="button" data-value="0">0</button>
+        <button class="quick-button" type="button" data-value="0.25" aria-label="四分之一">
+          <span class="fraction" aria-hidden="true"><span class="numerator">1</span><span class="bar"></span><span class="denominator">4</span></span>
+        </button>
+        <button class="quick-button" type="button" data-value="0.5" aria-label="二分之一">
+          <span class="fraction" aria-hidden="true"><span class="numerator">1</span><span class="bar"></span><span class="denominator">2</span></span>
+        </button>
+        <button class="quick-button" type="button" data-value="0.75" aria-label="四分之三">
+          <span class="fraction" aria-hidden="true"><span class="numerator">3</span><span class="bar"></span><span class="denominator">4</span></span>
+        </button>
+        <button class="quick-button" type="button" data-value="1">1</button>
+        <button class="quick-button" type="button" data-value="1.25" aria-label="一又四分之一">
+          <span class="mixed-number" aria-hidden="true"><span class="whole">1</span><span class="fraction"><span class="numerator">1</span><span class="bar"></span><span class="denominator">4</span></span></span>
+        </button>
+        <button class="quick-button" type="button" data-value="1.5" aria-label="一又二分之一">
+          <span class="mixed-number" aria-hidden="true"><span class="whole">1</span><span class="fraction"><span class="numerator">1</span><span class="bar"></span><span class="denominator">2</span></span></span>
+        </button>
+        <button class="quick-button" type="button" data-value="2">2</button>
+      </div>
+
+      <div class="button-row" aria-label="工具按鈕">
+        <button id="randomButton" class="tool-button" type="button">隨機出題</button>
+        <button id="resetButton" class="tool-button" type="button">重設</button>
+      </div>
+
+      <div id="status" class="status" role="status" aria-live="polite">目前顯示 25%。</div>
+    </section>
+
+    <section class="models" aria-label="三種視覺模型">
+      <article class="card">
+        <h2>小數數線</h2>
+        <p id="decimalLabel" class="model-value">小數：0.25</p>
+        <div class="numberline-wrap">
+          <div class="numberline" aria-hidden="true">
+            <div class="numberline-track"></div>
+            <div id="numberlineFill" class="numberline-fill"></div>
+            <div id="numberlineMarker" class="marker"></div>
+            <div class="tick" style="left: 0%;">0</div>
+            <div class="tick" style="left: 25%;">0.5</div>
+            <div class="tick" style="left: 50%;">1</div>
+            <div class="tick" style="left: 75%;">1.5</div>
+            <div class="tick" style="left: 100%;">2</div>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>分數條</h2>
+        <div id="fractionLabel" class="model-value"></div>
+        <div id="fractionBars" class="fraction-stack" aria-label="分數條模型"></div>
+        <div class="fraction-details" aria-label="分數資訊">
+          <div id="properFractionRow" class="fraction-row">
+            <span class="fraction-row-label">真分數</span>
+            <span id="properFractionDisplay" class="fraction-display"></span>
+          </div>
+          <div id="improperFractionRow" class="fraction-row">
+            <span class="fraction-row-label">假分數</span>
+            <span id="improperFractionDisplay" class="fraction-display"></span>
+          </div>
+          <div id="mixedFractionRow" class="fraction-row">
+            <span class="fraction-row-label">帶分數</span>
+            <span id="mixedFractionDisplay" class="fraction-display"></span>
+          </div>
+          <div id="integerFractionRow" class="fraction-row" hidden>
+            <span class="fraction-row-label">整數</span>
+            <span id="integerFractionDisplay" class="fraction-display"></span>
+          </div>
+        </div>
+      </article>
+
+      <article class="card">
+        <h2>圓形圖</h2>
+        <p id="percentLabel" class="model-value">百分數：25%</p>
+        <div class="pie-area">
+          <div id="pies" class="pies" aria-label="百分數圓圖模型"></div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+
+
+  <script>
+    "use strict";
+
+    const state = {
+      value: 0.25
+    };
+
+    const els = {
+      slider: document.getElementById("percentSlider"),
+      sliderReadout: document.getElementById("sliderReadout"),
+      decimalInput: document.getElementById("decimalInput"),
+      fractionWholeInput: document.getElementById("fractionWholeInput"),
+      fractionNumeratorInput: document.getElementById("fractionNumeratorInput"),
+      fractionDenominatorInput: document.getElementById("fractionDenominatorInput"),
+      percentInput: document.getElementById("percentInput"),
+      status: document.getElementById("status"),
+      decimalLabel: document.getElementById("decimalLabel"),
+      fractionLabel: document.getElementById("fractionLabel"),
+      properFractionRow: document.getElementById("properFractionRow"),
+      properFractionDisplay: document.getElementById("properFractionDisplay"),
+      mixedFractionRow: document.getElementById("mixedFractionRow"),
+      mixedFractionDisplay: document.getElementById("mixedFractionDisplay"),
+      improperFractionRow: document.getElementById("improperFractionRow"),
+      improperFractionDisplay: document.getElementById("improperFractionDisplay"),
+      integerFractionRow: document.getElementById("integerFractionRow"),
+      integerFractionDisplay: document.getElementById("integerFractionDisplay"),
+      percentLabel: document.getElementById("percentLabel"),
+      numberlineFill: document.getElementById("numberlineFill"),
+      numberlineMarker: document.getElementById("numberlineMarker"),
+      fractionBars: document.getElementById("fractionBars"),
+      pies: document.getElementById("pies"),
+      randomButton: document.getElementById("randomButton"),
+      resetButton: document.getElementById("resetButton")
+    };
+
+    function clampValue(value) {
+      if (Number.isNaN(value) || !Number.isFinite(value)) {
+        return { value: state.value, clamped: false, invalid: true };
+      }
+      const clamped = Math.min(2, Math.max(0, value));
+      return { value: clamped, clamped: clamped !== value, invalid: false };
+    }
+
+    function gcd(a, b) {
+      let x = Math.abs(Math.round(a));
+      let y = Math.abs(Math.round(b));
+      while (y !== 0) {
+        const next = x % y;
+        x = y;
+        y = next;
+      }
+      return x || 1;
+    }
+
+    function decimalToFraction(value) {
+      const fixed = Number(value.toFixed(3));
+      const text = fixed.toString();
+      const decimalPlaces = text.includes(".") ? text.split(".")[1].length : 0;
+      const denominator = Math.pow(10, decimalPlaces);
+      const numerator = Math.round(fixed * denominator);
+      const divisor = gcd(numerator, denominator);
+      return {
+        numerator: numerator / divisor,
+        denominator: denominator / divisor
+      };
+    }
+
+    function parseFractionInput(input) {
+      const text = input.trim().replace(/\s+/g, " ");
+      if (!text) return null;
+
+      const integerPattern = /^\d+$/;
+      const fractionPattern = /^(\d+)\/(\d+)$/;
+      const mixedPattern = /^(\d+)\s+(\d+)\/(\d+)$/;
+
+      if (integerPattern.test(text)) {
+        return Number(text);
+      }
+
+      let match = text.match(fractionPattern);
+      if (match) {
+        const numerator = Number(match[1]);
+        const denominator = Number(match[2]);
+        if (denominator === 0) return null;
+        return numerator / denominator;
+      }
+
+      match = text.match(mixedPattern);
+      if (match) {
+        const whole = Number(match[1]);
+        const numerator = Number(match[2]);
+        const denominator = Number(match[3]);
+        if (denominator === 0) return null;
+        return whole + numerator / denominator;
+      }
+
+      return null;
+    }
+
+    function parsePercentInput(input) {
+      const text = input.trim().replace("%", "");
+      if (!text) return null;
+      if (!/^\d+(\.\d+)?$/.test(text)) return null;
+      return Number(text) / 100;
+    }
+
+    function parseDecimalInput(input) {
+      const text = input.trim();
+      if (!text) return null;
+      if (!/^\d+(\.\d+)?$/.test(text)) return null;
+      return Number(text);
+    }
+
+    function formatDecimal(value) {
+      return Number(value.toFixed(3)).toString();
+    }
+
+    function formatPercent(value) {
+      return Number((value * 100).toFixed(1)).toString().replace(/\.0$/, "") + "%";
+    }
+
+    function formatImproperFraction(fraction) {
+      if (fraction.denominator === 1) return String(fraction.numerator);
+      return `${fraction.numerator}/${fraction.denominator}`;
+    }
+
+    function formatMixedFraction(fraction) {
+      const mixed = getMixedParts(fraction);
+      if (mixed.denominator === 1) return String(mixed.whole);
+      if (mixed.whole === 0) return `${mixed.numerator}/${mixed.denominator}`;
+      return `${mixed.whole} ${mixed.numerator}/${mixed.denominator}`;
+    }
+
+    function getMixedParts(fraction) {
+      const { numerator, denominator } = fraction;
+      if (denominator === 1) {
+        return { whole: numerator, numerator: 0, denominator: 1 };
+      }
+      const whole = Math.floor(numerator / denominator);
+      const remainder = numerator % denominator;
+      return { whole, numerator: remainder, denominator };
+    }
+
+    function renderFractionDisplay(numerator, denominator) {
+      if (denominator === 1) {
+        const integer = document.createElement("span");
+        integer.className = "whole";
+        integer.textContent = String(numerator);
+        integer.setAttribute("data-fraction-text", String(numerator));
+        return integer;
+      }
+
+      const fraction = document.createElement("span");
+      fraction.className = "fraction";
+      fraction.setAttribute("aria-label", `${numerator}/${denominator}`);
+      fraction.setAttribute("data-fraction-text", `${numerator}/${denominator}`);
+
+      const top = document.createElement("span");
+      top.className = "numerator";
+      top.textContent = String(numerator);
+
+      const bar = document.createElement("span");
+      bar.className = "bar";
+      bar.setAttribute("aria-hidden", "true");
+
+      const bottom = document.createElement("span");
+      bottom.className = "denominator";
+      bottom.textContent = String(denominator);
+
+      fraction.append(top, bar, bottom);
+      return fraction;
+    }
+
+    function renderMixedNumberDisplay(whole, numerator, denominator) {
+      if (denominator === 1 || numerator === 0) {
+        return renderFractionDisplay(whole, 1);
+      }
+      if (whole === 0) {
+        return renderFractionDisplay(numerator, denominator);
+      }
+
+      const mixed = document.createElement("span");
+      mixed.className = "mixed-number";
+      mixed.setAttribute("aria-label", `${whole} ${numerator}/${denominator}`);
+      mixed.setAttribute("data-fraction-text", `${whole} ${numerator}/${denominator}`);
+
+      const wholeEl = document.createElement("span");
+      wholeEl.className = "whole";
+      wholeEl.textContent = String(whole);
+
+      mixed.append(wholeEl, renderFractionDisplay(numerator, denominator));
+      return mixed;
+    }
+
+    function renderUnavailableDisplay() {
+      const unavailable = document.createElement("span");
+      unavailable.className = "whole";
+      unavailable.textContent = "/";
+      unavailable.setAttribute("aria-label", "不適用");
+      unavailable.setAttribute("data-fraction-text", "/");
+      return unavailable;
+    }
+
+    function getFractionClassification(fraction) {
+      if (fraction.denominator === 1) {
+        return {
+          type: "integer",
+          integer: fraction,
+          proper: null,
+          improper: null,
+          mixed: null
+        };
+      }
+
+      if (fraction.numerator < fraction.denominator) {
+        return {
+          type: "proper",
+          integer: null,
+          proper: fraction,
+          improper: null,
+          mixed: null
+        };
+      }
+
+      return {
+        type: "improper-mixed",
+        integer: null,
+        proper: null,
+        improper: fraction,
+        mixed: getMixedParts(fraction)
+      };
+    }
+
+    function setFractionDisplay(target, node) {
+      target.textContent = "";
+      target.appendChild(node);
+    }
+
+    function setFractionRowVisible(row, isVisible) {
+      row.hidden = !isVisible;
+    }
+
+    function renderFractionClassification(fraction) {
+      const classification = getFractionClassification(fraction);
+      const isInteger = classification.type === "integer";
+
+      setFractionRowVisible(els.properFractionRow, !isInteger);
+      setFractionRowVisible(els.improperFractionRow, !isInteger);
+      setFractionRowVisible(els.mixedFractionRow, !isInteger);
+      setFractionRowVisible(els.integerFractionRow, isInteger);
+
+      if (isInteger) {
+        setFractionDisplay(els.properFractionDisplay, renderUnavailableDisplay());
+        setFractionDisplay(els.improperFractionDisplay, renderUnavailableDisplay());
+        setFractionDisplay(els.mixedFractionDisplay, renderUnavailableDisplay());
+        setFractionDisplay(els.integerFractionDisplay, renderFractionDisplay(fraction.numerator, 1));
+        return;
+      }
+
+      setFractionDisplay(
+        els.properFractionDisplay,
+        classification.proper
+          ? renderFractionDisplay(classification.proper.numerator, classification.proper.denominator)
+          : renderUnavailableDisplay()
+      );
+      setFractionDisplay(
+        els.improperFractionDisplay,
+        classification.improper
+          ? renderFractionDisplay(classification.improper.numerator, classification.improper.denominator)
+          : renderUnavailableDisplay()
+      );
+      setFractionDisplay(
+        els.mixedFractionDisplay,
+        classification.mixed
+          ? renderMixedNumberDisplay(classification.mixed.whole, classification.mixed.numerator, classification.mixed.denominator)
+          : renderUnavailableDisplay()
+      );
+    }
+
+    function updateFractionInputFields(mixed) {
+      if (mixed.denominator === 1) {
+        els.fractionWholeInput.value = String(mixed.whole);
+        els.fractionNumeratorInput.value = "";
+        els.fractionDenominatorInput.value = "";
+        return;
+      }
+      els.fractionWholeInput.value = mixed.whole > 0 ? String(mixed.whole) : "";
+      els.fractionNumeratorInput.value = String(mixed.numerator);
+      els.fractionDenominatorInput.value = String(mixed.denominator);
+    }
+
+    function parseFractionFields() {
+      const wholeText = els.fractionWholeInput.value.trim();
+      const numeratorText = els.fractionNumeratorInput.value.trim();
+      const denominatorText = els.fractionDenominatorInput.value.trim();
+      const integerPattern = /^\d+$/;
+
+      if (wholeText && !integerPattern.test(wholeText)) return null;
+      if (numeratorText && !integerPattern.test(numeratorText)) return null;
+      if (denominatorText && !integerPattern.test(denominatorText)) return null;
+
+      const whole = wholeText ? Number(wholeText) : 0;
+      if (!numeratorText && !denominatorText) return whole;
+      if (!numeratorText || !denominatorText) return null;
+
+      const numerator = Number(numeratorText);
+      const denominator = Number(denominatorText);
+      if (denominator === 0) return null;
+      return whole + numerator / denominator;
+    }
+
+    function renderNumberLine(value) {
+      const percent = (value / 2) * 100;
+      els.numberlineFill.style.width = `${percent}%`;
+      els.numberlineMarker.style.left = `${percent}%`;
+    }
+
+    function renderFractionBars(fraction) {
+      const { numerator, denominator } = fraction;
+      els.fractionBars.textContent = "";
+
+      const wholeBars = Math.floor(numerator / denominator);
+      const remainder = numerator % denominator;
+      const barCount = Math.max(1, wholeBars + (remainder > 0 ? 1 : 0));
+
+      for (let barIndex = 0; barIndex < barCount; barIndex += 1) {
+        const filledParts = barIndex < wholeBars ? denominator : (barIndex === wholeBars ? remainder : 0);
+        const bar = document.createElement("div");
+        bar.className = "unit-bar";
+        bar.style.setProperty("--parts", denominator);
+        bar.setAttribute("aria-label", `第 ${barIndex + 1} 條：${filledParts}/${denominator}`);
+
+        for (let part = 0; part < denominator; part += 1) {
+          const piece = document.createElement("div");
+          piece.className = "unit-piece" + (part < filledParts ? " filled" : "");
+          bar.appendChild(piece);
+        }
+
+        const label = document.createElement("div");
+        label.className = "bar-label";
+        if (filledParts === denominator) {
+          label.textContent = "1 個完整整體";
+        } else {
+          label.appendChild(renderFractionDisplay(filledParts, denominator));
+        }
+
+        els.fractionBars.appendChild(bar);
+        els.fractionBars.appendChild(label);
+      }
+    }
+
+    function renderPieCharts(value) {
+      const totalPercent = Math.round(value * 1000) / 10;
+      const fullPies = Math.floor(totalPercent / 100);
+      const remainder = totalPercent - fullPies * 100;
+      const pieCount = Math.max(1, fullPies + (remainder > 0 ? 1 : 0));
+      els.pies.textContent = "";
+
+      for (let index = 0; index < pieCount; index += 1) {
+        const percent = index < fullPies ? 100 : (index === fullPies ? remainder : 0);
+        const wrap = document.createElement("div");
+        wrap.className = "pie-wrap";
+
+        const pie = document.createElement("div");
+        pie.className = "pie";
+        pie.style.setProperty("--angle", `${percent * 3.6}deg`);
+        pie.setAttribute("aria-label", `圓圖 ${index + 1}：${Number(percent.toFixed(1))}%`);
+
+        const label = document.createElement("div");
+        label.className = "pie-label";
+        label.textContent = percent === 100 ? "100%" : `${Number(percent.toFixed(1))}%`;
+
+        wrap.appendChild(pie);
+        wrap.appendChild(label);
+        els.pies.appendChild(wrap);
+      }
+    }
+
+    function setStatus(message, type) {
+      els.status.textContent = message;
+      els.status.className = "status" + (type ? ` ${type}` : "");
+    }
+
+    function updateAll(message, type) {
+      const value = state.value;
+      const fraction = decimalToFraction(value);
+      const mixed = getMixedParts(fraction);
+      const decimalText = formatDecimal(value);
+      const percentText = formatPercent(value);
+      const mixedText = formatMixedFraction(fraction);
+
+      els.slider.value = Math.round(value * 100);
+      els.sliderReadout.textContent = percentText;
+      els.decimalInput.value = decimalText;
+      updateFractionInputFields(mixed);
+      els.percentInput.value = percentText;
+
+      els.decimalLabel.textContent = `小數：${decimalText}`;
+      els.fractionLabel.textContent = "";
+      els.fractionLabel.append("分數：", renderMixedNumberDisplay(mixed.whole, mixed.numerator, mixed.denominator));
+      renderFractionClassification(fraction);
+      els.percentLabel.textContent = `百分數：${percentText}`;
+
+      renderNumberLine(value);
+      renderFractionBars(fraction);
+      renderPieCharts(value);
+
+      if (message) {
+        setStatus(message, type);
+      } else {
+        setStatus(`目前顯示 ${percentText}。`, "");
+      }
+    }
+
+    function applyValue(rawValue, sourceLabel) {
+      const result = clampValue(rawValue);
+      if (result.invalid) {
+        updateAll("請輸入 0 至 2 的小數、分數或 0% 至 200% 的百分數。", "error");
+        return false;
+      }
+      state.value = Number(result.value.toFixed(3));
+      if (result.clamped) {
+        updateAll(`${sourceLabel} 已超出範圍，已自動限制在 0 至 2。`, "clamped");
+      } else {
+        updateAll();
+      }
+      return true;
+    }
+
+    function commitInput(inputElement, parser, sourceLabel) {
+      const parsed = parser(inputElement.value);
+      if (parsed === null) {
+        updateAll("請輸入 0 至 2 的小數、分數或 0% 至 200% 的百分數。", "error");
+        return;
+      }
+      applyValue(parsed, sourceLabel);
+    }
+
+    function commitFractionFields() {
+      const parsed = parseFractionFields();
+      if (parsed === null) {
+        updateAll("請輸入 0 至 2 的小數、分數或 0% 至 200% 的百分數。", "error");
+        return;
+      }
+      applyValue(parsed, "分數");
+    }
+
+    function wireCommittedInput(inputElement, parser, sourceLabel) {
+      inputElement.addEventListener("change", () => commitInput(inputElement, parser, sourceLabel));
+      inputElement.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          inputElement.blur();
+          commitInput(inputElement, parser, sourceLabel);
+        }
+      });
+    }
+
+    function runTests() {
+      const tests = [
+        { value: 0, improper: "0", mixed: "0", percent: "0%", classification: "integer" },
+        { value: 0.25, improper: "1/4", mixed: "1/4", percent: "25%", classification: "proper" },
+        { value: 0.5, improper: "1/2", mixed: "1/2", percent: "50%", classification: "proper" },
+        { value: 1, improper: "1", mixed: "1", percent: "100%", classification: "integer" },
+        { value: 1.25, improper: "5/4", mixed: "1 1/4", percent: "125%", classification: "improper-mixed" },
+        { value: 1.5, improper: "3/2", mixed: "1 1/2", percent: "150%", classification: "improper-mixed" },
+        { value: 1.75, improper: "7/4", mixed: "1 3/4", percent: "175%", classification: "improper-mixed" },
+        { value: 2, improper: "2", mixed: "2", percent: "200%", classification: "integer" }
+      ];
+
+      tests.forEach((test) => {
+        const fraction = decimalToFraction(test.value);
+        console.assert(formatImproperFraction(fraction) === test.improper, `${test.value} improper fraction failed`);
+        console.assert(formatMixedFraction(fraction) === test.mixed, `${test.value} mixed fraction failed`);
+        console.assert(formatPercent(test.value) === test.percent, `${test.value} percent failed`);
+        console.assert(getFractionClassification(fraction).type === test.classification, `${test.value} classification failed`);
+      });
+
+      console.assert(parseFractionInput("1/4") === 0.25, "parse 1/4 failed");
+      console.assert(parseFractionInput("1 1/4") === 1.25, "parse 1 1/4 failed");
+      console.assert(parsePercentInput("125%") === 1.25, "parse 125% failed");
+      console.log("ALL TESTS PASSED");
+    }
+
+    els.slider.addEventListener("input", () => {
+      state.value = Number(els.slider.value) / 100;
+      updateAll();
+    });
+
+    wireCommittedInput(els.decimalInput, parseDecimalInput, "小數");
+    wireCommittedInput(els.percentInput, parsePercentInput, "百分數");
+
+    [els.fractionWholeInput, els.fractionNumeratorInput, els.fractionDenominatorInput].forEach((inputElement) => {
+      inputElement.addEventListener("change", commitFractionFields);
+      inputElement.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          inputElement.blur();
+          commitFractionFields();
+        }
+      });
+    });
+
+    document.querySelectorAll(".quick-button").forEach((button) => {
+      button.addEventListener("click", () => applyValue(Number(button.dataset.value), "快捷按鈕"));
+    });
+
+    els.resetButton.addEventListener("click", () => applyValue(0.25, "重設"));
+    els.randomButton.addEventListener("click", () => {
+      const commonPercents = [0, 10, 20, 25, 33, 40, 50, 60, 66, 75, 80, 100, 110, 125, 150, 175, 200];
+      const nextPercent = commonPercents[Math.floor(Math.random() * commonPercents.length)];
+      applyValue(nextPercent / 100, "隨機出題");
+    });
+
+    updateAll();
+    runTests();
+  </script>
+
+    <template id="ldl-copy-cost-markers" hidden>
+    <!-- copy-cost marker: body-gamma YFC -->
+    <!-- copy-cost marker: body-delta LD -->
+  </template>
+<script>
+    "use strict";
+
+    // ==================================================
+    // LDL Source Reference v1.1
+    // Creator credit + hidden ownership markers
+    // ==================================================
+    const LDL_RELEASE_YEAR = 2026;
+    const LDL_VERSION = "1.1.0";
+    const LDL_PRODUCT_NAME = "小數、分數、百分數轉換器";
+    const LDL_PRODUCT_NAME_EN = "Decimal Fraction Percent Converter";
+    const LDL_PRODUCT_CODE = "LDL-MATH-DFP-2026-001";
+    const LDL_TOOL_ID = "T02-decimal-fraction-percent-converter";
+    const LDL_MODULE_ID = "ldl-decimal-fraction-percent-converter";
+    const LDL_BUILD_ID = "LDL-MATH-DFP-2026-001";
+    const LDL_FINGERPRINT = "ldl-yfc-decimal-fraction-percent-converter-v1";
+    const LDL_COMPANY = "Yung Fu Chuen";
+    const LDL_AUTHOR = "Yung Fu Chuen";
+    const LDL_VISIBLE_WATERMARK_TEXT = `© ${LDL_RELEASE_YEAR} · Yung Fu Chuen`;
+    const LDL_COPYRIGHT = `© ${LDL_RELEASE_YEAR} Yung Fu Chuen. All rights reserved.`;
+    const LDL_LICENSE = "Free classroom use only. Redistribution, resale, cloning, re-hosting, modification, or derivative use without written permission is prohibited.";
+    const LDL_CONSOLE_MESSAGE = `© ${LDL_RELEASE_YEAR} Yung Fu Chuen｜Created by Yung Fu Chuen｜LDL Source Reference v1.1`;
+    const LDL_MARKER_SIGNATURE = "LDL-SOURCE-REFERENCE-v1.1::Yung-Fu-Chuen::decimal-fraction-percent-converter::2026";
+
+    function createLDLSourceRecord() {
+      return Object.freeze({
+        productName: LDL_PRODUCT_NAME,
+        productNameEn: LDL_PRODUCT_NAME_EN,
+        productCode: LDL_PRODUCT_CODE,
+        toolId: LDL_TOOL_ID,
+        moduleId: LDL_MODULE_ID,
+        company: LDL_COMPANY,
+        author: LDL_AUTHOR,
+        releaseYear: LDL_RELEASE_YEAR,
+        version: LDL_VERSION,
+        copyright: LDL_COPYRIGHT,
+        license: LDL_LICENSE,
+        buildId: LDL_BUILD_ID,
+        fingerprint: LDL_FINGERPRINT,
+        markerSignature: LDL_MARKER_SIGNATURE
+      });
+    }
+
+    function initLDLSourceReference() {
+      try {
+        const record = createLDLSourceRecord();
+        setLDLCssCustomProperties(record);
+        upsertLDLMetaTags(record);
+        upsertLDLBodyAttributes(record);
+        upsertLDLJsonRecord(record);
+        upsertLDLHiddenDomReference(record);
+        upsertLDLSvgMetadata(record);
+        upsertLDLVisibleWatermark();
+
+        Object.defineProperty(window, "__LDL_SOURCE_REFERENCE__", {
+          value: record,
+          writable: false,
+          configurable: true,
+          enumerable: false
+        });
+
+        console.info(LDL_CONSOLE_MESSAGE);
+      } catch (error) {
+        console.warn("LDL Source Reference failed to initialize.", error);
+      }
+    }
+
+    function setLDLCssCustomProperties(record) {
+      const root = document.documentElement;
+      root.style.setProperty("--ldl-product-name", JSON.stringify(record.productName));
+      root.style.setProperty("--ldl-product-name-en", JSON.stringify(record.productNameEn));
+      root.style.setProperty("--ldl-product-code", JSON.stringify(record.productCode));
+      root.style.setProperty("--ldl-tool-id", JSON.stringify(record.toolId));
+      root.style.setProperty("--ldl-module-id", JSON.stringify(record.moduleId));
+      root.style.setProperty("--ldl-company", JSON.stringify(record.company));
+      root.style.setProperty("--ldl-author", JSON.stringify(record.author));
+      root.style.setProperty("--ldl-release-year", String(record.releaseYear));
+      root.style.setProperty("--ldl-version", JSON.stringify(record.version));
+      root.style.setProperty("--ldl-build-id", JSON.stringify(record.buildId));
+      root.style.setProperty("--ldl-fingerprint", JSON.stringify(record.fingerprint));
+    }
+
+    function upsertLDLMetaTags(record) {
+      const metaValues = {
+        author: record.author,
+        company: record.company,
+        copyright: record.copyright,
+        license: record.license,
+        "ldl-product-name": record.productName,
+        "ldl-product-name-en": record.productNameEn,
+        "ldl-product-code": record.productCode,
+        "ldl-tool-id": record.toolId,
+        "ldl-module-id": record.moduleId,
+        "ldl-release-year": String(record.releaseYear),
+        "ldl-version": record.version,
+        "ldl-build-id": record.buildId,
+        "ldl-fingerprint": record.fingerprint,
+        "ldl-source-reference": `LDL Source Reference ${record.version} · ${record.company} · ${record.author}`
+      };
+
+      Object.entries(metaValues).forEach(([name, content]) => {
+        let meta = document.head.querySelector(`meta[name="${name}"]`);
+        if (!meta) {
+          meta = document.createElement("meta");
+          meta.setAttribute("name", name);
+          document.head.appendChild(meta);
+        }
+        meta.setAttribute("content", content);
+      });
+    }
+
+    function upsertLDLBodyAttributes(record) {
+      const attrs = {
+        "data-ldl-product-name": record.productName,
+        "data-ldl-product-name-en": record.productNameEn,
+        "data-ldl-product-code": record.productCode,
+        "data-ldl-tool-id": record.toolId,
+        "data-ldl-module-id": record.moduleId,
+        "data-ldl-build-id": record.buildId,
+        "data-ldl-fingerprint": record.fingerprint,
+        "data-ldl-marker-signature": record.markerSignature
+      };
+
+      Object.entries(attrs).forEach(([name, value]) => {
+        document.body.setAttribute(name, value);
+      });
+    }
+
+    function upsertLDLJsonRecord(record) {
+      let script = document.getElementById("ldl-source-reference");
+      if (!script) {
+        script = document.createElement("script");
+        script.type = "application/json";
+        script.id = "ldl-source-reference";
+        document.body.appendChild(script);
+      }
+      script.textContent = JSON.stringify(record, null, 2);
+    }
+
+    function upsertLDLHiddenDomReference(record) {
+      const hidden = getOrCreateLDLElement("div", "ldl-hidden-source-reference", document.body);
+      hidden.className = "ldl-offscreen-source-reference";
+      hidden.setAttribute("aria-hidden", "true");
+      hidden.setAttribute("data-ldl-product-name", record.productName);
+      hidden.setAttribute("data-ldl-product-name-en", record.productNameEn);
+      hidden.setAttribute("data-ldl-product-code", record.productCode);
+      hidden.setAttribute("data-ldl-tool-id", record.toolId);
+      hidden.setAttribute("data-ldl-module-id", record.moduleId);
+      hidden.setAttribute("data-ldl-company", record.company);
+      hidden.setAttribute("data-ldl-author", record.author);
+      hidden.setAttribute("data-ldl-release-year", String(record.releaseYear));
+      hidden.setAttribute("data-ldl-version", record.version);
+      hidden.setAttribute("data-ldl-build-id", record.buildId);
+      hidden.setAttribute("data-ldl-fingerprint", record.fingerprint);
+      hidden.setAttribute("data-ldl-marker-signature", record.markerSignature);
+      hidden.textContent = [
+        "LDL Source Reference",
+        record.productName,
+        record.productNameEn,
+        record.productCode,
+        record.toolId,
+        record.moduleId,
+        record.company,
+        record.author,
+        String(record.releaseYear),
+        record.version,
+        record.buildId,
+        record.fingerprint,
+        record.markerSignature,
+        record.license
+      ].join(" | ");
+    }
+
+    function upsertLDLSvgMetadata(record) {
+      let svg = document.getElementById("ldl-hidden-svg-source-reference");
+      if (!svg) {
+        svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.id = "ldl-hidden-svg-source-reference";
+        document.body.appendChild(svg);
+      }
+      svg.setAttribute("class", "ldl-offscreen-source-reference");
+      svg.setAttribute("width", "0");
+      svg.setAttribute("height", "0");
+      svg.setAttribute("aria-hidden", "true");
+      svg.setAttribute("focusable", "false");
+
+      let metadata = svg.querySelector("metadata");
+      if (!metadata) {
+        metadata = document.createElementNS("http://www.w3.org/2000/svg", "metadata");
+        svg.appendChild(metadata);
+      }
+      metadata.textContent = JSON.stringify(record);
+    }
+
+    function upsertLDLVisibleWatermark() {
+      const watermark = getOrCreateLDLElement("div", "ldl-visible-watermark", document.body);
+      watermark.className = "ldl-visible-watermark";
+      watermark.setAttribute("aria-hidden", "true");
+
+      let text = watermark.querySelector("span");
+      if (!text) {
+        text = document.createElement("span");
+        watermark.appendChild(text);
+      }
+      text.textContent = LDL_VISIBLE_WATERMARK_TEXT;
+    }
+
+    function getOrCreateLDLElement(tagName, id, parent) {
+      let element = document.getElementById(id);
+      if (!element) {
+        element = document.createElement(tagName);
+        element.id = id;
+        parent.appendChild(element);
+      }
+      return element;
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initLDLSourceReference, { once: true });
+    } else {
+      initLDLSourceReference();
+    }
+  </script>
+  <script src="../../assets/tool-home-nav.js"></script>
+</body>
+</html>

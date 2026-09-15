@@ -1,0 +1,20 @@
+{
+  "name": "四則衝刺：逃離暴龍",
+  "short_name": "四則衝刺",
+  "description": "學生友善的三線四則運算跑酷遊戲",
+  "lang": "zh-Hant",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "landscape",
+  "background_color": "#a9eff2",
+  "theme_color": "#3468d4",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

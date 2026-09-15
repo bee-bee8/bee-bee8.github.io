@@ -1,0 +1,1356 @@
+<!doctype html>
+<html lang="en" data-ldl-tool-id="T03-area-formula-discovery-lab" data-ldl-fingerprint="ldl-yfc-area-formula-discovery-lab-v1">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Yung Fu Chuen">
+  <meta name="company" content="Yung Fu Chuen">
+  <meta name="copyright" content="© 2026 Yung Fu Chuen. All rights reserved.">
+  <meta name="license" content="Free classroom use only. Redistribution, resale, cloning, re-hosting, modification, or derivative use without written permission is prohibited.">
+  <meta name="ldl-product-name" content="Area Formula Discovery Lab">
+  <meta name="ldl-product-name-en" content="Area Formula Discovery Lab">
+  <meta name="ldl-product-code" content="LDL-MATH-AREA-2026-001">
+  <meta name="ldl-tool-id" content="T03-area-formula-discovery-lab">
+  <meta name="ldl-module-id" content="ldl-area-formula-discovery-lab">
+  <meta name="ldl-release-year" content="2026">
+  <meta name="ldl-version" content="1.1.0">
+  <meta name="ldl-build-id" content="LDL-MATH-AREA-2026-001">
+  <meta name="ldl-fingerprint" content="ldl-yfc-area-formula-discovery-lab-v1">
+  <meta name="ldl-source-reference" content="LDL Source Reference v1.1 · Yung Fu Chuen · Yung Fu Chuen">
+  <title>Area Formula Discovery Lab</title>
+
+  <!--
+    LDL SOURCE REFERENCE v1.1
+    Purpose: creator credit + hidden ownership/source markers.
+    Product Name: Area Formula Discovery Lab
+    Product Name EN: Area Formula Discovery Lab
+    Product Code: LDL-MATH-AREA-2026-001
+    Tool ID: area-formula-discovery-lab
+    Module ID: ldl-area-formula-discovery-lab
+    Company: Yung Fu Chuen
+    Author: Yung Fu Chuen
+    Release Year: 2026
+    Version: 1.1.0
+    Build ID: LDL-MATH-AREA-2026-001
+    Fingerprint: ldl-yfc-area-formula-discovery-lab-v1
+    License: Free classroom use only. Redistribution, resale, cloning, re-hosting, modification, or derivative use without written permission is prohibited.
+  -->
+  <style>
+    :root {
+      --bg: #f4f8fb;
+      --panel: #ffffff;
+      --ink: #223044;
+      --muted: #68788d;
+      --line: #d7e3ef;
+      --grid: #d5e6f3;
+      --grid-strong: #b5cfe2;
+      --blue: #2878d3;
+      --orange: #f0952f;
+      --purple: #8560d6;
+      --green: #38a06e;
+      --shadow: 0 18px 42px rgba(35, 58, 84, 0.13);
+      --ldl-product-name: "Area Formula Discovery Lab";
+      --ldl-product-name-en: "Area Formula Discovery Lab";
+      --ldl-product-code: "LDL-MATH-AREA-2026-001";
+      --ldl-tool-id: "T03-area-formula-discovery-lab";
+      --ldl-module-id: "ldl-area-formula-discovery-lab";
+      --ldl-company: "Yung Fu Chuen";
+      --ldl-author: "Yung Fu Chuen";
+      --ldl-release-year: "2026";
+      --ldl-version: "1.1.0";
+      --ldl-build-id: "LDL-MATH-AREA-2026-001";
+      --ldl-fingerprint: "ldl-yfc-area-formula-discovery-lab-v1";
+      font-family: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(76, 162, 225, 0.18), transparent 30%),
+        linear-gradient(180deg, #fbfdff 0%, var(--bg) 100%);
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .app {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-size: clamp(28px, 3vw, 42px);
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .tabs,
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .tabs {
+      margin-bottom: 12px;
+    }
+
+    .tab,
+    .tool {
+      min-height: 42px;
+      border: 1px solid #bad1e5;
+      border-radius: 8px;
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 900;
+      transition: transform 130ms ease, background 130ms ease, border-color 130ms ease;
+    }
+
+    .tab {
+      padding: 9px 18px;
+      font-size: 17px;
+    }
+
+    .tool {
+      padding: 8px 12px;
+    }
+
+    .tab:hover,
+    .tool:hover {
+      transform: translateY(-1px);
+      background: #fafdff;
+      border-color: #83afd3;
+    }
+
+    .tab.active,
+    .tool.active {
+      background: #e7f3ff;
+      border-color: var(--blue);
+      color: #125b9f;
+    }
+
+    .lab {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: var(--shadow);
+    }
+
+    .toolbar {
+      padding: 12px;
+      border-bottom: 1px solid var(--line);
+      background: #f7fbff;
+    }
+
+    .stage-scroll {
+      overflow: auto;
+      background: #fafdff;
+    }
+
+    .stage-wrap {
+      width: 900px;
+      height: 560px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    svg {
+      display: block;
+      width: 900px;
+      height: 560px;
+      touch-action: none;
+      user-select: none;
+    }
+
+    .formula-strip {
+      border-top: 1px solid var(--line);
+      background: #ffffff;
+      padding: 18px 24px 24px;
+      text-align: center;
+    }
+
+    .formula-title {
+      font-size: 24px;
+      line-height: 1.2;
+      font-weight: 950;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .formula-text {
+      font-size: clamp(30px, 4vw, 48px);
+      line-height: 1.18;
+      font-weight: 950;
+      color: #1d3148;
+    }
+
+    .piece {
+      cursor: grab;
+    }
+
+    .piece:active,
+    .measure-group:active {
+      cursor: grabbing;
+    }
+
+    .piece.selected polygon {
+      filter: drop-shadow(0 8px 10px rgba(40, 120, 211, 0.24));
+    }
+
+    .shape-main {
+      fill: rgba(111, 180, 236, 0.72);
+      stroke: #2f7ed8;
+      stroke-width: 4;
+      stroke-linejoin: round;
+    }
+
+    .shape-piece {
+      fill: rgba(255, 211, 143, 0.88);
+      stroke: #e58e28;
+      stroke-width: 4;
+      stroke-linejoin: round;
+    }
+
+    .shape-twin {
+      fill: rgba(184, 226, 204, 0.88);
+      stroke: #2d9865;
+      stroke-width: 4;
+      stroke-linejoin: round;
+    }
+
+    .cut-line {
+      stroke: rgba(34, 48, 68, 0.48);
+      stroke-width: 3;
+      stroke-dasharray: 8 7;
+      pointer-events: none;
+    }
+
+    .measure-group {
+      cursor: grab;
+    }
+
+    .measure-line,
+    .measure-bar {
+      vector-effect: non-scaling-stroke;
+      stroke-width: 3.2;
+      stroke-linecap: round;
+      fill: none;
+    }
+
+    .measure-hit {
+      stroke: transparent;
+      stroke-width: 26;
+      stroke-linecap: round;
+      fill: none;
+    }
+
+    .measure-text {
+      font-size: 22px;
+      font-weight: 950;
+      paint-order: stroke;
+      stroke: rgba(255, 255, 255, 0.9);
+      stroke-width: 6px;
+      stroke-linejoin: round;
+      pointer-events: none;
+    }
+
+    .message-box {
+      fill: rgba(255, 255, 255, 0.93);
+      stroke: #d7e3ef;
+      stroke-width: 2;
+      filter: drop-shadow(0 8px 16px rgba(35, 58, 84, 0.12));
+    }
+
+    .message-text {
+      fill: #2d4058;
+      font-size: 22px;
+      font-weight: 950;
+    }
+
+
+
+    /* LDL Source Reference v1.1: creator credit + hidden source markers */
+    .ldl-visible-watermark {
+      position: fixed;
+      z-index: 2147483000;
+      left: max(14px, env(safe-area-inset-left));
+      right: auto;
+      top: max(70px, calc(env(safe-area-inset-top) + 66px));
+      bottom: auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 5px;
+      max-width: min(190px, calc(100vw - 20px));
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      color: rgba(23, 32, 51, 0.56);
+      background: transparent;
+      box-shadow: none;
+      font-size: 8px;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: 0;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+      backdrop-filter: none;
+    }
+
+    /* copy-cost marker: style-beta LD */
+
+    .ldl-visible-watermark img {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+      object-fit: contain;
+      opacity: 0.88;
+    }
+
+    .ldl-visible-watermark span {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .ldl-offscreen-source-reference {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      margin: -1px !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      clip: rect(0 0 0 0) !important;
+      clip-path: inset(50%) !important;
+      border: 0 !important;
+      white-space: nowrap !important;
+    }
+
+    @media (max-width: 520px) {
+      .ldl-visible-watermark {
+        left: max(8px, env(safe-area-inset-left));
+        right: auto;
+        top: max(58px, calc(env(safe-area-inset-top) + 54px));
+        bottom: auto;
+        font-size: 7px;
+      }
+
+      .ldl-visible-watermark img {
+        width: 14px;
+        height: 14px;
+      }
+    }
+
+    /* End LDL Source Reference v1.1 */
+
+    @media (max-width: 940px) {
+      .app {
+        padding: 14px;
+      }
+
+      .stage-wrap,
+      svg {
+        width: 900px;
+        height: 560px;
+      }
+    }
+  </style>
+</head>
+<body data-ldl-reserve-top-space="true"
+  data-ldl-product-name="Area Formula Discovery Lab"
+  data-ldl-product-name-en="Area Formula Discovery Lab"
+  data-ldl-product-code="LDL-MATH-AREA-2026-001"
+  data-ldl-tool-id="T03-area-formula-discovery-lab"
+  data-ldl-module-id="ldl-area-formula-discovery-lab"
+  data-ldl-build-id="LDL-MATH-AREA-2026-001"
+  data-ldl-fingerprint="ldl-yfc-area-formula-discovery-lab-v1"
+>
+  <main class="app">
+    <h1>Area Formula Lab</h1>
+
+    <nav class="tabs" aria-label="Shape modes">
+      <button class="tab active" type="button" data-mode="parallelogram">Parallelogram</button>
+      <button class="tab" type="button" data-mode="triangle">Triangle</button>
+      <button class="tab" type="button" data-mode="trapezium">Trapezium</button>
+    </nav>
+
+    <section class="lab">
+      <div class="toolbar" aria-label="Toolbar">
+        <button class="tool active" type="button" id="dragTool">Drag</button>
+        <button class="tool" type="button" data-action="flipX">Flip horizontally</button>
+        <button class="tool" type="button" data-action="flipY">Flip vertically</button>
+        <button class="tool" type="button" data-action="compose">Show composition</button>
+        <button class="tool" type="button" data-action="reset">Reset</button>
+      </div>
+
+      <div class="stage-scroll">
+        <div class="stage-wrap">
+          <svg id="stage" viewBox="0 0 900 560" role="img" aria-label="Area formula shape composition workspace">
+            <defs>
+              <pattern id="smallGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path d="M 20 0 L 0 0 0 20" fill="none" stroke="var(--grid)" stroke-width="1"/>
+              </pattern>
+              <pattern id="grid" width="100" height="100" patternUnits="userSpaceOnUse">
+                <rect width="100" height="100" fill="url(#smallGrid)"/>
+                <path d="M 100 0 L 0 0 0 100" fill="none" stroke="var(--grid-strong)" stroke-width="1.6"/>
+              </pattern>
+              <marker id="arrowBlue" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#2878d3"></path>
+              </marker>
+              <marker id="arrowOrange" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#f0952f"></path>
+              </marker>
+              <marker id="arrowPurple" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#8560d6"></path>
+              </marker>
+              <marker id="arrowBlack" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#20242a"></path>
+              </marker>
+            </defs>
+            <rect width="900" height="560" fill="url(#grid)"></rect>
+            <g id="shapeLayer"></g>
+            <g id="measureLayer"></g>
+            <g id="messageLayer"></g>
+          </svg>
+        </div>
+      </div>
+
+      <div class="formula-strip" aria-live="polite">
+        <div class="formula-title">Area</div>
+        <div class="formula-text" id="formulaText">base × height</div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const svg = document.getElementById("stage");
+    const shapeLayer = document.getElementById("shapeLayer");
+    const measureLayer = document.getElementById("measureLayer");
+    const messageLayer = document.getElementById("messageLayer");
+    const formulaText = document.getElementById("formulaText");
+    const dragTool = document.getElementById("dragTool");
+
+    const SVG_NS = "http://www.w3.org/2000/svg";
+    const colors = {
+      blue: "#2878d3",
+      orange: "#f0952f",
+      purple: "#8560d6"
+    };
+
+    const modeInfo = {
+      parallelogram: {
+        formula: "base × height",
+        message: "Only the position changes. The area stays the same.",
+        selected: "sidePiece"
+      },
+      triangle: {
+        formula: "base × height ÷ 2",
+        message: "It is half of a parallelogram.",
+        selected: "twinTriangle"
+      },
+      trapezium: {
+        formula: "(upper base + lower base) × height ÷ 2",
+        message: "Two identical trapeziums form one parallelogram.",
+        selected: "twinTrapezium"
+      }
+    };
+
+    const defaultMeasureOffsets = {
+      parallelogram: {
+        pBase: { dx: 0, dy: 0 },
+        pHeight: { dx: 0, dy: 0 }
+      },
+      triangle: {
+        tBase: { dx: 0, dy: 0 },
+        tHeight: { dx: 0, dy: 0 }
+      },
+      trapezium: {
+        zTop: { dx: 0, dy: 0 },
+        zBottom: { dx: 0, dy: 0 },
+        zHeight: { dx: 0, dy: 0 },
+        zTwinTop: { dx: 0, dy: 0 },
+        zTwinBottom: { dx: 0, dy: 0 },
+        zCombined: { dx: 0, dy: 0 }
+      }
+    };
+
+    let activeMode = "parallelogram";
+    let pieces = [];
+    let selectedId = modeInfo[activeMode].selected;
+    let dragEnabled = true;
+    let composed = false;
+    let animationFrame = null;
+    let dragState = null;
+    let measureOffsets = cloneOffsets(defaultMeasureOffsets);
+
+    function cloneOffsets(source) {
+      return JSON.parse(JSON.stringify(source));
+    }
+
+    function el(name, attrs = {}) {
+      const node = document.createElementNS(SVG_NS, name);
+      Object.entries(attrs).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) node.setAttribute(key, value);
+      });
+      return node;
+    }
+
+    function pointsToString(points) {
+      return points.map(point => point.join(",")).join(" ");
+    }
+
+    function transformFor(piece) {
+      const flipX = piece.flipX ? -1 : 1;
+      const flipY = piece.flipY ? -1 : 1;
+      return [
+        `translate(${piece.tx} ${piece.ty})`,
+        `translate(${piece.cx} ${piece.cy})`,
+        `rotate(${piece.rot})`,
+        `scale(${flipX} ${flipY})`,
+        `translate(${-piece.cx} ${-piece.cy})`
+      ].join(" ");
+    }
+
+    function resetPiecesForMode(mode) {
+      composed = false;
+      if (animationFrame) cancelAnimationFrame(animationFrame);
+
+      if (mode === "parallelogram") {
+        pieces = [
+          {
+            id: "mainBody",
+            points: [[240, 170], [580, 170], [500, 330], [240, 330]],
+            className: "shape-main",
+            tx: 0,
+            ty: 0,
+            rot: 0,
+            flipX: false,
+            flipY: false,
+            cx: 410,
+            cy: 250
+          },
+          {
+            id: "sidePiece",
+            points: [[160, 330], [240, 170], [240, 330]],
+            className: "shape-piece",
+            tx: 0,
+            ty: 0,
+            rot: 0,
+            flipX: false,
+            flipY: false,
+            cx: 215,
+            cy: 278,
+            target: { tx: 340, ty: 0, rot: 0, flipX: false, flipY: false }
+          }
+        ];
+      }
+
+      if (mode === "triangle") {
+        pieces = [
+          {
+            id: "mainTriangle",
+            points: [[260, 330], [560, 330], [260, 170]],
+            className: "shape-main",
+            tx: 0,
+            ty: 0,
+            rot: 0,
+            flipX: false,
+            flipY: false,
+            cx: 410,
+            cy: 250
+          },
+          {
+            id: "twinTriangle",
+            points: [[260, 330], [560, 330], [260, 170]],
+            className: "shape-twin",
+            tx: 260,
+            ty: -18,
+            rot: 0,
+            flipX: true,
+            flipY: false,
+            cx: 410,
+            cy: 250,
+            visible: false,
+            target: { tx: 0, ty: 0, rot: 180, flipX: false, flipY: false }
+          }
+        ];
+      }
+
+      if (mode === "trapezium") {
+        pieces = [
+          {
+            id: "mainTrapezium",
+            points: [[260, 180], [460, 180], [560, 340], [180, 340]],
+            className: "shape-main",
+            tx: 0,
+            ty: 0,
+            rot: 0,
+            flipX: false,
+            flipY: false,
+            cx: 370,
+            cy: 260
+          },
+          {
+            id: "twinTrapezium",
+            points: [[260, 180], [460, 180], [560, 340], [180, 340]],
+            className: "shape-twin",
+            tx: 250,
+            ty: -20,
+            rot: 0,
+            flipX: true,
+            flipY: false,
+            cx: 370,
+            cy: 260,
+            visible: false,
+            target: { tx: 280, ty: 0, rot: 180, flipX: false, flipY: false }
+          }
+        ];
+      }
+
+      selectedId = modeInfo[mode].selected;
+      render();
+    }
+
+    function render() {
+      formulaText.textContent = modeInfo[activeMode].formula;
+      shapeLayer.replaceChildren();
+      measureLayer.replaceChildren();
+      messageLayer.replaceChildren();
+
+      pieces.forEach(piece => {
+        if (piece.visible === false) return;
+        const group = el("g", {
+          class: `piece ${piece.id === selectedId ? "selected" : ""}`,
+          transform: transformFor(piece),
+          "data-piece-id": piece.id,
+          tabindex: "0",
+          role: "button",
+          "aria-label": "Draggable shape"
+        });
+        group.appendChild(el("polygon", {
+          points: pointsToString(piece.points),
+          class: piece.className
+        }));
+        if (piece.id === "mainBody") {
+          group.appendChild(el("line", {
+            x1: 240,
+            y1: 170,
+            x2: 240,
+            y2: 330,
+            class: "cut-line"
+          }));
+        }
+        group.addEventListener("pointerdown", startPieceDrag);
+        group.addEventListener("click", event => {
+          selectedId = piece.id;
+          render();
+          event.stopPropagation();
+        });
+        shapeLayer.appendChild(group);
+      });
+
+      drawMeasurements();
+      drawMessage(modeInfo[activeMode].message);
+    }
+
+    function drawMessage(message) {
+      const group = el("g");
+      group.appendChild(el("rect", {
+        x: 28,
+        y: 24,
+        width: 640,
+        height: 54,
+        rx: 8,
+        class: "message-box"
+      }));
+      const text = el("text", {
+        x: 48,
+        y: 59,
+        class: "message-text"
+      });
+      text.textContent = message;
+      group.appendChild(text);
+      messageLayer.appendChild(group);
+    }
+
+    function markerFor(colorName) {
+      if (colorName === "orange") return "url(#arrowOrange)";
+      if (colorName === "purple") return "url(#arrowPurple)";
+      return "url(#arrowBlue)";
+    }
+
+    function drawMeasurements() {
+      if (activeMode === "parallelogram") {
+        drawMeasure({ id: "pBase", x1: 160, y1: 386, x2: 500, y2: 386, label: "base", color: "blue", labelY: 422 });
+        drawMeasure({ id: "pHeight", x1: 626, y1: 170, x2: 626, y2: 330, label: "height", color: "purple", labelX: 662 });
+      }
+
+      if (activeMode === "triangle") {
+        drawMeasure({ id: "tBase", x1: 260, y1: 384, x2: 560, y2: 384, label: "base", color: "blue", labelY: 420 });
+        drawMeasure({ id: "tHeight", x1: 218, y1: 170, x2: 218, y2: 330, label: "height", color: "purple", labelX: 184 });
+      }
+
+      if (activeMode === "trapezium") {
+        drawMeasure({ id: "zTop", x1: 260, y1: 140, x2: 460, y2: 140, label: "upper base", color: "blue", labelY: 124 });
+        drawMeasure({ id: "zBottom", x1: 180, y1: 384, x2: 560, y2: 384, label: "lower base", color: "orange", labelY: 422 });
+        drawMeasure({ id: "zHeight", x1: 610, y1: 180, x2: 610, y2: 340, label: "height", color: "purple", labelX: 644 });
+
+        if (composed) {
+          drawMeasure({ id: "zTwinTop", x1: 460, y1: 128, x2: 840, y2: 128, label: "upper base", color: "orange", labelY: 112 });
+          drawMeasure({ id: "zTwinBottom", x1: 560, y1: 372, x2: 760, y2: 372, label: "lower base", color: "blue", labelY: 410 });
+          drawCombinedBase();
+        }
+      }
+    }
+
+    function drawMeasure(config) {
+      const color = colors[config.color];
+      const offset = measureOffsets[activeMode][config.id] || { dx: 0, dy: 0 };
+      const group = el("g", {
+        class: "measure-group",
+        transform: `translate(${offset.dx} ${offset.dy})`,
+        "data-measure-id": config.id,
+        tabindex: "0",
+        role: "button",
+        "aria-label": `Draggable measurement: ${config.label}`
+      });
+
+      const vertical = Math.abs(config.x1 - config.x2) < 0.1;
+      const bar = config.bar || 26;
+      const inset = config.inset || 15;
+      let ax1 = config.x1;
+      let ay1 = config.y1;
+      let ax2 = config.x2;
+      let ay2 = config.y2;
+
+      if (vertical) {
+        const direction = config.y2 >= config.y1 ? 1 : -1;
+        ay1 += inset * direction;
+        ay2 -= inset * direction;
+        group.appendChild(el("line", { x1: config.x1 - bar / 2, y1: config.y1, x2: config.x1 + bar / 2, y2: config.y1, stroke: color, class: "measure-bar" }));
+        group.appendChild(el("line", { x1: config.x2 - bar / 2, y1: config.y2, x2: config.x2 + bar / 2, y2: config.y2, stroke: color, class: "measure-bar" }));
+      } else {
+        const direction = config.x2 >= config.x1 ? 1 : -1;
+        ax1 += inset * direction;
+        ax2 -= inset * direction;
+        group.appendChild(el("line", { x1: config.x1, y1: config.y1 - bar / 2, x2: config.x1, y2: config.y1 + bar / 2, stroke: color, class: "measure-bar" }));
+        group.appendChild(el("line", { x1: config.x2, y1: config.y2 - bar / 2, x2: config.x2, y2: config.y2 + bar / 2, stroke: color, class: "measure-bar" }));
+      }
+
+      group.appendChild(el("line", {
+        x1: ax1,
+        y1: ay1,
+        x2: ax2,
+        y2: ay2,
+        stroke: color,
+        class: "measure-line",
+        "marker-start": markerFor(config.color),
+        "marker-end": markerFor(config.color)
+      }));
+      group.appendChild(el("line", {
+        x1: config.x1,
+        y1: config.y1,
+        x2: config.x2,
+        y2: config.y2,
+        class: "measure-hit"
+      }));
+
+      const text = el("text", {
+        x: config.labelX ?? (config.x1 + config.x2) / 2,
+        y: config.labelY ?? (config.y1 + config.y2) / 2 - 12,
+        fill: color,
+        class: "measure-text",
+        "text-anchor": "middle"
+      });
+      text.textContent = config.label;
+      group.appendChild(text);
+      group.addEventListener("pointerdown", startMeasureDrag);
+      measureLayer.appendChild(group);
+    }
+
+    function drawCombinedBase() {
+      const id = "zCombined";
+      const offset = measureOffsets.trapezium[id] || { dx: 0, dy: 0 };
+      const x1 = 180;
+      const x2 = 760;
+      const joinX = 560;
+      const y = 452;
+      const bar = 30;
+      const inset = 16;
+      const black = "#20242a";
+      const group = el("g", {
+        class: "measure-group",
+        transform: `translate(${offset.dx} ${offset.dy})`,
+        "data-measure-id": id,
+        tabindex: "0",
+        role: "button",
+        "aria-label": "Draggable measurement: lower base + upper base"
+      });
+      group.appendChild(el("line", { x1, y1: y - bar / 2, x2: x1, y2: y + bar / 2, stroke: black, class: "measure-bar" }));
+      group.appendChild(el("line", { x1: x2, y1: y - bar / 2, x2, y2: y + bar / 2, stroke: black, class: "measure-bar" }));
+      group.appendChild(el("line", {
+        x1: x1 + inset,
+        y1: y,
+        x2: x2 - inset,
+        y2: y,
+        stroke: black,
+        class: "measure-line",
+        "marker-start": "url(#arrowBlack)",
+        "marker-end": "url(#arrowBlack)"
+      }));
+      group.appendChild(el("line", {
+        x1: joinX,
+        y1: y - 18,
+        x2: joinX,
+        y2: y + 18,
+        stroke: black,
+        class: "measure-bar"
+      }));
+      group.appendChild(el("line", { x1, y1: y, x2, y2: y, class: "measure-hit" }));
+
+      const plus = el("text", {
+        x: joinX,
+        y: y + 52,
+        fill: black,
+        class: "measure-text",
+        "font-size": 34,
+        "text-anchor": "middle"
+      });
+      plus.textContent = "";
+      group.appendChild(plus);
+
+      const label = el("text", {
+        x: (x1 + x2) / 2,
+        y: y + 90,
+        fill: black,
+        class: "measure-text",
+        "text-anchor": "middle"
+      });
+      label.textContent = "lower base + upper base";
+      group.appendChild(label);
+      group.addEventListener("pointerdown", startMeasureDrag);
+      measureLayer.appendChild(group);
+    }
+
+    function drawSegmentInGroup(group, x1, y1, x2, y2, colorName) {
+      const color = colors[colorName];
+      const inset = 15;
+      const bar = 26;
+      group.appendChild(el("line", { x1, y1: y1 - bar / 2, x2: x1, y2: y1 + bar / 2, stroke: color, class: "measure-bar" }));
+      group.appendChild(el("line", { x1: x2, y1: y2 - bar / 2, x2, y2: y2 + bar / 2, stroke: color, class: "measure-bar" }));
+      group.appendChild(el("line", {
+        x1: x1 + inset,
+        y1,
+        x2: x2 - inset,
+        y2,
+        stroke: color,
+        class: "measure-line",
+        "marker-start": markerFor(colorName),
+        "marker-end": markerFor(colorName)
+      }));
+      group.appendChild(el("line", { x1, y1, x2, y2, class: "measure-hit" }));
+    }
+
+    function getPiece(id) {
+      return pieces.find(piece => piece.id === id);
+    }
+
+    function svgPoint(event) {
+      const point = svg.createSVGPoint();
+      point.x = event.clientX;
+      point.y = event.clientY;
+      return point.matrixTransform(svg.getScreenCTM().inverse());
+    }
+
+    function startPieceDrag(event) {
+      const piece = getPiece(event.currentTarget.dataset.pieceId);
+      if (!piece || !dragEnabled) return;
+      selectedId = piece.id;
+      const point = svgPoint(event);
+      dragState = {
+        type: "piece",
+        pointerId: event.pointerId,
+        piece,
+        startPoint: point,
+        startTx: piece.tx,
+        startTy: piece.ty
+      };
+      event.currentTarget.setPointerCapture(event.pointerId);
+      render();
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    function startMeasureDrag(event) {
+      const id = event.currentTarget.dataset.measureId;
+      const offset = measureOffsets[activeMode][id];
+      if (!offset) return;
+      const point = svgPoint(event);
+      dragState = {
+        type: "measure",
+        pointerId: event.pointerId,
+        measureId: id,
+        startPoint: point,
+        startDx: offset.dx,
+        startDy: offset.dy
+      };
+      event.currentTarget.setPointerCapture(event.pointerId);
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    svg.addEventListener("pointermove", event => {
+      if (!dragState) return;
+      const point = svgPoint(event);
+      const dx = point.x - dragState.startPoint.x;
+      const dy = point.y - dragState.startPoint.y;
+
+      if (dragState.type === "piece") {
+        dragState.piece.tx = dragState.startTx + dx;
+        dragState.piece.ty = dragState.startTy + dy;
+        if (composed && dragState.piece.target) {
+          const txDiff = dragState.piece.tx - dragState.piece.target.tx;
+          const tyDiff = dragState.piece.ty - dragState.piece.target.ty;
+          if (Math.hypot(txDiff, tyDiff) < 22) {
+            dragState.piece.tx = dragState.piece.target.tx;
+            dragState.piece.ty = dragState.piece.target.ty;
+          }
+        }
+      }
+
+      if (dragState.type === "measure") {
+        const offset = measureOffsets[activeMode][dragState.measureId];
+        offset.dx = dragState.startDx + dx;
+        offset.dy = dragState.startDy + dy;
+      }
+
+      render();
+    });
+
+    window.addEventListener("pointerup", () => {
+      dragState = null;
+    });
+
+    function applyToSelected(mutator) {
+      const piece = getPiece(selectedId);
+      if (!piece) return;
+      mutator(piece);
+      render();
+    }
+
+    function animatePiece(piece, target, duration = 850) {
+      if (!piece) return Promise.resolve();
+      piece.visible = true;
+      const start = {
+        tx: piece.tx,
+        ty: piece.ty,
+        rot: piece.rot,
+        flipX: piece.flipX ? 1 : 0,
+        flipY: piece.flipY ? 1 : 0
+      };
+      const end = {
+        tx: target.tx,
+        ty: target.ty,
+        rot: target.rot,
+        flipX: target.flipX ? 1 : 0,
+        flipY: target.flipY ? 1 : 0
+      };
+
+      return new Promise(resolve => {
+        const started = performance.now();
+        const step = now => {
+          const raw = Math.min(1, (now - started) / duration);
+          const ease = 1 - Math.pow(1 - raw, 3);
+          piece.tx = start.tx + (end.tx - start.tx) * ease;
+          piece.ty = start.ty + (end.ty - start.ty) * ease;
+          piece.rot = start.rot + (end.rot - start.rot) * ease;
+          piece.flipX = ease < 0.5 ? Boolean(start.flipX) : Boolean(end.flipX);
+          piece.flipY = ease < 0.5 ? Boolean(start.flipY) : Boolean(end.flipY);
+          render();
+          if (raw < 1) {
+            animationFrame = requestAnimationFrame(step);
+          } else {
+            piece.tx = target.tx;
+            piece.ty = target.ty;
+            piece.rot = target.rot;
+            piece.flipX = target.flipX;
+            piece.flipY = target.flipY;
+            render();
+            resolve();
+          }
+        };
+        animationFrame = requestAnimationFrame(step);
+      });
+    }
+
+    function animatePieceWithMeasure(piece, target, measureId, duration = 850, measureMove = null) {
+      if (!piece) return Promise.resolve();
+      const offset = measureOffsets[activeMode][measureId];
+      if (!offset) return animatePiece(piece, target, duration);
+      piece.visible = true;
+      const start = {
+        tx: piece.tx,
+        ty: piece.ty,
+        rot: piece.rot,
+        flipX: piece.flipX ? 1 : 0,
+        flipY: piece.flipY ? 1 : 0,
+        dx: offset.dx,
+        dy: offset.dy
+      };
+      const moveX = measureMove ? measureMove.dx : target.tx - piece.tx;
+      const moveY = measureMove ? measureMove.dy : target.ty - piece.ty;
+      const end = {
+        tx: target.tx,
+        ty: target.ty,
+        rot: target.rot,
+        flipX: target.flipX ? 1 : 0,
+        flipY: target.flipY ? 1 : 0,
+        dx: offset.dx + moveX,
+        dy: offset.dy + moveY
+      };
+
+      return new Promise(resolve => {
+        const started = performance.now();
+        const step = now => {
+          const raw = Math.min(1, (now - started) / duration);
+          const ease = 1 - Math.pow(1 - raw, 3);
+          piece.tx = start.tx + (end.tx - start.tx) * ease;
+          piece.ty = start.ty + (end.ty - start.ty) * ease;
+          piece.rot = start.rot + (end.rot - start.rot) * ease;
+          piece.flipX = ease < 0.5 ? Boolean(start.flipX) : Boolean(end.flipX);
+          piece.flipY = ease < 0.5 ? Boolean(start.flipY) : Boolean(end.flipY);
+          offset.dx = start.dx + (end.dx - start.dx) * ease;
+          offset.dy = start.dy + (end.dy - start.dy) * ease;
+          render();
+          if (raw < 1) {
+            animationFrame = requestAnimationFrame(step);
+          } else {
+            piece.tx = target.tx;
+            piece.ty = target.ty;
+            piece.rot = target.rot;
+            piece.flipX = target.flipX;
+            piece.flipY = target.flipY;
+            offset.dx = end.dx;
+            offset.dy = end.dy;
+            render();
+            resolve();
+          }
+        };
+        animationFrame = requestAnimationFrame(step);
+      });
+    }
+
+    async function composeCurrentMode() {
+      if (animationFrame) cancelAnimationFrame(animationFrame);
+      composed = true;
+
+      if (activeMode === "parallelogram") {
+        const piece = getPiece("sidePiece");
+        selectedId = "sidePiece";
+        await animatePieceWithMeasure(piece, piece.target, "pBase", 760, { dx: 80, dy: 0 });
+      }
+
+      if (activeMode === "triangle") {
+        const piece = getPiece("twinTriangle");
+        selectedId = "twinTriangle";
+        await animatePiece(piece, piece.target, 880);
+      }
+
+      if (activeMode === "trapezium") {
+        const piece = getPiece("twinTrapezium");
+        selectedId = "twinTrapezium";
+        await animatePiece(piece, piece.target, 900);
+      }
+    }
+
+    document.querySelectorAll(".tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        activeMode = tab.dataset.mode;
+        document.querySelectorAll(".tab").forEach(item => item.classList.toggle("active", item === tab));
+        resetPiecesForMode(activeMode);
+      });
+    });
+
+    dragTool.addEventListener("click", () => {
+      dragEnabled = !dragEnabled;
+      dragTool.classList.toggle("active", dragEnabled);
+    });
+
+    document.querySelectorAll("[data-action]").forEach(button => {
+      button.addEventListener("click", () => {
+        const action = button.dataset.action;
+
+        if (action === "flipX") {
+          applyToSelected(piece => {
+            piece.flipX = !piece.flipX;
+          });
+        }
+
+        if (action === "flipY") {
+          applyToSelected(piece => {
+            piece.flipY = !piece.flipY;
+          });
+        }
+
+        if (action === "compose") {
+          composeCurrentMode();
+        }
+
+        if (action === "reset") {
+          measureOffsets[activeMode] = cloneOffsets(defaultMeasureOffsets[activeMode]);
+          resetPiecesForMode(activeMode);
+        }
+      });
+    });
+
+    svg.addEventListener("click", () => {
+      selectedId = modeInfo[activeMode].selected;
+      render();
+    });
+
+    resetPiecesForMode(activeMode);
+  </script>
+
+  <template id="ldl-copy-cost-markers" hidden>
+    <!-- copy-cost marker: body-gamma YFC -->
+    <!-- copy-cost marker: body-delta LD -->
+  </template>
+<script>
+    "use strict";
+
+    // ==================================================
+    // LDL Source Reference v1.1
+    // Creator credit + hidden ownership markers
+    // ==================================================
+    const LDL_RELEASE_YEAR = 2026;
+    const LDL_VERSION = "1.1.0";
+    const LDL_PRODUCT_NAME = "Area Formula Discovery Lab";
+    const LDL_PRODUCT_NAME_EN = "Area Formula Discovery Lab";
+    const LDL_PRODUCT_CODE = "LDL-MATH-AREA-2026-001";
+    const LDL_TOOL_ID = "T03-area-formula-discovery-lab";
+    const LDL_MODULE_ID = "ldl-area-formula-discovery-lab";
+    const LDL_BUILD_ID = "LDL-MATH-AREA-2026-001";
+    const LDL_FINGERPRINT = "ldl-yfc-area-formula-discovery-lab-v1";
+    const LDL_COMPANY = "Yung Fu Chuen";
+    const LDL_AUTHOR = "Yung Fu Chuen";
+    const LDL_VISIBLE_WATERMARK_TEXT = `© ${LDL_RELEASE_YEAR} · Yung Fu Chuen`;
+    const LDL_COPYRIGHT = `© ${LDL_RELEASE_YEAR} Yung Fu Chuen. All rights reserved.`;
+    const LDL_LICENSE = "Free classroom use only. Redistribution, resale, cloning, re-hosting, modification, or derivative use without written permission is prohibited.";
+    const LDL_CONSOLE_MESSAGE = `© ${LDL_RELEASE_YEAR} Yung Fu Chuen｜Created by Yung Fu Chuen｜LDL Source Reference v1.1`;
+    const LDL_MARKER_SIGNATURE = "LDL-SOURCE-REFERENCE-v1.1::Yung-Fu-Chuen::2026";
+
+    function createLDLSourceRecord() {
+      return Object.freeze({
+        productName: LDL_PRODUCT_NAME,
+        productNameEn: LDL_PRODUCT_NAME_EN,
+        productCode: LDL_PRODUCT_CODE,
+        toolId: LDL_TOOL_ID,
+        moduleId: LDL_MODULE_ID,
+        company: LDL_COMPANY,
+        author: LDL_AUTHOR,
+        releaseYear: LDL_RELEASE_YEAR,
+        version: LDL_VERSION,
+        copyright: LDL_COPYRIGHT,
+        license: LDL_LICENSE,
+        buildId: LDL_BUILD_ID,
+        fingerprint: LDL_FINGERPRINT,
+        markerSignature: LDL_MARKER_SIGNATURE
+      });
+    }
+
+    function initLDLSourceReference() {
+      try {
+        const record = createLDLSourceRecord();
+        setLDLCssCustomProperties(record);
+        upsertLDLMetaTags(record);
+        upsertLDLBodyAttributes(record);
+        upsertLDLJsonRecord(record);
+        upsertLDLHiddenDomReference(record);
+        upsertLDLSvgMetadata(record);
+        upsertLDLVisibleWatermark();
+
+        Object.defineProperty(window, "__LDL_SOURCE_REFERENCE__", {
+          value: record,
+          writable: false,
+          configurable: true,
+          enumerable: false
+        });
+
+        console.info(LDL_CONSOLE_MESSAGE);
+      } catch (error) {
+        console.warn("LDL Source Reference failed to initialize.", error);
+      }
+    }
+
+    function setLDLCssCustomProperties(record) {
+      const root = document.documentElement;
+      root.style.setProperty("--ldl-product-name", JSON.stringify(record.productName));
+      root.style.setProperty("--ldl-product-name-en", JSON.stringify(record.productNameEn));
+      root.style.setProperty("--ldl-product-code", JSON.stringify(record.productCode));
+      root.style.setProperty("--ldl-tool-id", JSON.stringify(record.toolId));
+      root.style.setProperty("--ldl-module-id", JSON.stringify(record.moduleId));
+      root.style.setProperty("--ldl-company", JSON.stringify(record.company));
+      root.style.setProperty("--ldl-author", JSON.stringify(record.author));
+      root.style.setProperty("--ldl-release-year", String(record.releaseYear));
+      root.style.setProperty("--ldl-version", JSON.stringify(record.version));
+      root.style.setProperty("--ldl-build-id", JSON.stringify(record.buildId));
+      root.style.setProperty("--ldl-fingerprint", JSON.stringify(record.fingerprint));
+    }
+
+    function upsertLDLMetaTags(record) {
+      const metaValues = {
+        author: record.author,
+        company: record.company,
+        copyright: record.copyright,
+        license: record.license,
+        "ldl-product-name": record.productName,
+        "ldl-product-name-en": record.productNameEn,
+        "ldl-product-code": record.productCode,
+        "ldl-tool-id": record.toolId,
+        "ldl-module-id": record.moduleId,
+        "ldl-release-year": String(record.releaseYear),
+        "ldl-version": record.version,
+        "ldl-build-id": record.buildId,
+        "ldl-fingerprint": record.fingerprint,
+        "ldl-source-reference": `LDL Source Reference ${record.version} · ${record.company} · ${record.author}`
+      };
+
+      Object.entries(metaValues).forEach(([name, content]) => {
+        let meta = document.head.querySelector(`meta[name="${name}"]`);
+        if (!meta) {
+          meta = document.createElement("meta");
+          meta.setAttribute("name", name);
+          document.head.appendChild(meta);
+        }
+        meta.setAttribute("content", content);
+      });
+    }
+
+    function upsertLDLBodyAttributes(record) {
+      const attrs = {
+        "data-ldl-product-name": record.productName,
+        "data-ldl-product-name-en": record.productNameEn,
+        "data-ldl-product-code": record.productCode,
+        "data-ldl-tool-id": record.toolId,
+        "data-ldl-module-id": record.moduleId,
+        "data-ldl-build-id": record.buildId,
+        "data-ldl-fingerprint": record.fingerprint,
+        "data-ldl-marker-signature": record.markerSignature
+      };
+
+      Object.entries(attrs).forEach(([name, value]) => {
+        document.body.setAttribute(name, value);
+      });
+    }
+
+    function upsertLDLJsonRecord(record) {
+      let script = document.getElementById("ldl-source-reference");
+      if (!script) {
+        script = document.createElement("script");
+        script.type = "application/json";
+        script.id = "ldl-source-reference";
+        document.body.appendChild(script);
+      }
+      script.textContent = JSON.stringify(record, null, 2);
+    }
+
+    function upsertLDLHiddenDomReference(record) {
+      const hidden = getOrCreateLDLElement("div", "ldl-hidden-source-reference", document.body);
+      hidden.className = "ldl-offscreen-source-reference";
+      hidden.setAttribute("aria-hidden", "true");
+      hidden.setAttribute("data-ldl-product-name", record.productName);
+      hidden.setAttribute("data-ldl-product-name-en", record.productNameEn);
+      hidden.setAttribute("data-ldl-product-code", record.productCode);
+      hidden.setAttribute("data-ldl-tool-id", record.toolId);
+      hidden.setAttribute("data-ldl-module-id", record.moduleId);
+      hidden.setAttribute("data-ldl-company", record.company);
+      hidden.setAttribute("data-ldl-author", record.author);
+      hidden.setAttribute("data-ldl-release-year", String(record.releaseYear));
+      hidden.setAttribute("data-ldl-version", record.version);
+      hidden.setAttribute("data-ldl-build-id", record.buildId);
+      hidden.setAttribute("data-ldl-fingerprint", record.fingerprint);
+      hidden.setAttribute("data-ldl-marker-signature", record.markerSignature);
+      hidden.textContent = [
+        "LDL Source Reference",
+        record.productName,
+        record.productNameEn,
+        record.productCode,
+        record.toolId,
+        record.moduleId,
+        record.company,
+        record.author,
+        String(record.releaseYear),
+        record.version,
+        record.buildId,
+        record.fingerprint,
+        record.markerSignature,
+        record.license
+      ].join(" | ");
+    }
+
+    function upsertLDLSvgMetadata(record) {
+      let svg = document.getElementById("ldl-hidden-svg-source-reference");
+      if (!svg) {
+        svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.id = "ldl-hidden-svg-source-reference";
+        document.body.appendChild(svg);
+      }
+      svg.setAttribute("class", "ldl-offscreen-source-reference");
+      svg.setAttribute("width", "0");
+      svg.setAttribute("height", "0");
+      svg.setAttribute("aria-hidden", "true");
+      svg.setAttribute("focusable", "false");
+
+      let metadata = svg.querySelector("metadata");
+      if (!metadata) {
+        metadata = document.createElementNS("http://www.w3.org/2000/svg", "metadata");
+        svg.appendChild(metadata);
+      }
+      metadata.textContent = JSON.stringify(record);
+    }
+
+    function upsertLDLVisibleWatermark() {
+      const watermark = getOrCreateLDLElement("div", "ldl-visible-watermark", document.body);
+      watermark.className = "ldl-visible-watermark";
+      watermark.setAttribute("aria-hidden", "true");
+
+      let text = watermark.querySelector("span");
+      if (!text) {
+        text = document.createElement("span");
+        watermark.appendChild(text);
+      }
+      text.textContent = LDL_VISIBLE_WATERMARK_TEXT;
+    }
+
+    function getOrCreateLDLElement(tagName, id, parent) {
+      let element = document.getElementById(id);
+      if (!element) {
+        element = document.createElement(tagName);
+        element.id = id;
+        parent.appendChild(element);
+      }
+      return element;
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initLDLSourceReference, { once: true });
+    } else {
+      initLDLSourceReference();
+    }
+  </script>
+  <script src="../../assets/tool-home-nav-en.js"></script>
+</body>
+</html>

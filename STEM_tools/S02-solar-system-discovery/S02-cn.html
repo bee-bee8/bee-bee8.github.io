@@ -1,0 +1,1807 @@
+<!doctype html>
+<html lang="zh-Hant" data-ldl-tool-id="S02-solar-system-discovery">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Yung Fu Chuen">
+  <meta name="company" content="Yung Fu Chuen">
+  <meta name="copyright" content="© 2026 Yung Fu Chuen. All rights reserved.">
+  <meta name="ldl-product-name" content="太陽系探索模型">
+  <meta name="ldl-product-name-en" content="Solar System Discovery">
+  <meta name="ldl-tool-id" content="S02-solar-system-discovery">
+  <meta name="ldl-module-id" content="ldl-s02-solar-system-discovery">
+  <meta name="ldl-release-year" content="2026">
+  <meta name="ldl-version" content="1.0.0">
+  <meta name="ldl-build-id" content="LDL-SCI-S02-2026-001">
+  <meta name="ldl-fingerprint" content="ldl-yfc-s02-solar-system-discovery-v1">
+  <meta name="ldl-source-reference" content="LDL Source Reference v1.0.0 - Yung Fu Chuen - Yung Fu Chuen">
+  <title>太陽系探索模型</title>
+  <style>
+    :root {
+      --bg: #eff6ff;
+      --surface: #ffffff;
+      --surface-soft: #f8fbff;
+      --ink: #0f172a;
+      --muted: #475569;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --secondary: #f59e0b;
+      --accent: #ec4899;
+      --line: #dbeafe;
+      --shadow: 0 18px 36px rgba(15, 23, 42, 0.12);
+      --soft-shadow: 0 10px 22px rgba(37, 99, 235, 0.12);
+      --radius: 22px;
+      --planet-size: 18px;
+      --orbit-size: 60px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    html:fullscreen,
+    html:fullscreen body {
+      overflow-y: auto;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(236, 72, 153, 0.18), transparent 26rem),
+        radial-gradient(circle at 90% 0%, rgba(245, 158, 11, 0.24), transparent 22rem),
+        linear-gradient(180deg, #eff6ff 0%, #ffffff 52%, #f8fbff 100%);
+      color: var(--ink);
+      font-family: "Segoe UI", "Microsoft JhengHei", "PingFang TC", Arial, sans-serif;
+      line-height: 1.65;
+      overflow-x: hidden;
+      --ldl-tool-id: "S02-solar-system-discovery";
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      padding-bottom: 24px;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      z-index: 20;
+      transform: translateY(-160%);
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: var(--ink);
+      color: white;
+      font-weight: 800;
+      transition: transform 0.2s ease;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .page {
+      width: min(1540px, calc(100% - 24px));
+      margin: 0 auto;
+    }
+
+    header {
+      padding: 10px 0 8px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 8px 12px;
+      border: 2px solid rgba(37, 99, 235, 0.16);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: var(--soft-shadow);
+      backdrop-filter: blur(10px);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      font-weight: 900;
+      color: var(--primary-dark);
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fff7cc 0 22%, #f59e0b 23% 55%, #fb923c 56% 100%);
+      box-shadow: 0 0 0 5px rgba(245, 158, 11, 0.18), 0 8px 18px rgba(245, 158, 11, 0.24);
+      flex: 0 0 auto;
+    }
+
+    .brand span:last-child {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .nav-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .nav-pills a {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 14px;
+      border-radius: 999px;
+      color: #1e3a8a;
+      font-size: 0.94rem;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .nav-pills a:hover,
+    .nav-pills a:focus-visible {
+      background: #dbeafe;
+      outline: 3px solid rgba(37, 99, 235, 0.22);
+      outline-offset: 2px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.04fr) minmax(300px, 0.96fr);
+      gap: 28px;
+      align-items: stretch;
+      padding: 30px 0 24px;
+    }
+
+    .hero-copy {
+      min-width: 0;
+      padding: clamp(24px, 4vw, 46px);
+      border: 3px solid #c7ddff;
+      border-radius: 34px;
+      background: rgba(255, 255, 255, 0.86);
+      box-shadow: var(--shadow);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 12px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #fef3c7;
+      color: #92400e;
+      font-size: 0.92rem;
+      font-weight: 900;
+    }
+
+    h1 {
+      max-width: 12em;
+      margin: 0;
+      color: #0f172a;
+      font-size: clamp(2.25rem, 6vw, 4.75rem);
+      line-height: 1.04;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+      word-break: normal;
+    }
+
+    .hero-copy p {
+      max-width: 62ch;
+      margin: 18px 0 0;
+      color: #334155;
+      font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+      overflow-wrap: anywhere;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn,
+    .mode-btn,
+    .planet-chip {
+      min-height: 44px;
+      border: 0;
+      border-radius: 16px;
+      cursor: pointer;
+      font-weight: 900;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 18px;
+      text-decoration: none;
+      box-shadow: 0 8px 0 rgba(15, 23, 42, 0.12);
+    }
+
+    .btn.primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn.secondary {
+      background: #fff7ed;
+      color: #9a3412;
+      border: 2px solid #fed7aa;
+    }
+
+    .btn:hover,
+    .btn:focus-visible,
+    .mode-btn:hover,
+    .mode-btn:focus-visible,
+    .planet-chip:hover,
+    .planet-chip:focus-visible {
+      transform: translateY(-2px);
+      outline: 3px solid rgba(37, 99, 235, 0.28);
+      outline-offset: 2px;
+    }
+
+    .hero-model {
+      position: relative;
+      min-width: 0;
+      min-height: 420px;
+      border-radius: 34px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at center, rgba(37, 99, 235, 0.22), transparent 42%),
+        linear-gradient(145deg, #111827 0%, #0f172a 54%, #1e1b4b 100%);
+      box-shadow: var(--shadow);
+      border: 3px solid #172554;
+    }
+
+    .hero-model::before,
+    .stage-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,0.9) 0 1px, transparent 1px),
+        radial-gradient(circle, rgba(255,255,255,0.55) 0 1px, transparent 1px);
+      background-size: 68px 68px, 112px 112px;
+      background-position: 8px 18px, 34px 42px;
+      opacity: 0.32;
+      pointer-events: none;
+    }
+
+    .mini-orbit {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 86%;
+      aspect-ratio: 1;
+      transform: translate(-50%, -50%);
+    }
+
+    .mini-sun {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 92px;
+      aspect-ratio: 1;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, #fff7b8 0 22%, #f59e0b 23% 65%, #ea580c 66% 100%);
+      box-shadow: 0 0 38px rgba(245, 158, 11, 0.82), 0 0 86px rgba(245, 158, 11, 0.32);
+    }
+
+    .mini-line {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      border: 1px solid rgba(226, 232, 240, 0.16);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      aspect-ratio: 1;
+    }
+
+    .mini-dot {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: var(--s);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: var(--c);
+      transform: rotate(var(--a)) translateX(var(--r)) rotate(calc(-1 * var(--a)));
+      box-shadow: 0 0 12px color-mix(in srgb, var(--c), white 20%);
+    }
+
+    .section {
+      margin: 12px 0;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .section-title h2 {
+      margin: 0;
+      font-size: clamp(1.35rem, 2.4vw, 1.9rem);
+      line-height: 1.18;
+    }
+
+    .section-title p {
+      max-width: 58ch;
+      margin: 0;
+      color: var(--muted);
+      font-weight: 650;
+    }
+
+    .learn-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .learn-card {
+      padding: 12px 14px;
+      min-height: 0;
+      border: 2px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .learn-card b {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--primary-dark);
+      font-size: 0.98rem;
+    }
+
+    .learn-card p {
+      margin: 0;
+      color: #334155;
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .explorer {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(460px, 0.9fr);
+      gap: 16px;
+      align-items: stretch;
+      min-height: calc(100vh - 86px);
+      order: 1;
+    }
+
+    section[aria-labelledby="learn-title"] {
+      order: 2;
+    }
+
+    #compare {
+      order: 3;
+    }
+
+    .panel {
+      min-width: 0;
+      border: 3px solid #c7ddff;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: var(--shadow);
+    }
+
+    .stage-card {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: 14px;
+      background:
+        radial-gradient(circle at center, rgba(14, 165, 233, 0.22), transparent 38%),
+        linear-gradient(150deg, #0f172a, #111827 58%, #1e1b4b);
+      border-color: #172554;
+      color: white;
+    }
+
+    .mode-row {
+      position: relative;
+      z-index: 2;
+      order: 1;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .mode-btn {
+      padding: 9px 10px;
+      border: 2px solid rgba(191, 219, 254, 0.24);
+      background: rgba(15, 23, 42, 0.78);
+      color: #dbeafe;
+      text-align: left;
+    }
+
+    .mode-btn[aria-pressed="true"] {
+      background: #dbeafe;
+      color: #172554;
+      border-color: #93c5fd;
+      box-shadow: 0 7px 0 rgba(59, 130, 246, 0.18);
+    }
+
+    .mode-btn span {
+      display: block;
+      color: inherit;
+      font-size: 0.82rem;
+      font-weight: 700;
+      opacity: 0.78;
+    }
+
+    .stage {
+      position: relative;
+      z-index: 1;
+      order: 3;
+      width: 100%;
+      flex: 1 1 auto;
+      min-height: clamp(520px, calc(100vh - 285px), 760px);
+      border: 1px solid rgba(191, 219, 254, 0.16);
+      border-radius: 22px;
+      background: rgba(2, 6, 23, 0.32);
+    }
+
+    .orbit-ring {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: var(--orbit-size);
+      aspect-ratio: 1;
+      border: 1px solid rgba(226, 232, 240, 0.18);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .stage-sun {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 76px;
+      aspect-ratio: 1;
+      border: 0;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, #fff7b8 0 24%, #fbbf24 25% 66%, #ea580c 67% 100%);
+      box-shadow: 0 0 38px rgba(245, 158, 11, 0.86), 0 0 84px rgba(245, 158, 11, 0.36);
+      color: #431407;
+      font-size: 0.82rem;
+      cursor: pointer;
+      z-index: 3;
+    }
+
+    .stage-planet {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: max(var(--planet-size), 24px);
+      aspect-ratio: 1;
+      border: 2px solid rgba(255, 255, 255, 0.78);
+      border-radius: 50%;
+      background: var(--planet-color);
+      transform:
+        translate(-50%, -50%)
+        rotate(var(--angle))
+        translateX(var(--orbit-radius))
+        rotate(calc(-1 * var(--angle)));
+      box-shadow: 0 0 16px rgba(255, 255, 255, 0.18);
+      cursor: pointer;
+      z-index: 4;
+    }
+
+    .stage-planet.selected {
+      outline: 4px solid rgba(96, 165, 250, 0.48);
+      outline-offset: 4px;
+      box-shadow: 0 0 0 7px rgba(37, 99, 235, 0.18), 0 0 24px var(--planet-color);
+    }
+
+    .planet-label {
+      position: absolute;
+      left: 50%;
+      top: calc(100% + 6px);
+      transform: translateX(-50%);
+      padding: 2px 6px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.84);
+      color: #f8fafc;
+      font-size: 0.73rem;
+      font-weight: 900;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    .saturn-ring {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 190%;
+      height: 54%;
+      border: 3px solid rgba(254, 240, 138, 0.68);
+      border-radius: 50%;
+      transform: translate(-50%, -50%) rotate(-16deg);
+      pointer-events: none;
+    }
+
+    .stage-note {
+      position: relative;
+      z-index: 2;
+      order: 4;
+      margin: 12px 0 0;
+      padding: 10px 12px;
+      border-radius: 18px;
+      background: rgba(219, 234, 254, 0.12);
+      color: #dbeafe;
+      font-size: 0.88rem;
+      font-weight: 700;
+      line-height: 1.35;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .control-row {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      order: 2;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin: 0 0 10px;
+      padding: 10px;
+      border-radius: 18px;
+      background: rgba(15, 23, 42, 0.42);
+    }
+
+    .control-row [hidden] {
+      display: none !important;
+    }
+
+    .control-row label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #dbeafe;
+      font-weight: 850;
+    }
+
+    .control-row input {
+      accent-color: #60a5fa;
+    }
+
+    .fact-panel {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100vh - 86px);
+    }
+
+    .fact-hero {
+      display: grid;
+      grid-template-columns: 94px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+      padding: 14px;
+      border-bottom: 2px solid var(--line);
+      background: linear-gradient(135deg, #ffffff 0%, #eff6ff 100%);
+    }
+
+    .planet-image {
+      width: 94px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      border-radius: 24px;
+      background: #0f172a;
+      box-shadow: inset 0 0 0 3px rgba(255, 255, 255, 0.08), 0 12px 24px rgba(15, 23, 42, 0.12);
+      overflow: hidden;
+    }
+
+    .planet-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .fact-hero h2 {
+      margin: 0;
+      color: var(--primary-dark);
+      font-size: clamp(1.55rem, 3vw, 2.2rem);
+      line-height: 1.08;
+    }
+
+    .fact-hero .english {
+      color: #64748b;
+      font-size: 1rem;
+      font-weight: 900;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .tag {
+      display: inline-flex;
+      min-height: 32px;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 2px solid #bfdbfe;
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-size: 0.88rem;
+      font-weight: 900;
+    }
+
+    .fact-body {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 14px;
+    }
+
+    .big-summary {
+      margin: 0 0 12px;
+      padding: 12px 14px;
+      border-left: 6px solid var(--secondary);
+      border-radius: 16px;
+      background: #fff7ed;
+      color: #334155;
+      font-size: 0.98rem;
+      font-weight: 750;
+    }
+
+    .facts-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .fact-item {
+      padding: 10px;
+      border: 2px solid #e2e8f0;
+      border-radius: 18px;
+      background: var(--surface-soft);
+    }
+
+    .fact-item span {
+      display: block;
+      color: #64748b;
+      font-size: 0.82rem;
+      font-weight: 900;
+    }
+
+    .fact-item b {
+      display: block;
+      margin-top: 2px;
+      color: #0f172a;
+      font-size: 0.94rem;
+      line-height: 1.35;
+    }
+
+    .chips {
+      flex: 1 1 auto;
+      min-height: 230px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-auto-rows: minmax(66px, 1fr);
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .planet-chip {
+      width: 100%;
+      min-height: 66px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border: 2px solid #dbeafe;
+      background: white;
+      color: #1e3a8a;
+      box-shadow: 0 5px 0 rgba(37, 99, 235, 0.08);
+      font-size: 1rem;
+    }
+
+    .planet-chip.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    .chip-thumb {
+      width: 36px;
+      height: 36px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: #0f172a;
+      object-fit: contain;
+      box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.12), 0 4px 9px rgba(15, 23, 42, 0.12);
+    }
+
+    .planet-chip.active .chip-thumb {
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.72), 0 4px 12px rgba(15, 23, 42, 0.16);
+    }
+
+    .chip-name {
+      min-width: 0;
+      font-weight: 950;
+      white-space: nowrap;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 3px solid #c7ddff;
+      border-radius: 24px;
+      background: white;
+      box-shadow: var(--soft-shadow);
+    }
+
+    table {
+      width: 100%;
+      min-width: 860px;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 14px 12px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #dbeafe;
+      color: #172554;
+      font-weight: 950;
+    }
+
+    td {
+      color: #334155;
+      font-weight: 650;
+    }
+
+    tbody tr:hover {
+      background: #f8fbff;
+    }
+
+    .source-note {
+      margin-top: 10px;
+      color: #475569;
+      font-size: 0.93rem;
+      font-weight: 650;
+    }
+
+    .source-note a {
+      color: #1d4ed8;
+      font-weight: 900;
+    }
+
+    footer {
+      padding: 34px 0 48px;
+      color: #475569;
+      font-size: 0.94rem;
+    }
+
+    footer .page {
+      border-top: 2px solid #dbeafe;
+      padding-top: 18px;
+    }
+
+    @media (max-width: 940px) {
+      .hero,
+      .explorer {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-model {
+        min-height: 360px;
+      }
+
+      .learn-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .section-title {
+        align-items: start;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        width: min(100% - 20px, 1180px);
+      }
+
+      header {
+        padding-top: 12px;
+      }
+
+      .topbar {
+        align-items: stretch;
+        border-radius: 24px;
+        flex-direction: column;
+      }
+
+      .nav-pills {
+        justify-content: start;
+      }
+
+      .nav-pills a {
+        flex: 1 1 calc(33.333% - 8px);
+        justify-content: center;
+      }
+
+      .hero {
+        padding-top: 16px;
+      }
+
+      .hero-copy,
+      .panel {
+        border-radius: 24px;
+      }
+
+      .hero-copy {
+        padding: 24px;
+      }
+
+      h1 {
+        max-width: 100%;
+        font-size: clamp(1.92rem, 8.6vw, 2.25rem);
+        line-height: 1.12;
+      }
+
+      .hero-copy p {
+        font-size: 1rem;
+      }
+
+      .hero-model {
+        min-height: 300px;
+      }
+
+      .learn-grid,
+      .mode-row,
+      .facts-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .fact-hero {
+        grid-template-columns: 96px 1fr;
+        padding: 16px;
+      }
+
+      .planet-image {
+        width: 96px;
+      }
+
+      .stage {
+        min-height: 300px;
+      }
+
+      .planet-label {
+        display: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    /* Updated version: cleaner layout, two modes only */
+    .explorer {
+      grid-template-columns: minmax(0, 1.35fr) minmax(460px, 0.9fr);
+    }
+
+    .mode-row {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .stage {
+      min-height: clamp(520px, calc(100vh - 285px), 760px);
+      overflow: hidden;
+    }
+
+    .stage.size-stage {
+      overflow: auto;
+      display: block;
+      padding: 0;
+    }
+
+    .size-row {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 76px;
+      padding: 48px 64px 82px;
+      min-width: 1280px;
+      min-height: 100%;
+    }
+
+    .size-body-button {
+      position: relative;
+      flex: 0 0 auto;
+      min-width: 64px;
+      min-height: 64px;
+      border: 0;
+      background: transparent;
+      color: #e0f2fe;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-weight: 900;
+    }
+
+    .size-body-dot {
+      position: relative;
+      display: block;
+      width: var(--body-size);
+      height: var(--body-size);
+      min-width: 0.5px;
+      min-height: 0.5px;
+      border-radius: 50%;
+      background: var(--planet-color);
+      box-shadow: 0 0 16px rgba(255,255,255,0.22);
+    }
+
+    .size-body-button.selected .size-body-dot {
+      outline: 4px solid rgba(96, 165, 250, 0.54);
+      outline-offset: 5px;
+    }
+
+    .size-body-label {
+      position: absolute;
+      left: 50%;
+      bottom: 18px;
+      transform: translate(-50%, 100%);
+      min-width: 5.8em;
+      color: #f8fafc;
+      text-align: center;
+      font-size: 0.83rem;
+      line-height: 1.25;
+      text-shadow: 0 2px 4px rgba(2, 6, 23, 0.8);
+      pointer-events: none;
+    }
+
+    .size-body-label small {
+      display: block;
+      color: #bfdbfe;
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+
+    .size-body-button .saturn-ring {
+      width: calc(var(--body-size) * 1.9);
+      height: calc(var(--body-size) * 0.54);
+      min-width: 14px;
+      min-height: 5px;
+    }
+
+    @media (max-width: 940px) {
+      .explorer {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+
+      .fact-panel {
+        max-height: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .mode-row {
+        grid-template-columns: 1fr;
+      }
+      .stage {
+        min-height: 360px;
+      }
+      .size-row {
+        gap: 58px;
+        padding: 44px 44px 80px;
+      }
+
+      .chips {
+        gap: 8px;
+        grid-auto-rows: minmax(60px, 1fr);
+      }
+
+      .planet-chip {
+        min-height: 60px;
+        gap: 6px;
+        padding: 7px 6px;
+        font-size: 0.92rem;
+      }
+
+      .chip-thumb {
+        width: 30px;
+        height: 30px;
+      }
+    }
+
+    /* Horizontal centering pass */
+    body {
+      text-align: center;
+    }
+
+    main {
+      align-items: center;
+    }
+
+    .topbar,
+    .brand,
+    .hero-actions,
+    .section-title,
+    .nav-pills,
+    .tag-row,
+    .chips,
+    .control-row,
+    .size-row {
+      justify-content: center;
+    }
+
+    .hero-copy,
+    .section-title,
+    .learn-card,
+    .stage-note,
+    .fact-item,
+    .source-note,
+    footer {
+      text-align: center;
+    }
+
+    .hero-copy {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1,
+    .hero-copy p,
+    .section-title p,
+    .big-summary {
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .eyebrow,
+    .btn,
+    .mode-btn,
+    .planet-chip,
+    .tag,
+    .control-row label {
+      justify-content: center;
+      text-align: center;
+    }
+
+    .mode-btn span {
+      text-align: center;
+    }
+
+    .fact-hero {
+      justify-items: center;
+      text-align: center;
+    }
+
+    .fact-panel {
+      min-width: 460px;
+    }
+
+    .big-summary,
+    .fact-item b {
+      word-break: keep-all;
+      overflow-wrap: normal;
+    }
+
+    .big-summary {
+      line-height: 1.75;
+    }
+
+    th,
+    td {
+      text-align: center;
+    }
+
+    @media (max-width: 940px) {
+      .section-title {
+        align-items: center;
+      }
+
+      .fact-panel {
+        min-width: 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav-pills {
+        justify-content: center;
+      }
+    }
+
+  </style>
+</head>
+<body
+  data-ldl-tool-id="S02-solar-system-discovery"
+  data-ldl-module-id="ldl-s02-solar-system-discovery"
+  data-ldl-build-id="LDL-SCI-S02-2026-001"
+  data-ldl-fingerprint="ldl-yfc-s02-solar-system-discovery-v1"
+  data-ldl-reserve-top-space="true"
+>
+  <a class="skip-link" href="#main">跳到主要內容</a>
+
+  <header class="page">
+    <a id="tool-home-link" href="../../index.html" target="_top" aria-label="前往工具總覽">工具總覽</a>
+    <button class="top-button" id="exitFullscreen" type="button" aria-label="退出全螢幕">退出全螢幕</button>
+    <button class="top-button" id="enterFullscreen" type="button" aria-label="進入全螢幕">全螢幕</button>
+    <div class="topbar" aria-label="頁面導覽">
+      <div class="brand" aria-label="太陽系探索模型">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>太陽系探索模型</span>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    
+
+    <section class="page section" aria-labelledby="learn-title">
+      <div class="section-title">
+        <div>
+          <h2 id="learn-title">先認識 4 件事</h2>
+        </div>
+        <p>先了解太陽和八大行星的基本特點，再查看每顆行星的資料。</p>
+      </div>
+      <div class="learn-grid">
+        <article class="learn-card">
+          <b>1. 太陽在中心</b>
+          <p>太陽是一顆恆星，會發出光和熱。八大行星都繞着太陽運行。</p>
+        </article>
+        <article class="learn-card">
+          <b>2. 八大行星有次序</b>
+          <p>由近至遠是：水星、金星、地球、火星、木星、土星、天王星、海王星。</p>
+        </article>
+        <article class="learn-card">
+          <b>3. 內側四顆是岩石行星</b>
+          <p>水星、金星、地球和火星都有固體表面，屬於岩石行星。</p>
+        </article>
+        <article class="learn-card">
+          <b>4. 外側四顆是巨行星</b>
+          <p>木星和土星通常歸類為氣體巨行星；天王星和海王星通常歸類為冰巨行星。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="explore" class="page section explorer" aria-labelledby="explore-title">
+      <div class="panel stage-card">
+        <div class="section-title" style="position:relative; z-index:2; margin-bottom:12px;">
+          <div>
+            <h2 id="explore-title" style="color:white;">互動太陽系圖</h2>
+          </div>
+          <p style="color:#dbeafe;">選擇一種圖像，再點太陽或行星查看資料。</p>
+        </div>
+        <div class="mode-row" role="group" aria-label="探索模式">
+          <button class="mode-btn" type="button" data-mode="orbit" aria-pressed="true">
+            軌道示意圖
+            <span>看八大行星由近至遠的次序</span>
+          </button>
+          <button class="mode-btn" type="button" data-mode="size" aria-pressed="false">
+            大小比較圖
+            <span>比較太陽和行星的直徑大小</span>
+          </button>
+        </div>
+        <div id="stage" class="stage" aria-label="太陽系互動模型"></div>
+        <p id="stage-note" class="stage-note">
+          軌道示意圖：此圖顯示八大行星由近至遠繞太陽運行的次序。為了在同一個畫面顯示，行星距離已經壓縮，天體大小也沒有按同一比例顯示。
+        </p>
+        <div class="control-row">
+          <button id="play-toggle" class="btn primary" type="button">暫停轉動</button>
+          <label id="speed-label" for="speed-range">速度
+            <input id="speed-range" type="range" min="0.3" max="2.4" step="0.1" value="1">
+          </label>
+          <label id="size-zoom-label" for="size-zoom" hidden>大小縮放
+            <input id="size-zoom" type="range" min="1" max="10" step="0.5" value="1">
+          </label>
+        </div>
+      </div>
+
+      <aside class="panel fact-panel" aria-live="polite">
+        <div class="fact-hero">
+          <div class="planet-image">
+            <img id="fact-image" src="./地球.png" alt="地球圖片">
+          </div>
+          <div>
+            <h2 id="fact-name">地球</h2>
+            <div id="fact-english" class="english">Earth</div>
+            <div id="fact-tags" class="tag-row"></div>
+          </div>
+        </div>
+        <div class="fact-body">
+          <p id="fact-summary" class="big-summary"></p>
+          <div id="facts-grid" class="facts-grid"></div>
+          <div class="chips" id="planet-chips" aria-label="快速選擇天體"></div>
+        </div>
+      </aside>
+    </section>
+
+    <section id="compare" class="page section" aria-labelledby="compare-title">
+      <div class="section-title">
+        <div>
+          <h2 id="compare-title">八大行星比較表</h2>
+        </div>
+        <p>以下數字為約數。平均日距是行星與太陽之間的平均距離。</p>
+      </div>
+      <div class="table-wrap" role="region" aria-label="行星比較表" tabindex="0">
+        <table>
+          <thead>
+            <tr>
+              <th>次序</th>
+              <th>行星</th>
+              <th>類型</th>
+              <th>赤道直徑約</th>
+              <th>平均日距約</th>
+              <th>繞太陽一圈</th>
+              <th>記憶重點</th>
+            </tr>
+          </thead>
+          <tbody id="planet-table"></tbody>
+        </table>
+      </div>
+      <p class="source-note">
+        其他資源：
+        <a href="https://science.nasa.gov/solar-system/planets/" target="_blank" rel="noreferrer">NASA Solar System Planets</a>、
+        <a href="https://science.nasa.gov/solar-system/planet-sizes-and-locations-in-our-solar-system/" target="_blank" rel="noreferrer">NASA Planet Sizes and Locations</a>、
+        <a href="https://science.nasa.gov/solar-system/temperatures-across-our-solar-system/" target="_blank" rel="noreferrer">NASA Temperatures Across Our Solar System</a>。
+      </p>
+    </section>
+  </main>
+
+  
+
+  <script>
+    const bodies = [
+      {
+        id: "sun",
+        order: 0,
+        name: "太陽",
+        english: "Sun",
+        image: "太陽.png",
+        type: "恆星",
+        color: "#f59e0b",
+        diameterKm: 1392700,
+        distanceKm: 0,
+        yearText: "不是行星，不繞太陽",
+        tempText: "表面約 5,500°C",
+        moons: "不適用",
+        summary: "太陽是一顆恆星，會發出光和熱。它的引力使八大行星繞着它運行。",
+        key: "太陽是太陽系的中心天體。",
+        tags: ["中心", "恆星", "光和熱"],
+        orbitRatio: 0,
+        sizeRatio: 1
+      },
+      {
+        id: "mercury",
+        order: 1,
+        name: "水星",
+        english: "Mercury",
+        image: "水星.png",
+        type: "岩石行星",
+        color: "#9ca3af",
+        diameterKm: 4880,
+        distanceKm: 57900000,
+        yearText: "約 88 個地球日",
+        tempText: "日夜溫差很大",
+        moons: "0",
+        summary: "水星最接近太陽，也是八大行星中最小的一顆。它的大氣非常稀薄，白天和夜晚的溫差很大。",
+        key: "最接近太陽，也是最小的行星。",
+        tags: ["第 1 顆", "岩石", "最小"],
+        orbitRatio: 0.16,
+        sizeRatio: 0.034
+      },
+      {
+        id: "venus",
+        order: 2,
+        name: "金星",
+        english: "Venus",
+        image: "金星.png",
+        type: "岩石行星",
+        color: "#facc15",
+        diameterKm: 12104,
+        distanceKm: 108200000,
+        yearText: "約 225 個地球日",
+        tempText: "約 464°C，表面溫度很高",
+        moons: "0",
+        summary: "金星的大小和地球相近。它有濃厚的大氣，表面溫度很高。",
+        key: "八大行星中表面溫度最高。",
+        tags: ["第 2 顆", "岩石", "最熱"],
+        orbitRatio: 0.25,
+        sizeRatio: 0.085
+      },
+      {
+        id: "earth",
+        order: 3,
+        name: "地球",
+        english: "Earth",
+        image: "地球.png",
+        type: "岩石行星",
+        color: "#3b82f6",
+        diameterKm: 12756,
+        distanceKm: 149600000,
+        yearText: "約 365.25 個地球日",
+        tempText: "平均約 15°C",
+        moons: "1",
+        summary: "地球有液態水和大氣，是目前已知有生命存在的行星。",
+        key: "我們居住的行星，有一個月球。",
+        tags: ["第 3 顆", "岩石", "已知有生命"],
+        orbitRatio: 0.34,
+        sizeRatio: 0.089
+      },
+      {
+        id: "mars",
+        order: 4,
+        name: "火星",
+        english: "Mars",
+        image: "火星.png",
+        type: "岩石行星",
+        color: "#ef4444",
+        diameterKm: 6792,
+        distanceKm: 227900000,
+        yearText: "約 687 個地球日",
+        tempText: "平均約 -65°C",
+        moons: "2",
+        summary: "火星表面含有較多氧化鐵，所以看起來偏紅。科學家會研究火星過去是否曾經有液態水。",
+        key: "常被稱為紅色行星，有兩個小衛星。",
+        tags: ["第 4 顆", "岩石", "紅色"],
+        orbitRatio: 0.43,
+        sizeRatio: 0.047
+      },
+      {
+        id: "jupiter",
+        order: 5,
+        name: "木星",
+        english: "Jupiter",
+        image: "木星.png",
+        type: "氣體巨行星",
+        color: "#fb923c",
+        diameterKm: 142984,
+        distanceKm: 778600000,
+        yearText: "約 12 個地球年",
+        tempText: "高層大氣約 -110°C",
+        moons: "已知有多顆衛星",
+        summary: "木星是八大行星中最大的一顆，主要由氫和氦組成。大紅斑是木星上一個大型風暴系統。",
+        key: "八大行星中最大。",
+        tags: ["第 5 顆", "氣體巨行星", "最大"],
+        orbitRatio: 0.56,
+        sizeRatio: 1
+      },
+      {
+        id: "saturn",
+        order: 6,
+        name: "土星",
+        english: "Saturn",
+        image: "土星.png",
+        type: "氣體巨行星",
+        color: "#fde68a",
+        diameterKm: 120536,
+        distanceKm: 1433500000,
+        yearText: "約 29 個地球年",
+        tempText: "高層大氣約 -140°C",
+        moons: "已知有多顆衛星",
+        summary: "土星有明顯的行星環。土星環主要由冰粒和岩石碎片組成。",
+        key: "有明顯的行星環。",
+        tags: ["第 6 顆", "氣體巨行星", "有環"],
+        orbitRatio: 0.68,
+        sizeRatio: 0.843
+      },
+      {
+        id: "uranus",
+        order: 7,
+        name: "天王星",
+        english: "Uranus",
+        image: "天王星.png",
+        type: "冰巨行星",
+        color: "#67e8f9",
+        diameterKm: 51118,
+        distanceKm: 2872500000,
+        yearText: "約 84 個地球年",
+        tempText: "約 -195°C",
+        moons: "已知有多顆衛星",
+        summary: "天王星是冰巨行星，呈藍綠色。它的自轉軸傾斜很大，常被形容為像側躺着自轉。",
+        key: "自轉軸傾斜很大。",
+        tags: ["第 7 顆", "冰巨行星", "側躺"],
+        orbitRatio: 0.80,
+        sizeRatio: 0.357
+      },
+      {
+        id: "neptune",
+        order: 8,
+        name: "海王星",
+        english: "Neptune",
+        image: "海王星.png",
+        type: "冰巨行星",
+        color: "#60a5fa",
+        diameterKm: 49528,
+        distanceKm: 4495100000,
+        yearText: "約 165 個地球年",
+        tempText: "約 -200°C",
+        moons: "已知有多顆衛星",
+        summary: "海王星是八大行星中離太陽最遠的一顆，呈深藍色。它的大氣中有很強的風。",
+        key: "八大行星中離太陽最遠。",
+        tags: ["第 8 顆", "冰巨行星", "最遠"],
+        orbitRatio: 0.92,
+        sizeRatio: 0.346
+      }
+    ];
+
+    const planets = bodies.filter((body) => body.id !== "sun");
+    const stage = document.getElementById("stage");
+    const factImage = document.getElementById("fact-image");
+    const factName = document.getElementById("fact-name");
+    const factEnglish = document.getElementById("fact-english");
+    const factTags = document.getElementById("fact-tags");
+    const factSummary = document.getElementById("fact-summary");
+    const factsGrid = document.getElementById("facts-grid");
+    const chips = document.getElementById("planet-chips");
+    const tableBody = document.getElementById("planet-table");
+    const stageNote = document.getElementById("stage-note");
+    const modeButtons = Array.from(document.querySelectorAll(".mode-btn"));
+    const playToggle = document.getElementById("play-toggle");
+    const speedLabel = document.getElementById("speed-label");
+    const speedRange = document.getElementById("speed-range");
+    const sizeZoomLabel = document.getElementById("size-zoom-label");
+    const sizeZoomRange = document.getElementById("size-zoom");
+    const enterFullscreen = document.getElementById("enterFullscreen");
+    const exitFullscreen = document.getElementById("exitFullscreen");
+
+    let currentId = "earth";
+    let mode = "orbit";
+    let playing = true;
+    let speed = 1;
+    let sizeZoom = 1;
+    let angleOffset = 0;
+    let lastFrame = performance.now();
+
+    const orbitRadii = {
+      mercury: 15,
+      venus: 19,
+      earth: 23,
+      mars: 27,
+      jupiter: 32,
+      saturn: 37,
+      uranus: 42,
+      neptune: 47
+    };
+
+    function formatKm(value) {
+      if (value === 0) return "0";
+      if (value >= 1000000000) return `${(value / 1000000000).toFixed(2)} 十億公里`;
+      if (value >= 1000000) return `${(value / 1000000).toFixed(1)} 百萬公里`;
+      return `${value.toLocaleString("zh-Hant")} 公里`;
+    }
+
+    function getCurrentBody() {
+      return bodies.find((body) => body.id === currentId) || bodies[3];
+    }
+
+    function escapeHtml(text) {
+      return String(text).replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
+    function formatLongSentences(text) {
+      const escaped = escapeHtml(text);
+      if (text.length <= 30) return escaped;
+      return escaped.replace(/([。！？])(?=.)/g, "$1<br>");
+    }
+
+    function selectBody(id) {
+      currentId = id;
+      renderFactCard();
+      renderChips();
+      renderStage();
+    }
+
+    function renderFactCard() {
+      const body = getCurrentBody();
+      factImage.src = `./${body.image}`;
+      factImage.alt = `${body.name}圖片`;
+      factName.textContent = body.name;
+      factEnglish.textContent = body.english;
+      factTags.innerHTML = body.tags.map((tag) => `<span class="tag">${tag}</span>`).join("");
+      factSummary.innerHTML = formatLongSentences(body.summary);
+
+      const factRows = [
+        ["類型", body.type],
+        ["赤道直徑約", `${body.diameterKm.toLocaleString("zh-Hant")} 公里`],
+        ["平均日距約", body.id === "sun" ? "太陽在中心" : formatKm(body.distanceKm)],
+        ["繞太陽一圈", body.yearText],
+        ["溫度重點", body.tempText],
+        ["衛星", body.moons],
+        ["記憶重點", body.key]
+      ];
+
+      factsGrid.innerHTML = factRows.map(([label, value]) => `
+        <div class="fact-item">
+          <span>${label}</span>
+          <b>${value}</b>
+        </div>
+      `).join("");
+    }
+
+    function renderChips() {
+      chips.innerHTML = bodies.map((body) => `
+        <button class="planet-chip ${body.id === currentId ? "active" : ""}" type="button" data-id="${body.id}" aria-pressed="${body.id === currentId}">
+          <img class="chip-thumb" src="./${escapeHtml(body.image)}" alt="" aria-hidden="true">
+          <span class="chip-name">${escapeHtml(body.name)}</span>
+        </button>
+      `).join("");
+
+      chips.querySelectorAll("button").forEach((button) => {
+        button.addEventListener("click", () => selectBody(button.dataset.id));
+      });
+    }
+
+    function planetSize(body) {
+      return `${Math.max(18, Math.round(16 + Math.sqrt(body.sizeRatio) * 18))}px`;
+    }
+
+    function orbitRadiusPercent(body) {
+      return orbitRadii[body.id] || 30;
+    }
+
+    function orbitDiameterPercent(body) {
+      return orbitRadiusPercent(body) * 2;
+    }
+
+    function renderSizeComparison() {
+      stage.innerHTML = "";
+      stage.classList.add("size-stage");
+
+      const row = document.createElement("div");
+      row.className = "size-row";
+
+      const pxPerKm = 0.00016 * sizeZoom;
+      const sunSizePx = bodies[0].diameterKm * pxPerKm;
+      row.style.minHeight = `${Math.max(420, Math.ceil(sunSizePx + 170))}px`;
+      row.style.minWidth = `${Math.max(1320, Math.ceil(sunSizePx + 1120))}px`;
+
+      bodies.forEach((body) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `size-body-button ${currentId === body.id ? "selected" : ""}`;
+        button.setAttribute("aria-label", `查看${body.name}資料`);
+        button.addEventListener("click", () => selectBody(body.id));
+
+        const dot = document.createElement("span");
+        dot.className = "size-body-dot";
+        dot.style.setProperty("--planet-color", body.color);
+        dot.style.setProperty("--body-size", `${(body.diameterKm * pxPerKm).toFixed(3)}px`);
+        button.appendChild(dot);
+
+        if (body.id === "saturn") {
+          const ring = document.createElement("span");
+          ring.className = "saturn-ring";
+          dot.appendChild(ring);
+        }
+
+        const label = document.createElement("span");
+        label.className = "size-body-label";
+        label.innerHTML = `${body.name}<small>${body.diameterKm.toLocaleString("zh-Hant")} km</small>`;
+        button.appendChild(label);
+
+        row.appendChild(button);
+      });
+
+      stage.appendChild(row);
+    }
+
+    function renderOrbit() {
+      stage.innerHTML = "";
+      stage.classList.remove("size-stage");
+
+      planets.forEach((planet) => {
+        const ring = document.createElement("span");
+        ring.className = "orbit-ring";
+        ring.style.setProperty("--orbit-size", `${orbitDiameterPercent(planet)}%`);
+        stage.appendChild(ring);
+      });
+
+      const sunButton = document.createElement("button");
+      sunButton.type = "button";
+      sunButton.className = `stage-sun ${currentId === "sun" ? "selected" : ""}`;
+      sunButton.textContent = "太陽";
+      sunButton.setAttribute("aria-label", "查看太陽資料");
+      sunButton.addEventListener("click", () => selectBody("sun"));
+      stage.appendChild(sunButton);
+
+      planets.forEach((planet, index) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = `stage-planet ${currentId === planet.id ? "selected" : ""}`;
+        button.style.setProperty("--planet-color", planet.color);
+        button.style.setProperty("--planet-size", planetSize(planet));
+
+        const baseAngle = ((index * 43 + 18 + angleOffset * (0.25 + index * 0.05)) % 360) * Math.PI / 180;
+        const radius = orbitRadiusPercent(planet);
+        button.style.left = `${50 + Math.cos(baseAngle) * radius}%`;
+        button.style.top = `${50 + Math.sin(baseAngle) * radius}%`;
+        button.style.transform = "translate(-50%, -50%)";
+
+        button.setAttribute("aria-label", `查看${planet.name}資料`);
+        button.addEventListener("click", () => selectBody(planet.id));
+
+        const label = document.createElement("span");
+        label.className = "planet-label";
+        label.textContent = planet.name;
+        button.appendChild(label);
+
+        if (planet.id === "saturn") {
+          const ring = document.createElement("span");
+          ring.className = "saturn-ring";
+          button.appendChild(ring);
+        }
+
+        stage.appendChild(button);
+      });
+    }
+
+    function updateControls() {
+      const isSizeMode = mode === "size";
+      playToggle.hidden = isSizeMode;
+      speedLabel.hidden = isSizeMode;
+      sizeZoomLabel.hidden = !isSizeMode;
+      playToggle.disabled = isSizeMode;
+      speedRange.disabled = isSizeMode;
+      sizeZoomRange.disabled = !isSizeMode;
+      sizeZoomLabel.setAttribute("aria-hidden", String(!isSizeMode));
+    }
+
+    function renderStage() {
+      if (mode === "size") {
+        renderSizeComparison();
+      } else {
+        renderOrbit();
+      }
+
+      const notes = {
+        orbit: "軌道示意圖：此圖顯示八大行星由近至遠繞太陽運行的次序。為了在同一個畫面顯示，行星距離已經壓縮，天體大小也沒有按同一比例顯示。",
+        size: "大小比較圖：此圖按赤道直徑比例比較太陽和八大行星。較小的行星可能只顯示成很小的點，可使用縮放查看。"
+      };
+      stageNote.textContent = notes[mode];
+      updateControls();
+    }
+
+    function renderTable() {
+      tableBody.innerHTML = planets.map((planet) => `
+        <tr>
+          <td>${planet.order}</td>
+          <td><strong>${planet.name}</strong><br><span lang="en">${planet.english}</span></td>
+          <td>${planet.type}</td>
+          <td>${planet.diameterKm.toLocaleString("zh-Hant")} 公里</td>
+          <td>${formatKm(planet.distanceKm)}</td>
+          <td>${planet.yearText}</td>
+          <td>${planet.key}</td>
+        </tr>
+      `).join("");
+    }
+
+    function setMode(nextMode) {
+      mode = nextMode;
+      modeButtons.forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.mode === mode));
+      });
+      renderStage();
+    }
+
+    function tick(now) {
+      const delta = now - lastFrame;
+      lastFrame = now;
+      if (playing && mode === "orbit") {
+        angleOffset += delta * 0.02 * speed;
+        renderStage();
+      }
+      requestAnimationFrame(tick);
+    }
+
+    modeButtons.forEach((button) => {
+      button.addEventListener("click", () => setMode(button.dataset.mode));
+    });
+
+    playToggle.addEventListener("click", () => {
+      playing = !playing;
+      playToggle.textContent = playing ? "暫停轉動" : "繼續轉動";
+    });
+
+    speedRange.addEventListener("input", (event) => {
+      speed = Number(event.target.value);
+    });
+
+    sizeZoomRange.addEventListener("input", (event) => {
+      sizeZoom = Number(event.target.value);
+      renderStage();
+    });
+
+    enterFullscreen.addEventListener("click", async () => {
+      try {
+        if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+          await document.documentElement.requestFullscreen();
+        }
+      } catch (error) {
+        console.warn("Unable to enter fullscreen.", error);
+      }
+    });
+
+    exitFullscreen.addEventListener("click", async () => {
+      try {
+        if (document.fullscreenElement && document.exitFullscreen) {
+          await document.exitFullscreen();
+        }
+      } catch (error) {
+        console.warn("Unable to exit fullscreen.", error);
+      }
+    });
+
+    renderFactCard();
+    renderChips();
+    renderStage();
+    renderTable();
+    requestAnimationFrame(tick);
+  </script>
+  <script src="../../assets/tool-home-nav.js"></script>
+</body>
+</html>

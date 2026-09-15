@@ -1,0 +1,1888 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-ldl-tool-id="G01-multiplication" data-ldl-fingerprint="ldl-yfc-g01-multiplication-v1">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="author" content="Yung Fu Chuen">
+  <meta name="company" content="Yung Fu Chuen">
+  <meta name="copyright" content="© 2026 Yung Fu Chuen. All rights reserved.">
+  <meta name="license" content="Free classroom use only. Redistribution, resale, cloning, re-hosting, modification, or derivative use without written permission is prohibited.">
+  <meta name="ldl-product-name" content="乘法拔河大挑戰">
+  <meta name="ldl-product-name-en" content="Multiplication Tug-of-War Challenge">
+  <meta name="ldl-product-code" content="LDL-MATH-G01-2026-001">
+  <meta name="ldl-tool-id" content="G01-multiplication">
+  <meta name="ldl-module-id" content="ldl-g01-multiplication">
+  <meta name="ldl-release-year" content="2026">
+  <meta name="ldl-version" content="1.1.0">
+  <meta name="ldl-build-id" content="LDL-MATH-G01-2026-001">
+  <meta name="ldl-fingerprint" content="ldl-yfc-g01-multiplication-v1">
+  <meta name="ldl-source-reference" content="LDL Source Reference v1.1 · Yung Fu Chuen · Yung Fu Chuen">
+  <title>乘法拔河大挑戰</title>
+  <style>
+    :root {
+      --blue: #1677d2;
+      --blue-deep: #0a4f9f;
+      --blue-soft: #eaf6ff;
+      --red: #ed3d3a;
+      --red-deep: #a91419;
+      --red-soft: #fff1f1;
+      --green: #20b65f;
+      --gold: #ffd54f;
+      --ink: #162033;
+      --muted: #546178;
+      --paper: rgba(255, 255, 255, 0.9);
+      --paper-strong: rgba(255, 255, 255, 0.96);
+      --shadow: 0 22px 48px rgba(14, 32, 62, 0.22);
+      --inner-shadow: inset 0 -7px 0 rgba(24, 47, 80, 0.08);
+      --pull: 0px;
+      --question-bottom: clamp(102px, 11.2vh, 136px);
+      --team-card-height: clamp(314px, 34vh, 372px);
+      --score-gap: clamp(16px, 2vh, 28px);
+      --score-height-estimate: clamp(78px, 8.2vh, 104px);
+      --lane-inset: clamp(42px, 8vw, 300px);
+      --lane-card-max: 640px;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      color: var(--ink);
+      font-family: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", Arial, sans-serif;
+      background: #cceeff;
+      user-select: none;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .game {
+      position: relative;
+      width: 100vw;
+      height: 100dvh;
+      min-height: 620px;
+      overflow: hidden;
+      isolation: isolate;
+      background-image:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.14)),
+        url("G01-multiplication_background.png");
+      background-size: cover;
+      background-position: center bottom;
+    }
+
+    .game::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 19%, rgba(255, 255, 255, 0.28), transparent 30%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, transparent 42%, rgba(255, 250, 221, 0.44) 100%);
+    }
+
+    .game::after {
+      content: "";
+      position: absolute;
+      z-index: 1;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 40%;
+      pointer-events: none;
+      background: linear-gradient(180deg, transparent, rgba(255, 239, 194, 0.38));
+    }
+
+    .top-button {
+      position: absolute;
+      z-index: 2147483647;
+      top: max(14px, env(safe-area-inset-top));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 132px;
+      min-height: 54px;
+      padding: 0 14px;
+      border: 2px solid rgba(255, 255, 255, 0.82);
+      border-radius: 999px;
+      color: #ffffff;
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: 0;
+      white-space: nowrap;
+      cursor: pointer;
+      box-shadow: 0 12px 24px rgba(14, 31, 58, 0.24), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+      transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+    }
+
+    .top-button:hover,
+    .top-button:focus-visible {
+      outline: none;
+      transform: translateY(-2px);
+      box-shadow: 0 16px 28px rgba(14, 31, 58, 0.28), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+    }
+
+    .top-button:active {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    .exit-fullscreen {
+      left: max(158px, calc(env(safe-area-inset-left) + 158px));
+      background: linear-gradient(135deg, #3949ab, #1e2d66);
+    }
+
+    .enter-fullscreen {
+      right: 14px;
+      right: max(14px, env(safe-area-inset-right));
+      background: linear-gradient(135deg, #1d78d6, #124c91);
+    }
+
+    #tool-home-link {
+      position: absolute;
+      z-index: 2147483647;
+      top: max(14px, env(safe-area-inset-top));
+      left: max(14px, env(safe-area-inset-left));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 132px;
+      min-height: 54px;
+      padding: 0 14px;
+      border: 2px solid rgba(255, 255, 255, 0.82);
+      border-radius: 999px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #0f766e, #134e4a);
+      box-shadow: 0 12px 24px rgba(14, 31, 58, 0.24), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+      font-size: 18px !important;
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: 0;
+      text-decoration: none;
+      white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    #tool-home-link:focus-visible {
+      outline: 4px solid rgba(20, 184, 166, 0.38);
+      outline-offset: 3px;
+    }
+
+    #tool-home-link:active {
+      transform: scale(0.97);
+    }
+
+    @media (max-width: 560px) {
+      .top-button,
+      #tool-home-link {
+        width: 104px;
+        min-height: 46px;
+        padding: 0 6px;
+        font-size: 18px !important;
+      }
+
+      #tool-home-link {
+        left: max(8px, env(safe-area-inset-left));
+      }
+
+      .exit-fullscreen {
+        left: max(118px, calc(env(safe-area-inset-left) + 118px));
+      }
+
+      .enter-fullscreen {
+        right: max(8px, env(safe-area-inset-right));
+      }
+    }
+
+    .arena {
+      position: absolute;
+      z-index: 2;
+      top: clamp(72px, 9.8vh, 126px);
+      left: 50%;
+      width: min(1240px, 90vw);
+      height: clamp(228px, 32vh, 360px);
+      transform: translateX(-50%);
+      pointer-events: none;
+    }
+
+    .center-line {
+      position: absolute;
+      top: 4px;
+      bottom: -8px;
+      left: 50%;
+      width: 6px;
+      transform: translateX(-50%);
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 213, 79, 0.96));
+      box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.38), 0 14px 28px rgba(72, 42, 0, 0.2);
+      opacity: 0.96;
+    }
+
+    .student-track {
+      position: absolute;
+      z-index: 4;
+      left: 50%;
+      bottom: 0;
+      width: min(1080px, 82vw);
+      transform: translateX(calc(-50% + var(--pull)));
+      transition: transform 520ms cubic-bezier(0.2, 0.82, 0.2, 1);
+      will-change: transform;
+    }
+
+    .student-track::after {
+      content: "";
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      bottom: 2px;
+      height: 18px;
+      border-radius: 50%;
+      background: rgba(33, 45, 62, 0.2);
+      filter: blur(8px);
+    }
+
+    .student {
+      position: relative;
+      z-index: 1;
+      display: block;
+      width: 100%;
+      height: auto;
+      transform-origin: 50% 92%;
+      filter: drop-shadow(0 18px 18px rgba(19, 35, 54, 0.28));
+      animation: gentle-tug 1350ms ease-in-out infinite alternate;
+    }
+
+    @keyframes gentle-tug {
+      0% { transform: translateX(-5px) rotate(-0.35deg); }
+      100% { transform: translateX(5px) rotate(0.35deg); }
+    }
+
+    .score-ribbon {
+      position: absolute;
+      z-index: 10;
+      left: 50%;
+      top: var(--score-top, calc(100dvh - var(--question-bottom) - var(--team-card-height) - var(--score-gap) - var(--score-height-estimate)));
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: clamp(26px, 3.8vw, 56px);
+      transform: translateX(-50%);
+      width: min(560px, 38vw);
+      min-width: 330px;
+      padding: 12px clamp(26px, 3vw, 46px) 14px;
+      border: 3px solid rgba(255, 255, 255, 0.84);
+      border-radius: 999px;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(243, 249, 255, 0.9));
+      box-shadow: 0 18px 38px rgba(21, 38, 68, 0.22), inset 0 -6px 0 rgba(23, 54, 94, 0.07);
+      color: #24304a;
+      font-size: clamp(42px, 4.8vw, 76px);
+      font-weight: 950;
+      line-height: 0.92;
+      backdrop-filter: blur(10px);
+      will-change: top;
+    }
+
+    .score-ribbon .blue-score {
+      color: var(--blue-deep);
+      text-align: right;
+    }
+
+    .score-ribbon .red-score {
+      color: var(--red-deep);
+      text-align: left;
+    }
+
+    .score-ribbon .divider {
+      color: #6a7790;
+      font-weight: 900;
+      transform: translateY(-0.04em);
+    }
+
+    .questions {
+      position: absolute;
+      z-index: 8;
+      left: 0;
+      bottom: var(--question-bottom);
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 0;
+      align-items: end;
+    }
+
+    .team-card {
+      position: relative;
+      width: min(var(--lane-card-max), calc(100% - var(--lane-inset)));
+      justify-self: center;
+      display: grid;
+      grid-template-rows: auto auto auto;
+      align-content: space-between;
+      row-gap: clamp(14px, 2vh, 24px);
+      min-height: var(--team-card-height);
+      padding: clamp(18px, 2.15vw, 28px);
+      border: 4px solid transparent;
+      border-radius: 26px;
+      background: var(--paper);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+      transform: translateZ(0);
+      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    }
+
+    .team-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      border-radius: inherit;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.7), transparent 40%),
+        radial-gradient(circle at 16% 0%, rgba(255, 255, 255, 0.95), transparent 28%);
+    }
+
+    .team-card.blue {
+      border-color: rgba(22, 119, 210, 0.72);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(214, 237, 255, 0.94));
+    }
+
+    .team-card.red {
+      border-color: rgba(237, 61, 58, 0.68);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(255, 219, 219, 0.94));
+    }
+
+    .team-card.celebrate {
+      animation: celebrate-card 440ms ease both;
+    }
+
+    .team-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 0;
+    }
+
+    .team-name {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 0 17px 0 14px;
+      border-radius: 999px;
+      font-size: clamp(20px, 2.15vw, 31px);
+      font-weight: 900;
+      box-shadow: 0 10px 18px rgba(24, 47, 80, 0.13), inset 0 -4px 0 rgba(24, 47, 80, 0.06);
+    }
+
+    .team-name::before {
+      content: "";
+      width: 12px;
+      height: 12px;
+      margin-right: 8px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.96);
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.22);
+    }
+
+    .blue .team-name {
+      border: 3px solid rgba(22, 119, 210, 0.78);
+      color: var(--blue-deep);
+      background: linear-gradient(135deg, #f8fcff 0%, #d5eeff 42%, #9fd4ff 100%);
+    }
+
+    .red .team-name {
+      border: 3px solid rgba(237, 61, 58, 0.74);
+      color: var(--red-deep);
+      background: linear-gradient(135deg, #fffafa 0%, #ffe1e1 42%, #ffb4b4 100%);
+    }
+
+    .mini-score {
+      position: relative;
+      min-width: clamp(106px, 10vw, 132px);
+      padding: 8px 14px 10px;
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.72);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.68);
+      font-size: clamp(17px, 1.7vw, 25px);
+      font-weight: 900;
+      color: var(--muted);
+      text-align: center;
+      box-shadow: inset 0 -4px 0 rgba(26, 43, 72, 0.06);
+    }
+
+    .mini-score::after {
+      content: "";
+      position: absolute;
+      left: 9px;
+      right: auto;
+      bottom: 5px;
+      width: var(--progress-width, 0%);
+      max-width: calc(100% - 18px);
+      height: 4px;
+      border-radius: 999px;
+      transition: width 260ms ease;
+    }
+
+    .blue .mini-score::after {
+      background: linear-gradient(90deg, #2fa5ff, #0d55b3);
+    }
+
+    .red .mini-score::after {
+      background: linear-gradient(90deg, #ff6a66, #b71922);
+    }
+
+    .equation {
+      align-self: center;
+      margin: 0;
+      text-align: center;
+      color: #10192b;
+      font-size: clamp(44px, 4.9vw, 78px);
+      font-weight: 950;
+      line-height: 1.05;
+      letter-spacing: 0;
+      text-shadow: 0 3px 0 rgba(255, 255, 255, 0.68);
+    }
+
+    .answers {
+      align-self: center;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(12px, 1.45vw, 18px);
+      margin-bottom: 0;
+    }
+
+    .answer {
+      position: relative;
+      overflow: hidden;
+      min-height: clamp(70px, 9.5vh, 92px);
+      border: 3px solid rgba(255, 255, 255, 0.86);
+      border-radius: 19px;
+      color: #182338;
+      background: linear-gradient(180deg, #ffffff, #f6fbff);
+      font-size: clamp(29px, 3.4vw, 46px);
+      font-weight: 950;
+      cursor: pointer;
+      box-shadow:
+        0 13px 22px rgba(24, 47, 80, 0.16),
+        var(--inner-shadow);
+      transition: transform 120ms ease, box-shadow 120ms ease, background 160ms ease, color 160ms ease, border-color 160ms ease;
+      touch-action: manipulation;
+    }
+
+    .answer::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 0%, rgba(255, 255, 255, 0.78) 38%, transparent 62%);
+      opacity: 0;
+      transform: translateX(-55%);
+      transition: opacity 160ms ease, transform 260ms ease;
+    }
+
+    .answer:hover:not(:disabled),
+    .answer:focus-visible:not(:disabled) {
+      outline: none;
+      transform: translateY(-3px);
+      box-shadow:
+        0 17px 29px rgba(24, 47, 80, 0.22),
+        var(--inner-shadow);
+    }
+
+    .answer:hover:not(:disabled)::before,
+    .answer:focus-visible:not(:disabled)::before {
+      opacity: 1;
+      transform: translateX(55%);
+    }
+
+    .answer:active:not(:disabled) {
+      transform: translateY(2px) scale(0.99);
+    }
+
+    .blue .answer {
+      border-color: rgba(25, 118, 210, 0.2);
+    }
+
+    .red .answer {
+      border-color: rgba(229, 57, 53, 0.2);
+    }
+
+    .answer.correct {
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.78);
+      background: linear-gradient(135deg, #2fd878, #128044);
+      box-shadow: 0 14px 30px rgba(28, 151, 84, 0.34), inset 0 -6px 0 rgba(0, 0, 0, 0.15);
+      animation: answer-pop 360ms ease both;
+    }
+
+    .answer.wrong {
+      color: #ffffff;
+      border-color: rgba(255, 255, 255, 0.75);
+      background: linear-gradient(135deg, #ff6464, #c5222b);
+      box-shadow: 0 14px 30px rgba(198, 40, 40, 0.32), inset 0 -6px 0 rgba(0, 0, 0, 0.14);
+      animation: answer-wrong 320ms ease both;
+    }
+
+    .answer.correct::after,
+    .answer.wrong::after {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.92);
+      font-size: 18px;
+      line-height: 1;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.16);
+    }
+
+    .answer.correct::after {
+      content: "✓";
+      color: #128044;
+    }
+
+    .answer.wrong::after {
+      content: "×";
+      color: #c5222b;
+    }
+
+    .team-card.shake {
+      animation: shake-card 310ms ease both;
+    }
+
+    @keyframes shake-card {
+      0%, 100% { transform: translateX(0); }
+      22% { transform: translateX(-9px); }
+      46% { transform: translateX(8px); }
+      68% { transform: translateX(-5px); }
+      84% { transform: translateX(3px); }
+    }
+
+    @keyframes answer-pop {
+      0% { transform: translateY(0) scale(1); }
+      55% { transform: translateY(-4px) scale(1.05); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    @keyframes answer-wrong {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-7px); }
+      50% { transform: translateX(6px); }
+      75% { transform: translateX(-3px); }
+    }
+
+    @keyframes celebrate-card {
+      0% { transform: translateY(0) scale(1); box-shadow: var(--shadow); }
+      48% { transform: translateY(-8px) scale(1.012); box-shadow: 0 28px 54px rgba(20, 129, 79, 0.24); }
+      100% { transform: translateY(0) scale(1); box-shadow: var(--shadow); }
+    }
+
+    .star-board {
+      position: absolute;
+      z-index: 9;
+      left: 0;
+      right: auto;
+      bottom: 14px;
+      bottom: max(14px, env(safe-area-inset-bottom));
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 0;
+      padding: 0;
+    }
+
+    .star-row {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      justify-self: center;
+      width: min(var(--lane-card-max), calc(100% - var(--lane-inset)));
+      gap: 12px;
+      min-width: 0;
+      padding: 11px 18px;
+      border-radius: 22px;
+      box-shadow: 0 14px 28px rgba(21, 38, 68, 0.16);
+      backdrop-filter: blur(8px);
+    }
+
+    .star-row.blue {
+      border: 3px solid rgba(22, 119, 210, 0.46);
+      background: linear-gradient(135deg, rgba(250, 253, 255, 0.9), rgba(209, 235, 255, 0.84));
+    }
+
+    .star-row.red {
+      border: 3px solid rgba(237, 61, 58, 0.44);
+      background: linear-gradient(135deg, rgba(255, 250, 250, 0.9), rgba(255, 216, 216, 0.84));
+    }
+
+    .star-label {
+      min-width: 58px;
+      padding: 7px 11px;
+      border-radius: 999px;
+      font-size: clamp(14px, 1.35vw, 19px);
+      font-weight: 900;
+      text-align: center;
+      white-space: nowrap;
+      box-shadow: 0 8px 14px rgba(21, 38, 68, 0.14), inset 0 -3px 0 rgba(24, 47, 80, 0.06);
+    }
+
+    .star-row.blue .star-label {
+      border: 2px solid rgba(22, 119, 210, 0.72);
+      color: var(--blue-deep);
+      background: linear-gradient(135deg, #f8fcff 0%, #d5eeff 48%, #9fd4ff 100%);
+    }
+
+    .star-row.red .star-label {
+      border: 2px solid rgba(237, 61, 58, 0.7);
+      color: var(--red-deep);
+      background: linear-gradient(135deg, #fffafa 0%, #ffe1e1 48%, #ffb4b4 100%);
+    }
+
+    .stars {
+      display: grid;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      gap: 2px;
+      align-items: center;
+    }
+
+    .star {
+      display: grid;
+      place-items: center;
+      height: clamp(22px, 2.7vh, 32px);
+      color: rgba(98, 112, 136, 0.34);
+      font-size: clamp(18px, 2.1vw, 27px);
+      line-height: 1;
+      text-shadow: 0 2px 3px rgba(255, 255, 255, 0.78);
+      transition: transform 220ms ease, color 220ms ease;
+    }
+
+    .star.filled {
+      color: var(--gold);
+      transform: scale(1.13);
+      text-shadow: 0 2px 0 #b37a00, 0 0 10px rgba(255, 213, 79, 0.85);
+    }
+
+    .victory-overlay {
+      position: absolute;
+      z-index: 40;
+      inset: 0;
+      display: none;
+      place-items: center;
+      padding: 24px;
+      background: rgba(13, 23, 42, 0.52);
+      backdrop-filter: blur(7px);
+    }
+
+    .victory-overlay.show {
+      display: grid;
+    }
+
+    .victory-card {
+      position: relative;
+      width: min(650px, 92vw);
+      min-height: 330px;
+      display: grid;
+      place-items: center;
+      padding: 46px 34px 34px;
+      border: 6px solid rgba(255, 255, 255, 0.85);
+      border-radius: 38px;
+      color: #ffffff;
+      text-align: center;
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.38);
+      overflow: hidden;
+      animation: win-pop 520ms cubic-bezier(0.2, 1.2, 0.2, 1) both;
+    }
+
+    .victory-card.blue-win {
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.32), transparent 26%),
+        linear-gradient(135deg, #42a5f5 0%, #1565c0 48%, #0a3d91 100%);
+    }
+
+    .victory-card.red-win {
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255, 255, 255, 0.34), transparent 26%),
+        linear-gradient(135deg, #ff6b6b 0%, #d32f2f 48%, #8e1111 100%);
+    }
+
+    .victory-card::before,
+    .victory-card::after {
+      content: "";
+      position: absolute;
+      width: 170%;
+      height: 54px;
+      left: -35%;
+      background: rgba(255, 255, 255, 0.22);
+      transform: rotate(-10deg);
+      animation: ribbon-slide 1800ms ease-in-out infinite alternate;
+    }
+
+    .victory-card::before {
+      top: 34px;
+    }
+
+    .victory-card::after {
+      bottom: 42px;
+      animation-delay: 180ms;
+    }
+
+    .win-text {
+      position: relative;
+      z-index: 2;
+      margin: 0 0 28px;
+      font-size: clamp(54px, 7.5vw, 94px);
+      font-weight: 950;
+      line-height: 1;
+      letter-spacing: 0;
+      text-shadow: 0 5px 0 rgba(0, 0, 0, 0.14), 0 12px 30px rgba(0, 0, 0, 0.24);
+    }
+
+    .restart {
+      position: relative;
+      z-index: 2;
+      min-width: min(320px, 78vw);
+      min-height: 70px;
+      border: 0;
+      border-radius: 999px;
+      color: #123;
+      background: linear-gradient(180deg, #ffffff, #fff2b7);
+      font-size: clamp(24px, 3vw, 36px);
+      font-weight: 950;
+      cursor: pointer;
+      box-shadow: 0 16px 28px rgba(0, 0, 0, 0.24), inset 0 -6px 0 rgba(166, 112, 0, 0.18);
+      transition: transform 140ms ease;
+    }
+
+    .restart:active {
+      transform: scale(0.97);
+    }
+
+    .record-downloads {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .record-download {
+      min-width: min(250px, 78vw);
+      min-height: 52px;
+      padding: 0 18px;
+      border: 2px solid rgba(255, 255, 255, 0.82);
+      border-radius: 999px;
+      color: #ffffff;
+      background: rgba(13, 23, 42, 0.34);
+      font-size: clamp(17px, 2vw, 22px);
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+      transition: transform 140ms ease, background 140ms ease;
+    }
+
+    .record-download:hover,
+    .record-download:focus-visible {
+      outline: none;
+      transform: translateY(-2px);
+      background: rgba(13, 23, 42, 0.48);
+    }
+
+    .record-download:active {
+      transform: scale(0.97);
+    }
+
+    .confetti {
+      position: absolute;
+      top: -24px;
+      width: 12px;
+      height: 22px;
+      border-radius: 4px;
+      opacity: 0.92;
+      animation: confetti-fall var(--fall, 2200ms) linear infinite;
+    }
+
+    @keyframes win-pop {
+      0% { transform: translateY(24px) scale(0.88); opacity: 0; }
+      100% { transform: translateY(0) scale(1); opacity: 1; }
+    }
+
+    @keyframes ribbon-slide {
+      0% { transform: translateX(-14px) rotate(-10deg); }
+      100% { transform: translateX(14px) rotate(-10deg); }
+    }
+
+    @keyframes confetti-fall {
+      0% { transform: translateY(-8vh) rotate(0deg); }
+      100% { transform: translateY(108vh) rotate(620deg); }
+    }
+
+    @media (max-width: 760px) {
+      .game {
+        --question-bottom: 92px;
+        --team-card-height: 228px;
+        --score-gap: 12px;
+        --score-height-estimate: 74px;
+        --lane-inset: 28px;
+        --lane-card-max: 392px;
+        min-width: 900px;
+        min-height: 620px;
+        overflow: hidden;
+      }
+
+      .top-button {
+        min-height: 42px;
+        padding: 0 6px;
+        font-size: 18px;
+      }
+
+      .enter-fullscreen {
+        min-width: 76px;
+        right: auto;
+        left: clamp(188px, calc(100vw - 132px), 340px);
+        text-align: center;
+      }
+
+      .arena {
+        top: 64px;
+        height: 196px;
+        width: 830px;
+      }
+
+      .score-ribbon {
+        width: 320px;
+        min-width: 320px;
+        gap: 24px;
+        padding: 9px 24px 11px;
+        font-size: 42px;
+      }
+
+      .student-track {
+        width: 720px;
+      }
+
+      .questions {
+        position: absolute;
+        bottom: var(--question-bottom);
+        width: 900px;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 0;
+        padding-bottom: 0;
+      }
+
+      .team-card {
+        min-height: var(--team-card-height);
+        padding: 14px;
+        border-radius: 22px;
+        row-gap: 12px;
+      }
+
+      .team-name {
+        min-height: 38px;
+        padding: 0 14px;
+        font-size: 22px;
+      }
+
+      .mini-score {
+        font-size: 18px;
+        min-width: 108px;
+      }
+
+      .equation {
+        font-size: 40px;
+        margin: 0;
+      }
+
+      .answer {
+        min-height: 58px;
+        border-radius: 18px;
+        font-size: 30px;
+      }
+
+      .star-board {
+        position: absolute;
+        bottom: 12px;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        width: 900px;
+        gap: 0;
+      }
+
+      .star-row {
+        padding: 8px 12px;
+        border-radius: 18px;
+      }
+    }
+
+    @media (max-height: 700px) and (min-width: 761px) {
+      .game {
+        --question-bottom: 86px;
+        --team-card-height: 224px;
+        --score-gap: 12px;
+        --score-height-estimate: 74px;
+        --lane-inset: clamp(36px, 7vw, 170px);
+        --lane-card-max: 640px;
+      }
+
+      .arena {
+        top: 62px;
+        height: 214px;
+      }
+
+      .score-ribbon {
+        width: min(430px, 35vw);
+        min-width: 300px;
+        gap: 24px;
+        padding: 8px 22px 10px;
+        font-size: clamp(36px, 4vw, 52px);
+      }
+
+      .questions {
+        bottom: var(--question-bottom);
+      }
+
+      .team-card {
+        min-height: var(--team-card-height);
+        padding: 14px 16px;
+        border-radius: 22px;
+        row-gap: 10px;
+      }
+
+      .equation {
+        font-size: clamp(34px, 4.4vw, 54px);
+        margin: 0;
+      }
+
+      .answer {
+        min-height: 58px;
+      }
+
+      .star-board {
+        bottom: 10px;
+      }
+
+      .star-row {
+        padding: 8px 12px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+    /* LDL Source Reference v1.1 watermark */
+    :root {
+      --ldl-product-name: "乘法拔河大挑戰";
+      --ldl-product-name-en: "Multiplication Tug-of-War Challenge";
+      --ldl-product-code: "LDL-MATH-G01-2026-001";
+      --ldl-tool-id: "G01-multiplication";
+      --ldl-module-id: "ldl-g01-multiplication";
+      --ldl-company: "Yung Fu Chuen";
+      --ldl-author: "Yung Fu Chuen";
+      --ldl-release-year: "2026";
+      --ldl-version: "1.1.0";
+      --ldl-build-id: "LDL-MATH-G01-2026-001";
+      --ldl-fingerprint: "ldl-yfc-g01-multiplication-v1";
+    }
+
+    .ldl-visible-watermark {
+      position: fixed;
+      z-index: 35;
+      left: max(10px, env(safe-area-inset-left));
+      right: auto;
+      top: max(70px, calc(env(safe-area-inset-top) + 66px));
+      bottom: auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 5px;
+      max-width: min(190px, calc(100vw - 20px));
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      color: rgba(23, 32, 51, 0.56);
+      background: transparent;
+      box-shadow: none;
+      font-size: 8px;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: 0;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+      backdrop-filter: none;
+    }
+
+    /* copy-cost marker: style-beta LD */
+
+    .ldl-visible-watermark img {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+      object-fit: contain;
+      opacity: 0.88;
+    }
+
+    .ldl-visible-watermark span {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .ldl-offscreen-source-reference {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      margin: -1px !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      clip: rect(0 0 0 0) !important;
+      clip-path: inset(50%) !important;
+      border: 0 !important;
+      white-space: nowrap !important;
+    }
+
+    @media (max-width: 520px) {
+      .ldl-visible-watermark {
+        left: max(8px, env(safe-area-inset-left));
+        right: auto;
+        top: max(58px, calc(env(safe-area-inset-top) + 54px));
+        bottom: auto;
+        font-size: 7px;
+      }
+
+      .ldl-visible-watermark img {
+        width: 14px;
+        height: 14px;
+      }
+    }
+  </style>
+</head>
+<body
+  data-ldl-product-name="乘法拔河大挑戰"
+  data-ldl-product-name-en="Multiplication Tug-of-War Challenge"
+  data-ldl-product-code="LDL-MATH-G01-2026-001"
+  data-ldl-tool-id="G01-multiplication"
+  data-ldl-module-id="ldl-g01-multiplication"
+  data-ldl-build-id="LDL-MATH-G01-2026-001"
+  data-ldl-fingerprint="ldl-yfc-g01-multiplication-v1"
+>
+  <main class="game" id="game" data-tool-home-nav-root>
+    <section class="arena" aria-hidden="true">
+      <div class="center-line"></div>
+      <div class="student-track" id="studentTrack">
+        <img class="student" src="G01-multiplication_student.png" alt="">
+      </div>
+    </section>
+
+    <div class="score-ribbon" aria-label="比分">
+      <span class="blue-score" id="blueScoreTop">0</span>
+      <span class="divider">:</span>
+      <span class="red-score" id="redScoreTop">0</span>
+    </div>
+
+    <section class="questions" aria-label="乘法答題區">
+      <article class="team-card blue" id="blueCard">
+        <div class="team-header">
+          <div class="team-name">藍隊</div>
+          <div class="mini-score"><span id="blueScoreMini">0</span> / 10</div>
+        </div>
+        <div class="equation" id="blueEquation" aria-live="polite">1 × 1 = ?</div>
+        <div class="answers" id="blueAnswers"></div>
+      </article>
+
+      <article class="team-card red" id="redCard">
+        <div class="team-header">
+          <div class="team-name">紅隊</div>
+          <div class="mini-score"><span id="redScoreMini">0</span> / 10</div>
+        </div>
+        <div class="equation" id="redEquation" aria-live="polite">1 × 1 = ?</div>
+        <div class="answers" id="redAnswers"></div>
+      </article>
+    </section>
+
+    <section class="star-board" aria-label="答對進度">
+      <div class="star-row blue">
+        <div class="star-label">藍隊</div>
+        <div class="stars" id="blueStars"></div>
+      </div>
+      <div class="star-row red">
+        <div class="star-label">紅隊</div>
+        <div class="stars" id="redStars"></div>
+      </div>
+    </section>
+
+    <section class="victory-overlay" id="victoryOverlay" aria-live="assertive" aria-modal="true" role="dialog">
+      <div class="victory-card" id="victoryCard">
+        <div>
+          <h1 class="win-text" id="winText">藍隊勝利！</h1>
+          <button class="restart" id="restart" type="button">重新開始</button>
+          <div class="record-downloads" aria-label="學習紀錄下載">
+            <button class="record-download" id="downloadDetailCsv" type="button">下載詳細紀錄</button>
+            <button class="record-download" id="downloadErrorCsv" type="button">下載錯題統計</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const MAX_SCORE = 10;
+    const LEAD_TO_WIN = 4;
+    const MOVE_STEP = 64;
+    const MAX_MOVE = 192;
+    const TOOL_NAME = "乘法拔河大挑戰";
+
+    const teams = {
+      blue: {
+        name: "藍隊",
+        score: 0,
+        lastKey: "",
+        locked: false,
+        question: null,
+        card: document.getElementById("blueCard"),
+        equation: document.getElementById("blueEquation"),
+        answers: document.getElementById("blueAnswers"),
+        stars: document.getElementById("blueStars"),
+        scoreTop: document.getElementById("blueScoreTop"),
+        scoreMini: document.getElementById("blueScoreMini")
+      },
+      red: {
+        name: "紅隊",
+        score: 0,
+        lastKey: "",
+        locked: false,
+        question: null,
+        card: document.getElementById("redCard"),
+        equation: document.getElementById("redEquation"),
+        answers: document.getElementById("redAnswers"),
+        stars: document.getElementById("redStars"),
+        scoreTop: document.getElementById("redScoreTop"),
+        scoreMini: document.getElementById("redScoreMini")
+      }
+    };
+
+    const game = document.getElementById("game");
+    const scoreRibbon = document.querySelector(".score-ribbon");
+    const questionsSection = document.querySelector(".questions");
+    const victoryOverlay = document.getElementById("victoryOverlay");
+    const victoryCard = document.getElementById("victoryCard");
+    const winText = document.getElementById("winText");
+    const restartButton = document.getElementById("restart");
+    const downloadDetailCsvButton = document.getElementById("downloadDetailCsv");
+    const downloadErrorCsvButton = document.getElementById("downloadErrorCsv");
+    let gameOver = false;
+    let roundNumber = 0;
+    const learningRecords = [];
+    let audioContext = null;
+    const previewParams = new URLSearchParams(window.location.search);
+    const isPreviewMode = previewParams.has("preview") || previewParams.get("mute") === "1";
+    const bgm = new Audio("bgm.mp3");
+    bgm.loop = true;
+    bgm.volume = 0.32;
+
+    function startBgm(restart = false) {
+      if (isPreviewMode) return;
+
+      if (restart) {
+        try {
+          bgm.currentTime = 0;
+        } catch (error) {
+          // Some browsers may reject seeking until metadata is ready.
+        }
+      }
+
+      const playPromise = bgm.play();
+      if (playPromise && typeof playPromise.catch === "function") {
+        playPromise.catch(() => {});
+      }
+    }
+
+    function unlockBgm() {
+      startBgm();
+    }
+
+    function randomInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    function shuffle(items) {
+      const arr = [...items];
+      for (let i = arr.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+
+    function formatTimestamp(date) {
+      const pad = (value) => String(value).padStart(2, "0");
+      return [
+        date.getFullYear(),
+        pad(date.getMonth() + 1),
+        pad(date.getDate())
+      ].join("-") + " " + [
+        pad(date.getHours()),
+        pad(date.getMinutes()),
+        pad(date.getSeconds())
+      ].join(":");
+    }
+
+    function formatFileTimestamp(date) {
+      const pad = (value) => String(value).padStart(2, "0");
+      return [
+        date.getFullYear(),
+        pad(date.getMonth() + 1),
+        pad(date.getDate())
+      ].join("") + "_" + [
+        pad(date.getHours()),
+        pad(date.getMinutes()),
+        pad(date.getSeconds())
+      ].join("");
+    }
+
+    function getStudentOrGroupName() {
+      const input = window.prompt("請輸入檔名前綴（例如：3A_05 或 小組A）：", "");
+      if (input === null) return null;
+      const trimmed = input.trim();
+      return trimmed || "未命名";
+    }
+
+    function sanitizeFilePart(value) {
+      return String(value)
+        .trim()
+        .replace(/[\\/:*?"<>|]+/g, "_")
+        .replace(/\s+/g, "_") || "未命名";
+    }
+
+    function csvCell(value) {
+      const text = value === null || value === undefined ? "" : String(value);
+      return `"${text.replace(/"/g, '""')}"`;
+    }
+
+    function buildCsv(headers, rows) {
+      const lines = [headers, ...rows].map((row) => row.map(csvCell).join(","));
+      return "\uFEFF" + lines.join("\r\n");
+    }
+
+    function downloadCsv(prefix, recordType, csvContent) {
+      const timestamp = formatFileTimestamp(new Date());
+      const filePrefix = sanitizeFilePart(prefix);
+      const fileToolName = sanitizeFilePart(TOOL_NAME);
+      const fileRecordType = sanitizeFilePart(recordType);
+      const filename = `${filePrefix}_${fileToolName}_${fileRecordType}_${timestamp}.csv`;
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function getRoundScoreText() {
+      return `藍隊 ${teams.blue.score}：紅隊 ${teams.red.score}`;
+    }
+
+    function getModeText() {
+      return `雙隊拔河；1-10乘法；先達${MAX_SCORE}分或領先${LEAD_TO_WIN}分勝出`;
+    }
+
+    function recordLearningInteraction(teamKey, selectedAnswer, isCorrect) {
+      const team = teams[teamKey];
+      if (!team.question) return;
+
+      learningRecords.push({
+        roundNumber,
+        toolName: TOOL_NAME,
+        task: `${team.question.a} × ${team.question.b} = ?`,
+        studentAction: String(selectedAnswer),
+        expectedResult: String(team.question.correct),
+        isCorrect,
+        actionTime: formatTimestamp(new Date()),
+        roundScore: getRoundScoreText(),
+        team: team.name,
+        mode: getModeText()
+      });
+    }
+
+    function downloadDetailCsv() {
+      const prefix = getStudentOrGroupName();
+      if (prefix === null) return;
+
+      const headers = [
+        "學生／小組名稱",
+        "局數",
+        "工具名稱",
+        "題目、任務或目標內容",
+        "學生答案、選擇或操作內容",
+        "正確答案、目標內容或期望結果",
+        "是否答對、成功或完成",
+        "作答或操作時間",
+        "本局累積分數",
+        "隊伍",
+        "模式／關卡／難度"
+      ];
+      const rows = learningRecords.map((record) => [
+        prefix,
+        record.roundNumber,
+        record.toolName,
+        record.task,
+        record.studentAction,
+        record.expectedResult,
+        record.isCorrect ? "是" : "否",
+        record.actionTime,
+        record.roundScore,
+        record.team,
+        record.mode
+      ]);
+
+      downloadCsv(prefix, "詳細紀錄", buildCsv(headers, rows));
+    }
+
+    function downloadErrorCsv() {
+      const prefix = getStudentOrGroupName();
+      if (prefix === null) return;
+
+      const headers = [
+        "學生／小組名稱",
+        "題目、任務或目標內容",
+        "錯誤答案、錯誤選擇或錯誤操作",
+        "錯誤次數"
+      ];
+      const errorCounts = new Map();
+
+      learningRecords.forEach((record) => {
+        if (record.isCorrect) return;
+        const key = `${record.task}\n${record.studentAction}`;
+        const current = errorCounts.get(key) || {
+          task: record.task,
+          studentAction: record.studentAction,
+          count: 0
+        };
+        current.count += 1;
+        errorCounts.set(key, current);
+      });
+
+      const rows = errorCounts.size
+        ? Array.from(errorCounts.values()).map((record) => [
+          prefix,
+          record.task,
+          record.studentAction,
+          record.count
+        ])
+        : [[prefix, "本次頁面沒有錯題或錯誤操作", "", 0]];
+
+      downloadCsv(prefix, "錯題統計", buildCsv(headers, rows));
+    }
+
+    let layoutSyncFrame = 0;
+
+    function getScoreGap() {
+      if (window.innerWidth <= 760 || window.innerHeight <= 700) return 12;
+      return Math.max(16, Math.min(28, window.innerHeight * 0.02));
+    }
+
+    function syncLayout() {
+      if (!scoreRibbon || !questionsSection) return;
+
+      const gameRect = game.getBoundingClientRect();
+      const questionsRect = questionsSection.getBoundingClientRect();
+      const scoreRect = scoreRibbon.getBoundingClientRect();
+      const top = Math.max(8, questionsRect.top - gameRect.top - scoreRect.height - getScoreGap());
+
+      scoreRibbon.style.setProperty("--score-top", `${Math.round(top)}px`);
+    }
+
+    function scheduleLayoutSync() {
+      if (layoutSyncFrame) window.cancelAnimationFrame(layoutSyncFrame);
+      layoutSyncFrame = window.requestAnimationFrame(() => {
+        layoutSyncFrame = 0;
+        syncLayout();
+      });
+    }
+
+    function makeQuestion(team) {
+      let a = randomInt(1, 10);
+      let b = randomInt(1, 10);
+      let key = `${a}x${b}`;
+      let guard = 0;
+
+      while (key === team.lastKey && guard < 18) {
+        a = randomInt(1, 10);
+        b = randomInt(1, 10);
+        key = `${a}x${b}`;
+        guard += 1;
+      }
+
+      const correct = a * b;
+      const distractors = new Set();
+      const closeOffsets = shuffle([-10, -9, -8, -7, -6, -5, -4, -3, -2, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+      const tableHints = shuffle([
+        (a + 1) * b,
+        Math.max(1, a - 1) * b,
+        a * Math.min(10, b + 1),
+        a * Math.max(1, b - 1),
+        correct + a,
+        correct - a,
+        correct + b,
+        correct - b
+      ]);
+
+      for (const value of tableHints) {
+        if (distractors.size >= 2) break;
+        if (value > 0 && value <= 100 && value !== correct) distractors.add(value);
+      }
+
+      for (const offset of closeOffsets) {
+        if (distractors.size >= 2) break;
+        const value = correct + offset;
+        if (value > 0 && value <= 100 && value !== correct) distractors.add(value);
+      }
+
+      while (distractors.size < 2) {
+        const value = randomInt(1, 100);
+        if (value !== correct) distractors.add(value);
+      }
+
+      team.lastKey = key;
+      return {
+        a,
+        b,
+        correct,
+        choices: shuffle([correct, ...distractors])
+      };
+    }
+
+    function renderQuestion(teamKey) {
+      const team = teams[teamKey];
+      team.question = makeQuestion(team);
+      team.locked = false;
+      team.card.classList.remove("shake", "celebrate");
+      team.equation.textContent = `${team.question.a} × ${team.question.b} = ?`;
+      team.answers.innerHTML = "";
+
+      team.question.choices.forEach((choice) => {
+        const button = document.createElement("button");
+        button.className = "answer";
+        button.type = "button";
+        button.textContent = choice;
+        button.dataset.value = String(choice);
+        button.addEventListener("click", () => handleAnswer(teamKey, button, choice));
+        team.answers.appendChild(button);
+      });
+      scheduleLayoutSync();
+    }
+
+    function renderStars(teamKey) {
+      const team = teams[teamKey];
+      team.stars.innerHTML = "";
+      for (let i = 0; i < MAX_SCORE; i += 1) {
+        const star = document.createElement("span");
+        star.className = `star${i < team.score ? " filled" : ""}`;
+        star.textContent = "★";
+        star.setAttribute("aria-hidden", "true");
+        team.stars.appendChild(star);
+      }
+    }
+
+    function updateScores() {
+      teams.blue.scoreTop.textContent = teams.blue.score;
+      teams.red.scoreTop.textContent = teams.red.score;
+      teams.blue.scoreMini.textContent = teams.blue.score;
+      teams.red.scoreMini.textContent = teams.red.score;
+      teams.blue.card.style.setProperty("--progress-width", `${(teams.blue.score / MAX_SCORE) * 100}%`);
+      teams.red.card.style.setProperty("--progress-width", `${(teams.red.score / MAX_SCORE) * 100}%`);
+      renderStars("blue");
+      renderStars("red");
+
+      const difference = teams.red.score - teams.blue.score;
+      const pull = Math.max(-MAX_MOVE, Math.min(MAX_MOVE, difference * MOVE_STEP));
+      game.style.setProperty("--pull", `${pull}px`);
+    }
+
+    function setTeamButtons(teamKey, disabled) {
+      teams[teamKey].answers.querySelectorAll("button").forEach((button) => {
+        button.disabled = disabled;
+      });
+    }
+
+    function handleAnswer(teamKey, button, value) {
+      const team = teams[teamKey];
+      if (gameOver || team.locked) return;
+
+      const isCorrect = value === team.question.correct;
+
+      if (isCorrect) {
+        team.locked = true;
+        setTeamButtons(teamKey, true);
+        button.classList.add("correct");
+        team.card.classList.add("celebrate");
+        team.score += 1;
+        updateScores();
+        recordLearningInteraction(teamKey, value, true);
+
+        const winner = getWinner();
+        if (winner) {
+          window.setTimeout(() => showVictory(winner), 420);
+          return;
+        }
+
+        window.setTimeout(() => {
+          renderQuestion(teamKey);
+        }, 460);
+      } else {
+        team.locked = true;
+        setTeamButtons(teamKey, true);
+        button.classList.add("wrong");
+        team.card.classList.remove("shake");
+        void team.card.offsetWidth;
+        team.card.classList.add("shake");
+        recordLearningInteraction(teamKey, value, false);
+        window.setTimeout(() => {
+          renderQuestion(teamKey);
+        }, 360);
+      }
+    }
+
+    function getWinner() {
+      if (teams.blue.score >= MAX_SCORE) return "blue";
+      if (teams.red.score >= MAX_SCORE) return "red";
+      if (teams.blue.score - teams.red.score >= LEAD_TO_WIN) return "blue";
+      if (teams.red.score - teams.blue.score >= LEAD_TO_WIN) return "red";
+      return "";
+    }
+
+    function playVictorySound() {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        audioContext = audioContext || new AudioCtx();
+        const now = audioContext.currentTime;
+        [523.25, 659.25, 783.99, 1046.5].forEach((frequency, index) => {
+          const oscillator = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+          oscillator.type = "triangle";
+          oscillator.frequency.setValueAtTime(frequency, now + index * 0.11);
+          gain.gain.setValueAtTime(0, now + index * 0.11);
+          gain.gain.linearRampToValueAtTime(0.13, now + index * 0.11 + 0.02);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + index * 0.11 + 0.28);
+          oscillator.connect(gain);
+          gain.connect(audioContext.destination);
+          oscillator.start(now + index * 0.11);
+          oscillator.stop(now + index * 0.11 + 0.3);
+        });
+      } catch (error) {
+        audioContext = null;
+      }
+    }
+
+    function makeConfetti() {
+      victoryOverlay.querySelectorAll(".confetti").forEach((piece) => piece.remove());
+      const colors = ["#ffd54f", "#4fc3f7", "#ff6b6b", "#81c784", "#ffffff", "#b388ff"];
+      for (let i = 0; i < 58; i += 1) {
+        const piece = document.createElement("span");
+        piece.className = "confetti";
+        piece.style.left = `${Math.random() * 100}%`;
+        piece.style.background = colors[i % colors.length];
+        piece.style.animationDelay = `${Math.random() * -2100}ms`;
+        piece.style.setProperty("--fall", `${1900 + Math.random() * 1600}ms`);
+        victoryOverlay.appendChild(piece);
+      }
+    }
+
+    function showVictory(winner) {
+      gameOver = true;
+      setTeamButtons("blue", true);
+      setTeamButtons("red", true);
+      victoryCard.classList.remove("blue-win", "red-win");
+      victoryCard.classList.add(`${winner}-win`);
+      winText.textContent = winner === "blue" ? "藍隊勝利！" : "紅隊勝利！";
+      makeConfetti();
+      victoryOverlay.classList.add("show");
+      playVictorySound();
+      restartButton.focus({ preventScroll: true });
+    }
+
+    function resetGame() {
+      roundNumber += 1;
+      gameOver = false;
+      startBgm(true);
+      victoryOverlay.classList.remove("show");
+      victoryOverlay.querySelectorAll(".confetti").forEach((piece) => piece.remove());
+      teams.blue.score = 0;
+      teams.red.score = 0;
+      teams.blue.lastKey = "";
+      teams.red.lastKey = "";
+      updateScores();
+      renderQuestion("blue");
+      renderQuestion("red");
+    }
+
+    restartButton.addEventListener("click", resetGame);
+    downloadDetailCsvButton.addEventListener("click", downloadDetailCsv);
+    downloadErrorCsvButton.addEventListener("click", downloadErrorCsv);
+    if (!isPreviewMode) {
+      window.addEventListener("pointerdown", unlockBgm, { once: true });
+      window.addEventListener("keydown", unlockBgm, { once: true });
+    }
+    window.addEventListener("resize", scheduleLayoutSync);
+    document.addEventListener("fullscreenchange", scheduleLayoutSync);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", scheduleLayoutSync);
+    }
+
+    resetGame();
+    scheduleLayoutSync();
+  </script>
+  <template id="ldl-copy-cost-markers" hidden>
+    <!-- copy-cost marker: body-gamma YFC -->
+    <!-- copy-cost marker: body-delta LD -->
+  </template>
+<script>
+    "use strict";
+
+    // ==================================================
+    // LDL Source Reference v1.1
+    // Creator credit + hidden ownership markers
+    // copy-cost marker: script-epsilon YFC
+    // ==================================================
+    const LDL_RELEASE_YEAR = 2026;
+    const LDL_VERSION = "1.1.0";
+    const LDL_PRODUCT_NAME = "乘法拔河大挑戰";
+    const LDL_PRODUCT_NAME_EN = "Multiplication Tug-of-War Challenge";
+    const LDL_PRODUCT_CODE = "LDL-MATH-G01-2026-001";
+    const LDL_TOOL_ID = "G01-multiplication";
+    const LDL_MODULE_ID = "ldl-g01-multiplication";
+    const LDL_BUILD_ID = "LDL-MATH-G01-2026-001";
+    const LDL_FINGERPRINT = "ldl-yfc-g01-multiplication-v1";
+    const LDL_COMPANY = "Yung Fu Chuen";
+    const LDL_AUTHOR = "Yung Fu Chuen";
+    const LDL_VISIBLE_WATERMARK_TEXT = `© ${LDL_RELEASE_YEAR} · Yung Fu Chuen`;
+    const LDL_COPYRIGHT = `© ${LDL_RELEASE_YEAR} Yung Fu Chuen. All rights reserved.`;
+    const LDL_LICENSE = "Free classroom use only. Redistribution, resale, cloning, re-hosting, modification, or derivative use without written permission is prohibited.";
+    const LDL_CONSOLE_MESSAGE = `© ${LDL_RELEASE_YEAR} Yung Fu Chuen｜Created by Yung Fu Chuen｜LDL Source Reference v1.1`;
+    const LDL_MARKER_SIGNATURE = "LDL-SOURCE-REFERENCE-v1.1::Yung-Fu-Chuen::2026::g01-multiplication";
+
+    function createLDLSourceRecord() {
+      return Object.freeze({
+        productName: LDL_PRODUCT_NAME,
+        productNameEn: LDL_PRODUCT_NAME_EN,
+        productCode: LDL_PRODUCT_CODE,
+        toolId: LDL_TOOL_ID,
+        moduleId: LDL_MODULE_ID,
+        company: LDL_COMPANY,
+        author: LDL_AUTHOR,
+        releaseYear: LDL_RELEASE_YEAR,
+        version: LDL_VERSION,
+        copyright: LDL_COPYRIGHT,
+        license: LDL_LICENSE,
+        buildId: LDL_BUILD_ID,
+        fingerprint: LDL_FINGERPRINT,
+        markerSignature: LDL_MARKER_SIGNATURE
+      });
+    }
+
+    function initLDLSourceReference() {
+      try {
+        const record = createLDLSourceRecord();
+        setLDLCssCustomProperties(record);
+        upsertLDLMetaTags(record);
+        upsertLDLBodyAttributes(record);
+        upsertLDLJsonRecord(record);
+        upsertLDLHiddenDomReference(record);
+        upsertLDLSvgMetadata(record);
+        upsertLDLVisibleWatermark();
+
+        Object.defineProperty(window, "__LDL_SOURCE_REFERENCE__", {
+          value: record,
+          writable: false,
+          configurable: true,
+          enumerable: false
+        });
+
+        console.info(LDL_CONSOLE_MESSAGE);
+      } catch (error) {
+        console.warn("LDL Source Reference failed to initialize.", error);
+      }
+    }
+
+    function setLDLCssCustomProperties(record) {
+      const root = document.documentElement;
+      root.style.setProperty("--ldl-product-name", JSON.stringify(record.productName));
+      root.style.setProperty("--ldl-product-name-en", JSON.stringify(record.productNameEn));
+      root.style.setProperty("--ldl-product-code", JSON.stringify(record.productCode));
+      root.style.setProperty("--ldl-tool-id", JSON.stringify(record.toolId));
+      root.style.setProperty("--ldl-module-id", JSON.stringify(record.moduleId));
+      root.style.setProperty("--ldl-company", JSON.stringify(record.company));
+      root.style.setProperty("--ldl-author", JSON.stringify(record.author));
+      root.style.setProperty("--ldl-release-year", String(record.releaseYear));
+      root.style.setProperty("--ldl-version", JSON.stringify(record.version));
+      root.style.setProperty("--ldl-build-id", JSON.stringify(record.buildId));
+      root.style.setProperty("--ldl-fingerprint", JSON.stringify(record.fingerprint));
+    }
+
+    function upsertLDLMetaTags(record) {
+      const metaValues = {
+        author: record.author,
+        company: record.company,
+        copyright: record.copyright,
+        license: record.license,
+        "ldl-product-name": record.productName,
+        "ldl-product-name-en": record.productNameEn,
+        "ldl-product-code": record.productCode,
+        "ldl-tool-id": record.toolId,
+        "ldl-module-id": record.moduleId,
+        "ldl-release-year": String(record.releaseYear),
+        "ldl-version": record.version,
+        "ldl-build-id": record.buildId,
+        "ldl-fingerprint": record.fingerprint,
+        "ldl-source-reference": `LDL Source Reference ${record.version} · ${record.company} · ${record.author}`
+      };
+
+      Object.entries(metaValues).forEach(([name, content]) => {
+        let meta = document.head.querySelector(`meta[name="${name}"]`);
+        if (!meta) {
+          meta = document.createElement("meta");
+          meta.setAttribute("name", name);
+          document.head.appendChild(meta);
+        }
+        meta.setAttribute("content", content);
+      });
+    }
+
+    function upsertLDLBodyAttributes(record) {
+      const attrs = {
+        "data-ldl-product-name": record.productName,
+        "data-ldl-product-name-en": record.productNameEn,
+        "data-ldl-product-code": record.productCode,
+        "data-ldl-tool-id": record.toolId,
+        "data-ldl-module-id": record.moduleId,
+        "data-ldl-build-id": record.buildId,
+        "data-ldl-fingerprint": record.fingerprint,
+        "data-ldl-marker-signature": record.markerSignature
+      };
+
+      Object.entries(attrs).forEach(([name, value]) => {
+        document.body.setAttribute(name, value);
+      });
+    }
+
+    function upsertLDLJsonRecord(record) {
+      let script = document.getElementById("ldl-source-reference");
+      if (!script) {
+        script = document.createElement("script");
+        script.type = "application/json";
+        script.id = "ldl-source-reference";
+        document.body.appendChild(script);
+      }
+      script.textContent = JSON.stringify(record, null, 2);
+    }
+
+    function upsertLDLHiddenDomReference(record) {
+      const hidden = getOrCreateLDLElement("div", "ldl-hidden-source-reference", document.body);
+      hidden.className = "ldl-offscreen-source-reference";
+      hidden.setAttribute("aria-hidden", "true");
+      hidden.setAttribute("data-ldl-product-name", record.productName);
+      hidden.setAttribute("data-ldl-product-name-en", record.productNameEn);
+      hidden.setAttribute("data-ldl-product-code", record.productCode);
+      hidden.setAttribute("data-ldl-tool-id", record.toolId);
+      hidden.setAttribute("data-ldl-module-id", record.moduleId);
+      hidden.setAttribute("data-ldl-company", record.company);
+      hidden.setAttribute("data-ldl-author", record.author);
+      hidden.setAttribute("data-ldl-release-year", String(record.releaseYear));
+      hidden.setAttribute("data-ldl-version", record.version);
+      hidden.setAttribute("data-ldl-build-id", record.buildId);
+      hidden.setAttribute("data-ldl-fingerprint", record.fingerprint);
+      hidden.setAttribute("data-ldl-marker-signature", record.markerSignature);
+      hidden.textContent = [
+        "LDL Source Reference",
+        record.productName,
+        record.productNameEn,
+        record.productCode,
+        record.toolId,
+        record.moduleId,
+        record.company,
+        record.author,
+        String(record.releaseYear),
+        record.version,
+        record.buildId,
+        record.fingerprint,
+        record.markerSignature,
+        record.license
+      ].join(" | ");
+    }
+
+    function upsertLDLSvgMetadata(record) {
+      let svg = document.getElementById("ldl-hidden-svg-source-reference");
+      if (!svg) {
+        svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.id = "ldl-hidden-svg-source-reference";
+        document.body.appendChild(svg);
+      }
+      svg.setAttribute("class", "ldl-offscreen-source-reference");
+      svg.setAttribute("width", "0");
+      svg.setAttribute("height", "0");
+      svg.setAttribute("aria-hidden", "true");
+      svg.setAttribute("focusable", "false");
+
+      let metadata = svg.querySelector("metadata");
+      if (!metadata) {
+        metadata = document.createElementNS("http://www.w3.org/2000/svg", "metadata");
+        svg.appendChild(metadata);
+      }
+      metadata.textContent = JSON.stringify(record);
+    }
+
+    function upsertLDLVisibleWatermark() {
+      const watermark = getOrCreateLDLElement("div", "ldl-visible-watermark", document.body);
+      watermark.className = "ldl-visible-watermark";
+      watermark.setAttribute("aria-hidden", "true");
+
+      let text = watermark.querySelector("span");
+      if (!text) {
+        text = document.createElement("span");
+        watermark.appendChild(text);
+      }
+      text.textContent = LDL_VISIBLE_WATERMARK_TEXT;
+    }
+
+    function getOrCreateLDLElement(tagName, id, parent) {
+      let element = document.getElementById(id);
+      if (!element) {
+        element = document.createElement(tagName);
+        element.id = id;
+        parent.appendChild(element);
+      }
+      return element;
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initLDLSourceReference, { once: true });
+    } else {
+      initLDLSourceReference();
+    }
+  </script>
+  <script src="../../assets/tool-home-nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,2420 @@
+<!doctype html>
+<html lang="en" data-ldl-tool-id="G04-starry-addition-and-subtraction" data-ldl-fingerprint="ldl-yfc-g04-starry-addition-and-subtraction-v1">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="ldl-tool-id" content="G04-starry-addition-and-subtraction" />
+    <title>Starry Addition and Subtraction | Addition and Subtraction within 999</title>
+    <!-- Tailwind CSS v3 via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons via CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts Inter & Outfit & JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700;800&family=Baloo+2:wght@500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
+              display: ["Outfit", "Baloo 2", "sans-serif"],
+              mono: ["JetBrains Mono", "monospace"],
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      /* Smooth transitions and animations */
+      .animate-fade-in {
+        animation: fadeIn 0.3s ease-out forwards;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-4px); }
+      }
+
+      @keyframes glow {
+        0%, 100% { filter: drop-shadow(0 0 4px rgba(253, 224, 71, 0.4)) opacity(0.8); }
+        50% { filter: drop-shadow(0 0 16px rgba(253, 224, 71, 0.9)) opacity(1); }
+      }
+
+      .animate-float {
+        animation: float 4s ease-in-out infinite;
+      }
+
+      .animate-glow {
+        animation: glow 3s ease-in-out infinite;
+      }
+
+      /* Fixed Backdrop cover background */
+      .starry-shell {
+        position: relative;
+        isolation: isolate;
+        min-height: screen;
+      }
+      .starry-shell::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        background:
+          linear-gradient(180deg, rgba(15, 23, 42, 0.45), rgba(2, 6, 23, 0.85)),
+          url("G04-backdrop1.png") center / cover no-repeat;
+        background-attachment: fixed;
+      }
+
+      /* Translucent glass panel */
+      .glass-panel {
+        background: rgba(2, 6, 23, 0.62);
+        border: 1px solid rgba(255, 255, 255, 0.16);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      }
+
+      input[type="range"]::-webkit-slider-thumb {
+        cursor: pointer;
+        transition: transform 0.1s;
+      }
+      input[type="range"]::-webkit-slider-thumb:hover {
+        transform: scale(1.2);
+      }
+
+      /* Grid custom Scrollbar styling */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.15);
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.25);
+      }
+
+      /* Readability for 7-12 year-old learners */
+      body, button, input, select, textarea {
+        font-size: 16px;
+      }
+      body .text-\[8px\],
+      body .text-\[9px\],
+      body .text-\[10px\],
+      body .text-\[11px\],
+      body .text-xs,
+      body .text-sm,
+      footer .text-\[10px\] {
+        font-size: 16px !important;
+        line-height: 1.45 !important;
+      }
+      .csv-privacy-note {
+        font-size: 16px !important;
+        line-height: 1.6 !important;
+      }
+      #custom-settings-panel .setting-button-row {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 0.35rem;
+        overflow: hidden;
+      }
+
+      #custom-settings-panel .setting-button-row button {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        min-width: 0;
+        min-height: 2.75rem;
+        padding: 0.5rem 0.65rem;
+        text-align: center;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        line-height: 1.15 !important;
+        font-size: 14px !important;
+      }
+      .star-reward-label {
+        animation: rewardPop 1.6s ease-out forwards;
+        text-shadow: 0 0 12px rgba(252, 211, 77, 0.95), 0 0 28px rgba(56, 189, 248, 0.55);
+      }
+      @keyframes rewardPop {
+        0% { opacity: 0; transform: translate(-50%, -34%) scale(0.75); }
+        18% { opacity: 1; transform: translate(-50%, -74%) scale(1.08); }
+        72% { opacity: 1; transform: translate(-50%, -92%) scale(1); }
+        100% { opacity: 0; transform: translate(-50%, -126%) scale(0.92); }
+      }
+
+      body.starry-shell {
+        padding-top: max(70px, calc(env(safe-area-inset-top) + 70px));
+        scroll-padding-top: max(70px, calc(env(safe-area-inset-top) + 70px));
+      }
+      #tool-home-link {
+        position: fixed;
+        z-index: 2147483647;
+        top: max(14px, env(safe-area-inset-top));
+        left: max(14px, env(safe-area-inset-left));
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 132px;
+        min-height: 54px;
+        padding: 0 14px;
+        border: 2px solid rgba(255, 255, 255, 0.82);
+        border-radius: 999px;
+        color: #ffffff;
+        background: linear-gradient(135deg, #0f766e, #134e4a);
+        box-shadow: 0 12px 24px rgba(14, 31, 58, 0.24), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+        font-size: 18px !important;
+        font-weight: 900;
+        line-height: 1.1;
+        letter-spacing: 0;
+        text-decoration: none;
+        white-space: nowrap;
+        -webkit-tap-highlight-color: transparent;
+        transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+      }
+      #tool-home-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 16px 28px rgba(14, 31, 58, 0.28), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+      }
+      #tool-home-link:focus-visible {
+        outline: 4px solid rgba(20, 184, 166, 0.38);
+        outline-offset: 3px;
+      }
+      #tool-home-link:active {
+        transform: scale(0.97);
+      }
+      .ldl-fullscreen-controls {
+        position: fixed;
+        z-index: 2147483647;
+        top: max(14px, env(safe-area-inset-top));
+        right: max(14px, env(safe-area-inset-right));
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
+        pointer-events: none;
+      }
+      .top-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 132px;
+        min-height: 54px;
+        padding: 0 14px;
+        border: 2px solid rgba(255, 255, 255, 0.82);
+        border-radius: 999px;
+        color: #ffffff;
+        font-size: 18px;
+        font-weight: 900;
+        line-height: 1.1;
+        letter-spacing: 0;
+        white-space: nowrap;
+        cursor: pointer;
+        pointer-events: auto;
+        box-shadow: 0 12px 24px rgba(14, 31, 58, 0.24), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+        transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+      }
+      .top-button:hover,
+      .top-button:focus-visible {
+        outline: none;
+        transform: translateY(-2px);
+        box-shadow: 0 16px 28px rgba(14, 31, 58, 0.28), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+      }
+      .top-button:active {
+        transform: translateY(1px) scale(0.98);
+      }
+      .exit-fullscreen {
+        background: linear-gradient(135deg, #3949ab, #1e2d66);
+      }
+      .enter-fullscreen {
+        background: linear-gradient(135deg, #1d78d6, #124c91);
+      }
+      .top-button[data-fullscreen-active="true"].enter-fullscreen,
+      .top-button[data-fullscreen-active="false"].exit-fullscreen {
+        filter: grayscale(0.35);
+      }
+      .ldl-fullscreen-controls .top-button,
+      #enterFullscreen,
+      #exitFullscreen {
+        position: static;
+        width: auto;
+        min-width: 0;
+        min-height: 38px;
+        padding: 0 12px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 800;
+      }
+      html:fullscreen,
+      html:fullscreen body {
+        width: 100%;
+        min-height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+      html:fullscreen body {
+        align-items: stretch;
+        justify-content: flex-start;
+        padding-top: max(70px, calc(env(safe-area-inset-top) + 70px));
+        scroll-padding-top: max(70px, calc(env(safe-area-inset-top) + 70px));
+      }
+
+      /* LDL Source Reference v1.1 watermark */
+      :root {
+        --ldl-product-name: "Starry Addition and Subtraction";
+        --ldl-product-name-en: "Starry Addition and Subtraction";
+        --ldl-product-code: "LDL-MATH-G04-2026-001";
+        --ldl-tool-id: "G04-starry-addition-and-subtraction";
+        --ldl-module-id: "ldl-g04-starry-addition-and-subtraction";
+        --ldl-company: "Yung Fu Chuen";
+        --ldl-author: "Yung Fu Chuen";
+        --ldl-release-year: "2026";
+        --ldl-version: "1.1.0";
+        --ldl-build-id: "LDL-MATH-G04-2026-001";
+        --ldl-fingerprint: "ldl-yfc-g04-starry-addition-and-subtraction-v1";
+      }
+
+      #ldl-visible-watermark.ldl-visible-watermark {
+        position: fixed;
+        z-index: 35;
+        left: max(10px, env(safe-area-inset-left));
+        right: auto;
+        top: max(70px, calc(env(safe-area-inset-top) + 66px));
+        bottom: auto;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 5px;
+        max-width: min(190px, calc(100vw - 20px));
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        color: rgba(255, 255, 255, 0.58);
+        background: transparent;
+        box-shadow: none;
+        font-size: 8px;
+        font-weight: 600;
+        line-height: 1.25;
+        letter-spacing: 0;
+        pointer-events: none;
+        user-select: none;
+        -webkit-user-select: none;
+        backdrop-filter: none;
+      }
+
+      /* copy-cost marker: style-beta LD */
+
+      #ldl-visible-watermark.ldl-visible-watermark img {
+        width: 16px;
+        height: 16px;
+        flex: 0 0 auto;
+        object-fit: contain;
+        opacity: 0.88;
+      }
+
+      #ldl-visible-watermark.ldl-visible-watermark span {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+
+      .ldl-offscreen-source-reference {
+        position: absolute !important;
+        width: 1px !important;
+        height: 1px !important;
+        margin: -1px !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        clip: rect(0 0 0 0) !important;
+        clip-path: inset(50%) !important;
+        border: 0 !important;
+        white-space: nowrap !important;
+      }
+
+      @media (max-width: 560px) {
+        body.starry-shell {
+          padding-top: max(58px, calc(env(safe-area-inset-top) + 58px));
+          scroll-padding-top: max(58px, calc(env(safe-area-inset-top) + 58px));
+        }
+        #tool-home-link {
+          left: max(8px, env(safe-area-inset-left));
+          width: 104px;
+          min-height: 46px;
+          padding: 0 6px;
+          font-size: 18px !important;
+        }
+        .ldl-fullscreen-controls {
+          top: max(14px, env(safe-area-inset-top));
+          right: max(8px, env(safe-area-inset-right));
+          bottom: auto;
+          flex-direction: column;
+          gap: 8px;
+        }
+        .top-button {
+          width: 104px;
+          min-height: 46px;
+          padding: 0 6px;
+          font-size: 18px;
+        }
+        html:fullscreen body {
+          padding-top: max(58px, calc(env(safe-area-inset-top) + 58px));
+          scroll-padding-top: max(58px, calc(env(safe-area-inset-top) + 58px));
+        }
+        #ldl-visible-watermark.ldl-visible-watermark {
+          left: max(8px, env(safe-area-inset-left));
+          right: auto;
+          top: max(58px, calc(env(safe-area-inset-top) + 54px));
+          bottom: auto;
+          font-size: 7px;
+        }
+        #ldl-visible-watermark.ldl-visible-watermark img {
+          width: 14px;
+          height: 14px;
+        }
+      }
+    </style>
+  </head>
+  <body class="starry-shell min-h-screen text-slate-100 p-4 md:p-6 flex flex-col justify-between" data-tool-home-nav-en-root data-ldl-tool-id="G04-starry-addition-and-subtraction">
+    <div id="ldl-visible-watermark" class="ldl-visible-watermark" aria-hidden="true">
+      <span>© 2026 · Yung Fu Chuen</span>
+    </div>
+    <div
+      id="ldl-hidden-source-reference"
+      class="ldl-offscreen-source-reference"
+      aria-hidden="true"
+      data-ldl-product-name="Starry Addition and Subtraction"
+      data-ldl-product-name-en="Starry Addition and Subtraction"
+      data-ldl-product-code="LDL-MATH-G04-2026-001"
+      data-ldl-tool-id="G04-starry-addition-and-subtraction"
+      data-ldl-module-id="ldl-g04-starry-addition-and-subtraction"
+      data-ldl-company="Yung Fu Chuen"
+      data-ldl-author="Yung Fu Chuen"
+      data-ldl-release-year="2026"
+      data-ldl-version="1.1.0"
+      data-ldl-build-id="LDL-MATH-G04-2026-001"
+      data-ldl-fingerprint="ldl-yfc-g04-starry-addition-and-subtraction-v1"
+    >
+      LDL Source Reference v1.1 · Yung Fu Chuen · Yung Fu Chuen · G04-starry-addition-and-subtraction
+    </div>
+    
+    <!-- Stars Background Glow Layer -->
+    <div id="starry-overlay-layer" class="absolute inset-0 pointer-events-none overflow-hidden select-none z-[1]">
+      <!-- Lit stars will be dynamically inserted here -->
+    </div>
+
+    <!-- Sticky Header navigation -->
+    <header class="relative z-10 w-full max-w-6xl mx-auto flex justify-between items-center py-4 mb-2 select-none border-b border-white/10">
+      <div class="flex items-center gap-2.5 cursor-pointer" onclick="goToScreen('setup')">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-sky-500 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-sky-500/20">
+          <i data-lucide="sparkles" class="w-5 h-5 text-amber-300 animate-pulse"></i>
+        </div>
+        <div>
+          <h1 class="font-display font-extrabold text-lg md:text-xl tracking-tight text-white flex items-center gap-1.5">
+            Starry Addition and Subtraction
+          </h1>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <!-- In play active controls -->
+        <button id="header-btn-quit" onclick="quitActiveGameEarly()" class="hidden text-xs font-bold text-slate-300 bg-white/10 hover:bg-rose-500/20 hover:text-rose-200 hover:border-rose-400/30 px-3.5 py-1.5 rounded-lg border border-white/10 cursor-pointer transition">
+          Finish and View Report
+        </button>
+
+        <button
+          onclick="toggleMuteState()"
+          class="p-2.5 rounded-xl bg-slate-900/60 border border-white/10 text-slate-300 hover:text-white hover:bg-slate-800/80 transition shadow-md cursor-pointer"
+          title="Sound on/off"
+        >
+          <i data-lucide="volume-2" class="w-4 h-4 text-emerald-400" id="global-mute-icon"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main router container block -->
+    <main class="relative z-10 flex-1 flex items-center justify-center py-6 w-full max-w-6xl mx-auto">
+      
+      <!-- Screen 1: SETUP SCREEN -->
+      <div id="screen-setup" class="screen-view w-full max-w-6xl glass-panel rounded-3xl p-5 md:p-7 lg:p-8 animate-fade-in">
+        <div class="grid grid-cols-1 lg:grid-cols-[0.9fr_1.35fr] gap-6 lg:gap-8 items-start">
+          <section class="space-y-5">
+        <div class="text-left space-y-2.5 pb-2">
+          <h2 class="text-3xl md:text-4xl font-display font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-sky-200">
+            Starry Addition and Subtraction
+          </h2>
+        </div>
+
+        <!-- Presets choosing row -->
+        <div class="space-y-2">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">
+            1. Quick Difficulty Presets
+          </span>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <button onclick="applyDifficultyPreset('entry')" class="bg-slate-900/40 border border-indigo-500/20 hover:border-indigo-400 text-slate-200 text-left p-3 rounded-2xl cursor-pointer hover:bg-indigo-950/20 transition-all">
+              <div class="font-bold text-slate-100 text-sm">Starter Challenge</div>
+              <div class="text-[10px] text-slate-400 mt-0.5">Two-digit addition/subtraction (10-99)</div>
+            </button>
+            <button onclick="applyDifficultyPreset('basic')" class="bg-slate-900/40 border border-amber-500/20 hover:border-amber-400 text-slate-200 text-left p-3 rounded-2xl cursor-pointer hover:bg-amber-950/20 transition-all">
+              <div class="font-bold text-slate-100 text-sm">Core Challenge</div>
+              <div class="text-[10px] text-slate-400 mt-0.5">Addition/subtraction within 999</div>
+            </button>
+            <button onclick="applyDifficultyPreset('advanced')" class="bg-slate-900/40 border border-teal-500/20 hover:border-teal-400 text-slate-200 text-left p-3 rounded-2xl cursor-pointer hover:bg-teal-950/20 transition-all">
+              <div class="font-bold text-slate-100 text-sm">Advanced Challenge</div>
+              <div class="text-[10px] text-slate-400 mt-0.5">Three-number mixed addition/subtraction (1-999)</div>
+            </button>
+            <button onclick="applyDifficultyPreset('ultimate')" class="bg-slate-900/40 border border-purple-500/20 hover:border-purple-400 text-slate-200 text-left p-3 rounded-2xl cursor-pointer hover:bg-purple-950/20 transition-all">
+              <div class="font-black text-slate-100 text-sm text-purple-200">Master Challenge</div>
+              <div class="text-[10px] text-slate-400 mt-0.5">Regrouping plus compound operations</div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Launch Operations Grid -->
+        <div class="pt-2 flex flex-col gap-3.5 select-none">
+          <button onclick="startGameChallenge()" class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-sky-500 via-indigo-500 to-amber-400 text-slate-950 font-black text-base shadow-lg shadow-sky-500/20 hover:scale-[1.02] cursor-pointer transition flex items-center justify-center gap-2">
+            <i data-lucide="play" class="w-5 h-5 fill-slate-950"></i>
+            Start the Starry Challenge!
+          </button>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <button id="btn-review-mistakes" onclick="practiceMistakesQueue()" class="hidden py-4 px-5 rounded-2xl bg-amber-500/10 border-2 border-amber-500/35 hover:bg-amber-500/20 text-amber-300 font-bold text-sm cursor-pointer transition flex items-center justify-center gap-2 min-w-0">
+            <i data-lucide="refresh-cw" class="w-4 h-4 shrink-0 text-amber-400 animate-spin-slow"></i>
+            <span class="leading-tight text-center">
+              Review<br class="sm:hidden" />
+              Mistakes
+              <span class="whitespace-nowrap">(<span id="span-mistakes-badge">0</span>)</span>
+            </span>
+          </button>
+
+            <button id="btn-clear-mistakes-set" onclick="clearMistakesDatabase()" class="hidden px-4 py-3 text-xs font-bold text-rose-400 hover:text-rose-300 bg-rose-500/10 rounded-xl hover:bg-rose-500/20 border border-rose-500/20 transition cursor-pointer">
+              Clear Mistake Records
+            </button>
+          </div>
+        </div>
+          </section>
+
+          <section class="space-y-4">
+        <!-- Parameters Sliders Card -->
+        <div id="custom-settings-panel" class="bg-slate-900/30 rounded-2xl border border-white/5 p-4 md:p-5 space-y-5">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block pb-1 border-b border-white/5">
+            2. Custom Practice Settings
+          </span>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-2">
+              <div class="flex justify-between items-center">
+                <span class="text-xs font-bold text-slate-300">Minimum answer value</span>
+                <input type="number" id="input-range-min" min="1" max="999" value="10" oninput="onValueSliderChange('min', this.value)" class="w-20 rounded-lg border border-sky-500/20 bg-sky-500/10 px-2 py-1 text-center text-xs font-mono font-bold text-sky-400 outline-none focus:border-sky-300 focus:ring-2 focus:ring-sky-400/30">
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <div class="flex justify-between items-center">
+                <span class="text-xs font-bold text-slate-300">Maximum answer value</span>
+                <input type="number" id="input-range-max" min="1" max="999" value="99" oninput="onValueSliderChange('max', this.value)" class="w-20 rounded-lg border border-sky-500/20 bg-sky-500/10 px-2 py-1 text-center text-xs font-mono font-bold text-sky-400 outline-none focus:border-sky-300 focus:ring-2 focus:ring-sky-400/30">
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="space-y-1.5">
+              <span class="text-xs font-bold text-slate-400 block font-sans">Operation Type</span>
+              <div class="setting-button-row flex bg-slate-950/60 p-1 rounded-xl border border-white/5 gap-1" id="group-op-type">
+                <button onclick="setOperatorOption('ADD')" class="flex-grow py-1.5 px-2 rounded-lg text-xs font-bold cursor-pointer transition bg-sky-500 text-slate-950 font-sans shadow">Addition Only</button>
+                <button onclick="setOperatorOption('SUBTRACT')" class="flex-grow py-1.5 px-2 rounded-lg text-xs font-bold cursor-pointer transition text-slate-400 hover:text-slate-200 font-sans">Subtraction Only</button>
+                <button onclick="setOperatorOption('MIXED')" class="flex-grow py-1.5 px-2 rounded-lg text-xs font-bold cursor-pointer transition text-slate-400 hover:text-slate-200 font-sans">Mixed</button>
+              </div>
+            </div>
+
+            <div class="space-y-1.5">
+              <span class="text-xs font-bold text-slate-400 block">Number of terms</span>
+              <div class="setting-button-row flex bg-slate-950/60 p-1 rounded-xl border border-white/5 gap-1" id="group- operands-count">
+                <button onclick="setOperandsOption(2)" id="btn-op-count-2" class="flex-grow py-1.5 px-2 rounded-lg text-xs font-bold cursor-pointer transition bg-sky-500 text-slate-950 shadow">Two numbers</button>
+                <button onclick="setOperandsOption(3)" id="btn-op-count-3" class="flex-grow py-1.5 px-2 rounded-lg text-xs font-bold cursor-pointer transition text-slate-400 hover:text-slate-200">Three numbers</button>
+              </div>
+            </div>
+
+            <div class="space-y-1.5">
+              <span class="text-xs font-bold text-slate-400 block">Regrouping Level</span>
+              <div class="setting-button-row flex bg-slate-950/60 p-1 rounded-xl border border-white/5 gap-1" id="group-carry-mode">
+                <button onclick="setCarryModeOption('NORMAL')" id="btn-carry-normal" class="flex-grow py-1.5 px-2 rounded-lg text-xs font-bold cursor-pointer transition bg-amber-400 text-slate-950 shadow">Standard Mode</button>
+                <button onclick="setCarryModeOption('CHALLENGE')" id="btn-carry-challenge" class="flex-grow py-1.5 px-2 rounded-lg text-xs font-bold cursor-pointer transition text-slate-400 hover:text-slate-200">Regrouping Challenge</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-1.5">
+              <span class="text-xs font-bold text-slate-400 block">Number of Questions</span>
+              <div class="grid grid-cols-[minmax(8.5rem,1fr)_7rem] gap-2">
+                <select id="select-question-count" onchange="onQuestionCountSelectChange(this.value)" class="w-full text-xs font-bold py-2.5 px-3 bg-slate-950/60 text-slate-200 border border-white/10 rounded-xl focus:border-sky-500/55 focus:outline-none cursor-pointer">
+                  <option value="10">10 questions</option>
+                  <option value="20">20 questions</option>
+                  <option value="40">40 questions</option>
+                  <option value="0">Endless Mode</option>
+                  <option value="custom">Custom</option>
+                </select>
+                <input id="input-question-count" type="number" min="1" max="200" step="1" value="10" inputmode="numeric" onchange="onQuestionCountInputChange(this.value)" oninput="onQuestionCountInputChange(this.value)" aria-label="CustomNumber of Questions" class="w-full text-xs font-bold py-2.5 px-3 bg-slate-950/60 text-slate-200 border border-white/10 rounded-xl focus:border-sky-500/55 focus:outline-none" />
+              </div>
+            </div>
+
+            <div class="space-y-1.5">
+              <span class="text-xs font-bold text-slate-400 block">Countdown Timer</span>
+              <div class="grid grid-cols-[minmax(8.5rem,1fr)_7rem] gap-2">
+                <select id="select-time-limit" onchange="onTimeLimitSelectChange(this.value)" class="w-full text-xs font-bold py-2.5 px-3 bg-slate-950/60 text-slate-200 border border-white/10 rounded-xl focus:border-sky-500/55 focus:outline-none cursor-pointer">
+                  <option value="0">No time limit</option>
+                  <option value="180">3 minutes</option>
+                  <option value="300">5 minutes</option>
+                  <option value="900">15 minutes</option>
+                  <option value="custom">Custom</option>
+                </select>
+                <input id="input-time-limit" type="number" min="0" max="60" step="1" placeholder="minutes" inputmode="numeric" onchange="onTimeLimitInputChange(this.value)" oninput="onTimeLimitInputChange(this.value)" aria-label="Custom countdown minutes" class="w-full text-xs font-bold py-2.5 px-3 bg-slate-950/60 text-slate-200 border border-white/10 rounded-xl focus:border-sky-500/55 focus:outline-none" />
+              </div>
+            </div>
+
+            <div class="space-y-1.5 md:col-span-2">
+              <span class="text-xs font-bold text-slate-400 block">Answer Mode</span>
+              <div class="setting-button-row flex bg-slate-950/60 p-1 rounded-xl border border-white/5 gap-1" id="group-answer-mode">
+                <button onclick="setAnswerModeOption('CHOICE')" id="btn-mode-choice" class="flex-grow py-1.5 px-1 rounded-lg text-xs font-bold cursor-pointer transition bg-sky-500 text-slate-950">Multiple Choice</button>
+                <button onclick="setAnswerModeOption('KEYPAD')" id="btn-mode-keypad" class="flex-grow py-1.5 px-1 rounded-lg text-xs font-bold cursor-pointer transition text-slate-400 hover:text-slate-200">Typed Answer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+          </section>
+        </div>
+      </div>
+
+      <!-- Screen 2: PLAYING MATRICES ENGINE -->
+      <div id="screen-playing" class="screen-view hidden w-full max-w-5xl space-y-5 animate-fade-in">
+        
+        <!-- Status stats bar -->
+        <div class="flex items-center justify-between bg-slate-950/50 backdrop-blur-md border border-white/5 px-4 py-3 rounded-2xl select-none text-xs font-bold">
+          <div class="flex items-center gap-2.5">
+            <span class="text-slate-400 font-semibold">Question:</span>
+            <span id="playing-span-index" class="font-mono text-sky-300 text-base font-extrabold pb-0.5">1</span>
+            <span id="playing-span-total-cap" class="text-slate-500">/ 10</span>
+
+            <div id="playing-timer-bar-wrapper" class="hidden ml-2.5 flex items-center gap-1 bg-amber-500/15 border border-amber-500/20 text-amber-300 py-1 px-2.5 rounded-full">
+              <i data-lucide="clock" class="w-3.5 h-3.5 text-amber-400 animate-pulse"></i>
+              <span id="playing-timer-display" class="font-mono font-black">?</span>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <div id="playing-combo-capsule" class="hidden bg-amber-400 text-slate-950 font-black px-3 py-1 rounded-full text-[10px] animate-bounce shrink-0 flex items-center gap-1">
+              <i data-lucide="zap" class="w-3 h-3 fill-slate-950"></i>
+              Streak x <span id="playing-span-combo">0</span>
+            </div>
+
+            <span class="text-slate-400 font-medium">
+              Correct <strong id="playing-txt-correct" class="text-emerald-400 font-bold font-mono">0</strong> | Incorrect <strong id="playing-txt-wrong" class="text-rose-400 font-bold font-mono">0</strong>
+            </span>
+          </div>
+        </div>
+
+        <!-- Dynamic Visual Bar -->
+        <div id="playing-progress-container" class="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+          <div id="playing-progress-filler" class="h-full bg-gradient-to-r from-sky-400 via-indigo-400 to-amber-400 transition-all duration-300 w-0"></div>
+        </div>
+
+        <!-- Giant problem card -->
+        <div class="glass-panel rounded-3xl p-6 md:p-8 space-y-6 relative overflow-hidden">
+          <span class="absolute bottom-4 right-4 text-[10px] uppercase font-bold tracking-wider text-white/5 select-none font-display">
+            Starry Addition and Subtraction Challenge
+          </span>
+
+          <div class="flex flex-col items-center justify-center py-6 text-center">
+            <div id="playing-giant-equation" class="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 font-display text-4xl md:text-6xl font-black text-white select-none">
+              <!-- Equation injected with JS code -->
+            </div>
+
+            <p class="mt-4 text-xs font-semibold text-slate-400">
+              Choose an answer, or type it directly
+            </p>
+          </div>
+
+          <!-- Answer submission triggers panel -->
+          <div class="pt-2 border-t border-white/5">
+            
+            <!-- MCQ Options Grid -->
+            <div id="playing-options-choice-grid" class="grid grid-cols-2 gap-3.5 select-none">
+              <!-- Injected by JS -->
+            </div>
+
+            <!-- Standalone interactive custom numeric Pad -->
+            <div id="playing-options-keypad-grid" class="hidden max-w-sm mx-auto space-y-3 select-none">
+              <div class="flex bg-slate-950/60 rounded-2xl border border-white/10 px-4 py-3 items-center justify-center min-h-[56px]">
+                <span id="keypad-string-display" class="font-mono text-3xl font-black leading-none text-sky-300">
+                  <span class="text-slate-600 font-sans text-xl animate-pulse">Type your answer...</span>
+                </span>
+              </div>
+
+              <div class="grid grid-cols-3 gap-2">
+                <button onclick="onCustomKeyPress('1')" class="py-3 px-1 rounded-xl bg-slate-900/50 border border-white/5 hover:bg-slate-800 text-lg font-mono font-black text-slate-100 active:scale-95 transition">1</button>
+                <button onclick="onCustomKeyPress('2')" class="py-3 px-1 rounded-xl bg-slate-900/50 border border-white/5 hover:bg-slate-800 text-lg font-mono font-black text-slate-100 active:scale-95 transition">2</button>
+                <button onclick="onCustomKeyPress('3')" class="py-3 px-1 rounded-xl bg-slate-900/50 border border-white/5 hover:bg-slate-800 text-lg font-mono font-black text-slate-100 active:scale-95 transition">3</button>
+                <button onclick="onCustomKeyPress('4')" class="py-3 px-1 rounded-xl bg-slate-900/50 border border-white/5 hover:bg-slate-800 text-lg font-mono font-black text-slate-100 active:scale-95 transition">4</button>
+                <button onclick="onCustomKeyPress('5')" class="py-3 px-1 rounded-xl bg-slate-900/50 border border-white/5 hover:bg-slate-800 text-lg font-mono font-black text-slate-100 active:scale-95 transition">5</button>
+                <button onclick="onCustomKeyPress('6')" class="py-3 px-1 rounded-xl bg-slate-900/50 border border-white/5 hover:bg-slate-800 text-lg font-mono font-black text-slate-100 active:scale-95 transition">6</button>
+                <button onclick="onCustomKeyPress('7')" class="py-3 px-1 rounded-xl bg-slate-900/50 border border-white/5 hover:bg-slate-800 text-lg font-mono font-black text-slate-100 active:scale-95 transition">7</button>
+                <button onclick="onCustomKeyPress('8')" class="py-3 px-1 rounded-xl bg-slate-900/50 border border-white/5 hover:bg-slate-800 text-lg font-mono font-black text-slate-100 active:scale-95 transition">8</button>
+                <button onclick="onCustomKeyPress('9')" class="py-3 px-1 rounded-xl bg-slate-900/50 border border-white/5 hover:bg-slate-800 text-lg font-mono font-black text-slate-100 active:scale-95 transition">9</button>
+                <button onclick="onCustomKeyPress('DELETE')" class="py-3 px-1 rounded-xl bg-rose-500/15 border border-rose-500/20 hover:bg-rose-500/25 text-xs font-bold text-rose-300 active:scale-95 transition">Backspace</button>
+                <button onclick="onCustomKeyPress('0')" class="py-3 px-1 rounded-xl bg-slate-900/50 border border-white/5 hover:bg-slate-800 text-lg font-mono font-black text-slate-100 active:scale-95 transition">0</button>
+                <button id="btn-submit-keypad" onclick="onCustomKeyPress('ENTER')" class="py-3 px-1 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 text-slate-950 font-black text-sm active:scale-95 transition cursor-pointer">Submit</button>
+              </div>
+            </div>
+
+            <!-- Floating Feedback results banner -->
+            <div id="playing-banner-evaluation-box" class="hidden space-y-4 pt-4 animate-fade-in">
+              <div id="eval-banner-color-wrapper" class="p-4 rounded-2xl border flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3 text-center sm:text-left">
+                  <div id="eval-banner-icon-bg" class="w-12 h-12 rounded-xl flex items-center justify-center shrink-0">
+                    <!-- Icon placeholder -->
+                  </div>
+                  <div>
+                    <h4 id="eval-banner-title" class="text-base font-black"></h4>
+                    <p id="eval-banner-formula" class="text-xs text-slate-400 font-semibold font-sans mt-0.5"></p>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2.5 w-full sm:w-auto">
+                  <button id="btn-playing-collapse-exp" onclick="toggleActivePlayingExplanationCollapse()" class="flex-grow sm:flex-none py-2 px-3.5 rounded-xl text-xs font-bold transition border bg-slate-900 border-white/10 text-slate-300 hover:text-white cursor-pointer">
+                    Show Explanation
+                  </button>
+                  <button onclick="proceedToNextQuestion()" class="flex-grow sm:flex-none py-2 px-5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-black text-xs transition flex items-center justify-center gap-1 shadow shadow-sky-500/10 cursor-pointer">
+                    <span id="playing-btn-next-label">Next Question</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Inline Visual step carrying/borrowing breakdown -->
+              <div id="playing-inline-explanation-holder" class="hidden p-4 bg-slate-950/40 border border-white/5 rounded-2xl space-y-4 max-h-[350px] overflow-y-auto">
+                <!-- Injected with visual vertical calculations -->
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Screen 3: SUMMARY REPORT SCREEN -->
+      <div id="screen-summary" class="screen-view hidden w-full max-w-5xl glass-panel rounded-3xl p-6 md:p-8 space-y-6 animate-fade-in">
+        
+        <div class="text-center space-y-2">
+          <div class="w-16 h-16 bg-amber-400/10 border border-amber-400/25 rounded-2xl flex items-center justify-center mx-auto mb-2.5">
+            <i data-lucide="trophy" class="w-9 h-9 text-amber-300 animate-bounce"></i>
+          </div>
+          <h2 class="text-2xl md:text-3xl font-display font-black tracking-tight text-white">
+            Starry Challenge Performance Report
+          </h2>
+          <p id="summary-meta-range" class="text-xs text-sky-300 bg-sky-500/10 inline-block px-3 py-1 rounded-full font-bold border border-sky-400/20"></p>
+        </div>
+
+        <!-- Rating assessment details -->
+        <div id="summary-appraisal-card" class="p-4 rounded-2xl border text-center sm:text-left">
+          <!-- Text and title injected by JS -->
+        </div>
+
+        <!-- Numerical statistics block -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 select-none">
+          <div class="bg-slate-900/50 border border-white/5 p-4 rounded-2xl text-center">
+            <span class="text-xs font-bold text-slate-400 block mb-1">Accuracy</span>
+            <span id="summary-txt-accuracy" class="text-2xl font-black font-mono text-emerald-400">0%</span>
+            <span id="summary-txt-fraction" class="text-[10px] text-slate-500 block font-bold mt-1">(0 / 0)</span>
+          </div>
+
+          <div class="bg-slate-900/50 border border-white/5 p-4 rounded-2xl text-center">
+            <span class="text-xs font-bold text-slate-400 block mb-1">Average Time</span>
+            <span id="summary-txt-speed" class="text-2xl font-black font-mono text-sky-400">0.0s</span>
+            <span class="text-[10px] text-slate-500 block font-bold mt-1">Response Time by Question</span>
+          </div>
+
+          <div class="bg-slate-900/50 border border-white/5 p-4 rounded-2xl text-center">
+            <span class="text-xs font-bold text-slate-400 block mb-1">Combo</span>
+            <span id="summary-txt-combo" class="text-2xl font-black font-mono text-amber-400">0</span>
+            <span class="text-[10px] text-slate-500 block font-bold mt-1">consecutive correct answers</span>
+          </div>
+
+          <div class="bg-slate-900/50 border border-white/5 p-4 rounded-2xl text-center">
+            <span class="text-xs font-bold text-slate-400 block mb-1">Slowest and Correct</span>
+            <div id="summary-slowest-container" class="flex flex-col items-center">
+              <span id="summary-slowest-eq" class="text-xs font-black font-mono text-rose-300 truncate max-w-full">-</span>
+              <span id="summary-slowest-speed" class="text-[10px] font-mono text-slate-500 font-bold mt-1">0.0 sec</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Answers graph duration bars -->
+        <div class="p-4 bg-slate-900/40 border border-white/5 rounded-2xl select-none">
+          <div class="flex items-center gap-2 text-slate-300 font-bold text-sm mb-3.5">
+            <i data-lucide="activity" class="w-4 h-4 text-sky-400 animate-pulse"></i>
+            Time and Accuracy by Question
+          </div>
+          <div id="summary-duration-graph-bars" class="w-full h-24 flex items-end justify-between gap-1 border-b border-white/10 pb-1">
+            <!-- Bars injected by JS -->
+          </div>
+          <p class="text-[10px] text-slate-400 text-center mt-2 font-medium">
+            * Green bars show correct answers and red bars show incorrect answers. Taller bars mean longer response time.
+          </p>
+        </div>
+
+        <!-- Detailed list visual step explanation summary list -->
+        <div class="space-y-2">
+          <h3 class="text-base font-bold text-slate-300 flex items-center gap-2">
+            <i data-lucide="book-open" class="w-4 h-4 text-sky-400"></i>
+            Step-by-Step Learning Explanations
+          </h3>
+          <div id="summary-detailed-solutions-group" class="space-y-1.5 max-h-[350px] overflow-y-auto pr-1">
+            <!-- Injected by JS -->
+          </div>
+        </div>
+
+        <!-- Storage rules privacy disclaimer and Excel actions -->
+        <div class="pt-4 flex flex-wrap gap-3">
+          <button onclick="startGameChallenge()" class="flex-1 min-w-[140px] py-3 px-4 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 text-slate-950 font-black text-xs transition hover:scale-[1.01] flex items-center justify-center gap-1 shadow-lg shadow-sky-500/10 cursor-pointer">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+            Restart with Same Settings
+          </button>
+
+          <button id="btn-summary-practice-mistakes" onclick="practiceMistakesCurrentSummaryQueue()" class="hidden py-3 px-4 rounded-xl bg-amber-500/10 border-2 border-amber-500/30 text-amber-300 font-bold text-xs transition hover:bg-amber-500/25 flex items-center justify-center gap-1.5 cursor-pointer">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i>
+            Review This Session's Mistakes (<span id="span-sum-mistakes-cnt">0</span>)
+          </button>
+
+          <button onclick="downloadCSVExportSheet(false)" class="py-3 px-4 rounded-xl bg-slate-900 border border-white/10 text-slate-200 hover:text-white font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
+            <i data-lucide="file-spreadsheet" class="w-4 h-4 text-emerald-400"></i>
+            Download Detailed Report
+          </button>
+
+          <button onclick="downloadCSVExportSheet(true)" class="py-3 px-4 rounded-xl bg-slate-900 border border-white/10 text-slate-200 hover:text-white font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
+            <i data-lucide="file-spreadsheet" class="w-4 h-4 text-rose-400"></i>
+            Download Mistake Report
+          </button>
+
+          <button onclick="resetSetupMenu()" class="py-3 px-5 rounded-xl border border-white/10 bg-slate-950/60 hover:bg-slate-900 hover:text-white text-slate-300 font-bold text-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
+            <i data-lucide="home" class="w-4 h-4"></i>
+            Back to Main Menu
+          </button>
+        </div>
+
+        <p class="csv-privacy-note text-slate-400 text-center font-semibold max-w-none mx-auto bg-slate-950/50 p-3 rounded-xl border border-white/5">
+          Privacy note: this session's learning records are kept only in this page and are not uploaded to any server.<br>After downloading, the user is responsible for keeping the file. Refreshing or closing the page clears this session's records.
+        </p>
+      </div>
+
+    </main>
+
+    <!-- AppFooter -->
+    <footer class="relative z-10 w-full max-w-6xl mx-auto py-5 border-t border-white/10 text-center select-none text-[11px] text-slate-500 tracking-wide font-medium">
+      Starry Addition and Subtraction | Designed for primary mathematics learning | Practice records are stored only in this page during the session. After downloading, the user is responsible for keeping the report file.
+    </footer>
+
+    <!-- Game Engine scripting logic -->
+    <script>
+      // 1. Core State Definition
+      let activeScreen = "setup"; 
+      let isMutedState = false;
+
+      let settingsState = {
+        aMin: 10,
+        aMax: 99,
+        opType: "MIXED", // ADD, SUBTRACT, MIXED
+        operandsCount: 2, // 2 or 3 operands
+        carryMode: "NORMAL", // NORMAL, CHALLENGE
+        questionCount: 10, // 0 is endless
+        timeLimit: 0, // 0 is unlimited
+        questionMode: "CHOICE" // CHOICE, KEYPAD
+      };
+
+      let activeQuestions = [];
+      let currentActiveIndex = 0;
+      let typedAnswerStr = "";
+      let hasUserAnswered = false;
+      let selectedMcqOptionIdx = null;
+
+      // Stats
+      let scoreCorrect = 0;
+      let scoreWrong = 0;
+      let currentCombo = 0;
+      let maxComboCount = 0;
+      let historyQueue = []; // chronological answered questions
+      
+      // Timer intervals
+      let timerMsLeft = 0;
+      let timerIntervalId = null;
+      let questionOpenedTimestamp = 0;
+
+      // Sound procedural synthesizer context
+      let globalCtxAudio = null;
+      let backgroundMusicAudio = null;
+      let backgroundMusicUnlocked = false;
+
+      // Local storage database mistakes
+      let mistakesCollection = [];
+      try {
+        const savedMistakes = localStorage.getItem("starry_mistakes");
+        if (savedMistakes) {
+          mistakesCollection = JSON.parse(savedMistakes);
+        }
+      } catch (err) {
+        console.warn("Storage read error:", err);
+      }
+
+      // 2. Custom detail solution expands track
+      let expandedSummaryIndices = new Set();
+      let playModeInlineExplanationVisible = false;
+
+      // Stars array coordinates
+      let activeStarsList = [];
+
+      // Initialize elements on load
+      window.addEventListener("DOMContentLoaded", () => {
+        try {
+          const m = localStorage.getItem("starry_muted");
+          isMutedState = m === "true";
+        } catch {}
+
+        initializeBackgroundMusic();
+        updateMuteControls();
+        updateMistakesBadgeText();
+        setQuestionCountControls(settingsState.questionCount);
+        setTimeLimitControls(settingsState.timeLimit);
+        lucide.createIcons();
+      });
+
+      function initializeBackgroundMusic() {
+        if (backgroundMusicAudio) return;
+        backgroundMusicAudio = new Audio("G04-music.mp3");
+        backgroundMusicAudio.loop = true;
+        backgroundMusicAudio.preload = "auto";
+        backgroundMusicAudio.volume = 0.22;
+        backgroundMusicAudio.muted = isMutedState;
+
+        const unlockBackgroundMusic = () => {
+          backgroundMusicUnlocked = true;
+          syncBackgroundMusic();
+          window.removeEventListener("pointerdown", unlockBackgroundMusic);
+          window.removeEventListener("touchstart", unlockBackgroundMusic);
+        };
+
+        window.addEventListener("pointerdown", unlockBackgroundMusic, { once: true });
+        window.addEventListener("touchstart", unlockBackgroundMusic, { once: true });
+      }
+
+      function syncBackgroundMusic() {
+        if (!backgroundMusicAudio) return;
+        backgroundMusicAudio.muted = isMutedState;
+        if (isMutedState || !backgroundMusicUnlocked) {
+          backgroundMusicAudio.pause();
+          return;
+        }
+        backgroundMusicAudio.play().catch(() => {});
+      }
+
+      // 3. Audio Synthesizer via Web Audio API
+      function playAudioSynthesizer(type) {
+        if (isMutedState) return;
+        try {
+          if (!globalCtxAudio) {
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            globalCtxAudio = new AudioContextClass();
+          }
+          const ctx = globalCtxAudio;
+          if (ctx.state === "suspended") {
+            ctx.resume();
+          }
+
+          const now = ctx.currentTime;
+          if (type === "tap") {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(580, now);
+            osc.frequency.exponentialRampToValueAtTime(160, now + 0.08);
+            gain.gain.setValueAtTime(0.06, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+            osc.start(now);
+            osc.stop(now + 0.08);
+          } else if (type === "correct") {
+            const notes = [440, 554.37, 659.25, 880];
+            notes.forEach((freq, idx) => {
+              const osc = ctx.createOscillator();
+              const gain = ctx.createGain();
+              osc.connect(gain);
+              gain.connect(ctx.destination);
+              osc.type = "triangle";
+              osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+              gain.gain.setValueAtTime(0.12, now + idx * 0.06);
+              gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.16);
+              osc.start(now + idx * 0.06);
+              osc.stop(now + idx * 0.06 + 0.18);
+            });
+          } else if (type === "incorrect") {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = "sawtooth";
+            osc.frequency.setValueAtTime(140, now);
+            osc.frequency.linearRampToValueAtTime(90, now + 0.25);
+            gain.gain.setValueAtTime(0.15, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+            osc.start(now);
+            osc.stop(now + 0.3);
+          } else if (type === "win") {
+            const chord = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99, 1046.50];
+            chord.forEach((freq, idx) => {
+              const osc = ctx.createOscillator();
+              const gain = ctx.createGain();
+              osc.connect(gain);
+              gain.connect(ctx.destination);
+              osc.type = "sine";
+              osc.frequency.setValueAtTime(freq, now + idx * 0.06);
+              gain.gain.setValueAtTime(0.08, now + idx * 0.06);
+              gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.06 + 0.35);
+              osc.start(now + idx * 0.06);
+              osc.stop(now + idx * 0.06 + 0.45);
+            });
+          } else if (type === "tick") {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(1100, now);
+            gain.gain.setValueAtTime(0.04, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+            osc.start(now);
+            osc.stop(now + 0.04);
+          }
+        } catch (err) {
+          console.warn("WAA Synthesizer failed:", err);
+        }
+      }
+
+      function toggleMuteState() {
+        isMutedState = !isMutedState;
+        try {
+          localStorage.setItem("starry_muted", String(isMutedState));
+        } catch {}
+        playAudioSynthesizer("tap");
+        updateMuteControls();
+      }
+
+      function updateMuteControls() {
+        const icon = document.getElementById("global-mute-icon");
+        if (isMutedState) {
+          icon.setAttribute("data-lucide", "volume-x");
+          icon.className = "w-4 h-4 text-rose-400";
+        } else {
+          icon.setAttribute("data-lucide", "volume-2");
+          icon.className = "w-4 h-4 text-emerald-400";
+        }
+        syncBackgroundMusic();
+        lucide.createIcons();
+      }
+
+      function updateMistakesBadgeText() {
+        const badge = document.getElementById("span-mistakes-badge");
+        const btnReview = document.getElementById("btn-review-mistakes");
+        const btnClear = document.getElementById("btn-clear-mistakes-set");
+
+        if (mistakesCollection.length > 0) {
+          badge.textContent = mistakesCollection.length;
+          btnReview.classList.remove("hidden");
+          btnClear.classList.remove("hidden");
+        } else {
+          btnReview.classList.add("hidden");
+          btnClear.classList.add("hidden");
+        }
+      }
+
+      function clearMistakesDatabase() {
+        playAudioSynthesizer("tap");
+        if (confirm("Are you sure you want to clear all saved addition/subtraction mistake records?")) {
+          mistakesCollection = [];
+          try {
+            localStorage.removeItem("starry_mistakes");
+          } catch {}
+          updateMistakesBadgeText();
+        }
+      }
+
+      // 4. Input events & settings callbacks
+      function onValueSliderChange(type, value) {
+        const parsed = parseInt(value, 10);
+        const val = Number.isFinite(parsed) ? Math.min(999, Math.max(1, parsed)) : 1;
+        if (type === "min") {
+          settingsState.aMin = val;
+          if (settingsState.aMin > settingsState.aMax) {
+            settingsState.aMax = settingsState.aMin;
+          }
+        } else {
+          settingsState.aMax = val;
+          if (settingsState.aMax < settingsState.aMin) {
+            settingsState.aMin = settingsState.aMax;
+          }
+        }
+        document.getElementById("input-range-min").value = settingsState.aMin;
+        document.getElementById("input-range-max").value = settingsState.aMax;
+      }
+
+      function setOperatorOption(op) {
+        playAudioSynthesizer("tap");
+        settingsState.opType = op;
+        const selector = document.getElementById("group-op-type");
+        const buttons = selector.querySelectorAll("button");
+        const opsMap = ["ADD", "SUBTRACT", "MIXED"];
+
+        buttons.forEach((btn, idx) => {
+          if (opsMap[idx] === op) {
+            btn.className = "flex-grow py-1.5 px-2 rounded-lg text-xs font-bold cursor-pointer transition bg-sky-500 text-slate-950 font-sans shadow";
+          } else {
+            btn.className = "flex-grow py-1.5 px-2 rounded-lg text-xs font-bold cursor-pointer transition text-slate-400 hover:text-slate-200 font-sans";
+          }
+        });
+      }
+
+      function setOperandsOption(count) {
+        playAudioSynthesizer("tap");
+        settingsState.operandsCount = count;
+        const count2 = document.getElementById("btn-op-count-2");
+        const count3 = document.getElementById("btn-op-count-3");
+
+        if (count === 2) {
+          count2.className = "flex-grow py-1.5 px-2 rounded-lg text-xs font-bold cursor-pointer transition bg-sky-500 text-slate-950 shadow";
+          count3.className = "flex-grow py-1.5 px-2 rounded-lg text-xs font-bold cursor-pointer transition text-slate-400 hover:text-slate-200";
+        } else {
+          count3.className = "flex-grow py-1.5 px-2 rounded-lg text-xs font-bold cursor-pointer transition bg-sky-500 text-slate-950 shadow";
+          count2.className = "flex-grow py-1.5 px-2 rounded-lg text-xs font-bold cursor-pointer transition text-slate-400 hover:text-slate-200";
+        }
+      }
+
+      function setCarryModeOption(mode) {
+        playAudioSynthesizer("tap");
+        settingsState.carryMode = mode;
+        const btnNormal = document.getElementById("btn-carry-normal");
+        const btnChallenge = document.getElementById("btn-carry-challenge");
+
+        if (mode === "NORMAL") {
+          btnNormal.className = "flex-grow py-1.5 px-2 rounded-lg text-xs font-bold cursor-pointer transition bg-amber-400 text-slate-950 shadow";
+          btnChallenge.className = "flex-grow py-1.5 px-2 rounded-lg text-xs font-bold cursor-pointer transition text-slate-400 hover:text-slate-200";
+        } else {
+          btnChallenge.className = "flex-grow py-1.5 px-2 rounded-lg text-xs font-bold cursor-pointer transition bg-amber-400 text-slate-950 shadow";
+          btnNormal.className = "flex-grow py-1.5 px-2 rounded-lg text-xs font-bold cursor-pointer transition text-slate-400 hover:text-slate-200";
+        }
+      }
+
+      function clampIntegerInput(value, min, max, fallback) {
+        const parsed = parseInt(value, 10);
+        if (Number.isNaN(parsed)) return fallback;
+        return Math.max(min, Math.min(max, parsed));
+      }
+
+      function selectHasValue(select, value) {
+        return Array.from(select.options).some((option) => option.value === value);
+      }
+
+      function formatMinutesLabel(seconds) {
+        if (seconds === 0) return "No time limit";
+        return `${Math.ceil(seconds / 60)}minutes`;
+      }
+
+      function setQuestionCountControls(value, forcedSelectValue = null) {
+        const count = clampIntegerInput(value, 0, 200, 10);
+        settingsState.questionCount = count;
+
+        const select = document.getElementById("select-question-count");
+        const input = document.getElementById("input-question-count");
+        if (select) {
+          const countValue = String(count);
+          select.value = forcedSelectValue || (selectHasValue(select, countValue) ? countValue : "custom");
+        }
+        if (input) {
+          input.value = count === 0 ? "" : String(count);
+        }
+      }
+
+      function setTimeLimitControls(value, forcedSelectValue = null) {
+        const seconds = clampIntegerInput(value, 0, 3600, 0);
+        settingsState.timeLimit = seconds;
+
+        const select = document.getElementById("select-time-limit");
+        const input = document.getElementById("input-time-limit");
+        if (select) {
+          const secondsValue = String(seconds);
+          select.value = forcedSelectValue || (selectHasValue(select, secondsValue) ? secondsValue : "custom");
+        }
+        if (input) {
+          input.value = seconds === 0 ? "" : String(Math.ceil(seconds / 60));
+        }
+      }
+
+      function onQuestionCountSelectChange(value) {
+        if (value === "custom") {
+          setQuestionCountControls(settingsState.questionCount, "custom");
+          return;
+        }
+        setQuestionCountControls(value);
+      }
+
+      function onQuestionCountInputChange(value) {
+        if (value.trim() === "") return;
+        const count = clampIntegerInput(value, 1, 200, settingsState.questionCount || 10);
+        const select = document.getElementById("select-question-count");
+        const selectValue = select && selectHasValue(select, String(count)) ? String(count) : "custom";
+        setQuestionCountControls(count, selectValue);
+      }
+
+      function onTimeLimitSelectChange(value) {
+        if (value === "custom") {
+          setTimeLimitControls(settingsState.timeLimit, "custom");
+          return;
+        }
+        setTimeLimitControls(value);
+      }
+
+      function onTimeLimitInputChange(value) {
+        if (value.trim() === "") return;
+        const minutes = clampIntegerInput(value, 0, 60, Math.ceil(settingsState.timeLimit / 60));
+        const seconds = minutes * 60;
+        const select = document.getElementById("select-time-limit");
+        const selectValue = select && selectHasValue(select, String(seconds)) ? String(seconds) : "custom";
+        setTimeLimitControls(seconds, selectValue);
+      }
+
+      function setAnswerModeOption(mode) {
+        playAudioSynthesizer("tap");
+        settingsState.questionMode = mode;
+        const btnChoice = document.getElementById("btn-mode-choice");
+        const btnKeypad = document.getElementById("btn-mode-keypad");
+
+        if (mode === "CHOICE") {
+          btnChoice.className = "flex-grow py-1.5 px-1 rounded-lg text-xs font-bold cursor-pointer transition bg-sky-500 text-slate-950 shadow";
+          btnKeypad.className = "flex-grow py-1.5 px-1 rounded-lg text-xs font-bold cursor-pointer transition text-slate-400 hover:text-slate-200";
+        } else {
+          btnKeypad.className = "flex-grow py-1.5 px-1 rounded-lg text-xs font-bold cursor-pointer transition bg-sky-500 text-slate-950 shadow";
+          btnChoice.className = "flex-grow py-1.5 px-1 rounded-lg text-xs font-bold cursor-pointer transition text-slate-400 hover:text-slate-200";
+        }
+      }
+
+      function applyDifficultyPreset(preset) {
+        if (preset === "entry") {
+          onValueSliderChange("min", 10);
+          onValueSliderChange("max", 99);
+          setOperatorOption("MIXED");
+          setOperandsOption(2);
+          setCarryModeOption("NORMAL");
+          setAnswerModeOption("CHOICE");
+          setQuestionCountControls(10);
+          setTimeLimitControls(0);
+        } else if (preset === "basic") {
+          onValueSliderChange("min", 1);
+          onValueSliderChange("max", 999);
+          setOperatorOption("MIXED");
+          setOperandsOption(2);
+          setCarryModeOption("CHALLENGE");
+          setAnswerModeOption("CHOICE");
+          setQuestionCountControls(10);
+          setTimeLimitControls(180);
+        } else if (preset === "advanced") {
+          onValueSliderChange("min", 1);
+          onValueSliderChange("max", 999);
+          setOperatorOption("MIXED");
+          setOperandsOption(3);
+          setCarryModeOption("NORMAL");
+          setAnswerModeOption("KEYPAD");
+          setQuestionCountControls(10);
+          setTimeLimitControls(300);
+        } else if (preset === "ultimate") {
+          onValueSliderChange("min", 1);
+          onValueSliderChange("max", 999);
+          setOperatorOption("MIXED");
+          setOperandsOption(3);
+          setCarryModeOption("CHALLENGE");
+          setAnswerModeOption("KEYPAD");
+          setQuestionCountControls(10);
+          setTimeLimitControls(900);
+        }
+
+        // Sync visual DOM indicators
+        document.getElementById("input-range-min").value = settingsState.aMin;
+        document.getElementById("input-range-max").value = settingsState.aMax;
+      }
+
+      // 5. Questions generators
+      function solveAdditionColumnwise(num1, num2) {
+        const result = num1 + num2;
+        const digit1_ones = num1 % 10;
+        const digit1_tens = Math.floor((num1 % 100) / 10);
+        const digit1_hundreds = Math.floor(num1 / 100);
+
+        const digit2_ones = num2 % 10;
+        const digit2_tens = Math.floor((num2 % 100) / 10);
+        const digit2_hundreds = Math.floor(num2 / 100);
+
+        let carryOnes = 0;
+        let carryTens = 0;
+        const explanationParts = [];
+
+        // Ones
+        const sumOnes = digit1_ones + digit2_ones;
+        if (sumOnes >= 10) {
+          carryOnes = 1;
+          explanationParts.push(`[Ones] ${digit1_ones} + ${digit2_ones} = ${sumOnes}. The ones total is 10 or more, so write ${sumOnes % 10} in the ones place and carry 1 to the tens place.`);
+        } else {
+          explanationParts.push(`[Ones] ${digit1_ones} + ${digit2_ones} = ${sumOnes}. No carrying is needed, so write ${sumOnes} in the ones place.`);
+        }
+
+        // Tens
+        const sumTens = digit1_tens + digit2_tens + carryOnes;
+        if (sumTens >= 10) {
+          carryTens = 1;
+          explanationParts.push(`[Tens] ${digit1_tens} + ${digit2_tens}${carryOnes ? " + 1 (carry)" : ""} = ${sumTens}. The tens total is 10 or more, so write ${sumTens % 10} in the tens place and carry 1 to the hundreds place.`);
+        } else {
+          explanationParts.push(`[Tens] ${digit1_tens} + ${digit2_tens}${carryOnes ? " + 1 (carry)" : ""} = ${sumTens}. No carrying is needed, so write ${sumTens} in the tens place.`);
+        }
+
+        // Hundreds
+        const sumHundreds = digit1_hundreds + digit2_hundreds + carryTens;
+        explanationParts.push(`[Hundreds] ${digit1_hundreds} + ${digit2_hundreds}${carryTens ? " + 1 (carry)" : ""} = ${sumHundreds}. Write ${sumHundreds} in the hundreds place.`);
+
+        const carries = [];
+        if (carryOnes) carries.push(0);
+        if (carryTens) carries.push(1);
+
+        return {
+          expression: `${num1} + ${num2}`,
+          num1,
+          num2,
+          op: "+",
+          result,
+          explanation: explanationParts.join("\n"),
+          carries
+        };
+      }
+
+      function solveSubtractionColumnwise(num1, num2) {
+        const result = num1 - num2;
+        const d1_ones = num1 % 10;
+        const d1_tens = Math.floor((num1 % 100) / 10);
+        const d1_hundreds = Math.floor(num1 / 100);
+
+        const d2_ones = num2 % 10;
+        const d2_tens = Math.floor((num2 % 100) / 10);
+        const d2_hundreds = Math.floor(num2 / 100);
+
+        const explanationParts = [];
+        let b_ones = d1_ones;
+        let b_tens = d1_tens;
+        let b_hundreds = d1_hundreds;
+        const borrows = [];
+
+        if (d1_ones < d2_ones) {
+          borrows.push(0);
+          if (b_tens > 0) {
+            b_tens -= 1;
+            b_ones += 10;
+            explanationParts.push(`[Ones] ${d1_ones} is less than ${d2_ones}, so borrow 1 ten as 10 ones. The tens digit becomes ${d1_tens - 1}, the ones value becomes ${b_ones}, and ${b_ones} - ${d2_ones} = ${b_ones - d2_ones}.`);
+          } else {
+            borrows.push(1);
+            b_hundreds -= 1;
+            b_tens = 9;
+            b_ones += 10;
+            explanationParts.push(`[Ones borrowing] ${d1_ones} is less than ${d2_ones}, and the tens digit is 0. Borrow 1 hundred to make 10 tens, then borrow 1 ten to make 10 ones. The hundreds digit becomes ${d1_hundreds - 1}, the tens digit becomes 9, and the ones value becomes ${b_ones}.\n[Ones] Calculate ${b_ones} - ${d2_ones} = ${b_ones - d2_ones}.`);
+          }
+        } else {
+          explanationParts.push(`[Ones] ${d1_ones} is enough to subtract ${d2_ones}. Calculate ${d1_ones} - ${d2_ones} = ${d1_ones - d2_ones}.`);
+        }
+
+        if (b_tens < d2_tens) {
+          borrows.push(1);
+          b_hundreds -= 1;
+          const old_b_tens = b_tens;
+          b_tens += 10;
+          explanationParts.push(`[Tens] ${old_b_tens} is less than ${d2_tens}, so borrow 1 hundred as 10 tens. The hundreds digit becomes ${b_hundreds}, the tens value becomes ${b_tens}, and ${b_tens} - ${d2_tens} = ${b_tens - d2_tens}.`);
+        } else {
+          explanationParts.push(`[Tens] ${b_tens} is enough to subtract ${d2_tens}. Calculate ${b_tens} - ${d2_tens} = ${b_tens - d2_tens}.`);
+        }
+
+        explanationParts.push(`[Hundreds] ${b_hundreds} remains in the hundreds place. Calculate ${b_hundreds} - ${d2_hundreds} = ${b_hundreds - d2_hundreds}.`);
+
+        return {
+          expression: `${num1} - ${num2}`,
+          num1,
+          num2,
+          op: "-",
+          result,
+          explanation: explanationParts.join("\n"),
+          borrows
+        };
+      }
+
+      function generateQuestionSteps(nums, ops) {
+        const solutions = [];
+        let r = nums[0];
+        for (let i = 0; i < ops.length; i++) {
+          const next = nums[i + 1];
+          const op = ops[i];
+          const sol = op === "+" ? solveAdditionColumnwise(r, next) : solveSubtractionColumnwise(r, next);
+          solutions.push(sol);
+          r = sol.result;
+        }
+        return solutions;
+      }
+
+      function generateMathQuestionItem(id, min, max, operators, count, mode) {
+        let attempts = 0;
+        while (attempts < 500) {
+          attempts++;
+          const nums = [];
+          const ops = [];
+
+          for (let i = 0; i < count - 1; i++) {
+            ops.push(operators[Math.floor(Math.random() * operators.length)]);
+          }
+
+          nums.push(Math.floor(Math.random() * (max - min + 1)) + min);
+          let running = nums[0];
+          let valids = true;
+
+          for (let i = 0; i < ops.length; i++) {
+            const op = ops[i];
+            let nextNum = Math.floor(Math.random() * (max - min + 1)) + min;
+
+            if (mode === "NORMAL") {
+              if (op === "+") {
+                const digitO = running % 10;
+                const digitT = Math.floor((running % 100) / 10);
+                const digitH = Math.floor(running / 100);
+
+                const maxO = Math.floor(Math.random() * (10 - digitO));
+                const maxT = Math.floor(Math.random() * (10 - digitT));
+                const maxH = Math.floor(Math.random() * (10 - digitH));
+
+                nextNum = maxH * 100 + maxT * 10 + maxO;
+                if (nextNum < min) nextNum = min;
+                if (nextNum > max) nextNum = max;
+              } else {
+                const digitO = running % 10;
+                const digitT = Math.floor((running % 100) / 10);
+                const digitH = Math.floor(running / 100);
+
+                const maxO = Math.floor(Math.random() * (digitO + 1));
+                const maxT = Math.floor(Math.random() * (digitT + 1));
+                const maxH = Math.floor(Math.random() * (digitH + 1));
+
+                nextNum = maxH * 100 + maxT * 10 + maxO;
+                if (nextNum < min) nextNum = min;
+                if (nextNum > max) nextNum = max;
+              }
+            }
+
+            nums.push(nextNum);
+            if (op === "+") running += nextNum;
+            else running -= nextNum;
+
+            if (running < 0 || running > 999) {
+              valids = false;
+              break;
+            }
+          }
+
+          if (!valids) continue;
+
+          if (running >= 0 && running <= 999) {
+            // distractors
+            const options = new Set([running]);
+            const offsets = [1, -1, 10, -10, 100, -100, 9, -9, 11, -11, 2, -2];
+            for (const off of offsets) {
+              const val = running + off;
+              if (val >= 0 && val <= 999 && val !== running) options.add(val);
+              if (options.size >= 4) break;
+            }
+            while (options.size < 4) {
+              const val = running + Math.floor(Math.random() * 40) - 20;
+              if (val >= 0 && val <= 999) options.add(val);
+            }
+
+            return {
+              id,
+              nums,
+              ops,
+              correctAnswer: running,
+              options: Array.from(options).sort(() => Math.random() - 0.5),
+              userAnswer: null,
+              isCorrect: false,
+              timeTaken: 0
+            };
+          }
+        }
+
+        // Failsafe
+        return {
+          id,
+          nums: [25, 14],
+          ops: ["+"],
+          correctAnswer: 39,
+          options: [38, 39, 40, 49],
+          userAnswer: null,
+          isCorrect: false,
+          timeTaken: 0
+        };
+      }
+
+      // 6. Navigation Routers
+      function goToScreen(screenName) {
+        document.querySelectorAll(".screen-view").forEach((s) => s.classList.add("hidden"));
+        document.getElementById(`screen-${screenName}`).classList.remove("hidden");
+        
+        const quitBtn = document.getElementById("header-btn-quit");
+        if (screenName === "playing") {
+          quitBtn.classList.remove("hidden");
+        } else {
+          quitBtn.classList.add("hidden");
+        }
+
+        activeScreen = screenName;
+      }
+
+      function resetSetupMenu() {
+        playAudioSynthesizer("tap");
+        goToScreen("setup");
+      }
+
+      // Stars overlays
+      function clearStarsOverlay() {
+        activeStarsList = [];
+        document.getElementById("starry-overlay-layer").innerHTML = "";
+      }
+
+      function appendStarToCanvas() {
+        const starId = Math.floor(Math.random() * 4) + 2; 
+        const x = Math.floor(Math.random() * 86) + 7;
+        const y = Math.floor(Math.random() * 78) + 11;
+        
+        const isCombo = currentCombo >= 3 || Math.random() > 0.7;
+        const size = isCombo ? Math.floor(Math.random() * 34) + 78 : Math.floor(Math.random() * 26) + 52;
+        const rotation = Math.floor(Math.random() * 360);
+        const scale = Math.random() * 0.3 + 0.85;
+
+        const star = {
+          id: `star_${Math.random().toString(36).substring(4)}`,
+          src: `G04-backdrop${starId}.png`,
+          x, y, size, rotation, scale
+        };
+
+        activeStarsList.push(star);
+
+        const container = document.getElementById("starry-overlay-layer");
+        const img = document.createElement("img");
+        img.id = star.id;
+        img.src = star.src;
+        img.alt = "Star Light";
+        img.className = "absolute animate-glow transition-all duration-1000 opacity-100 pointer-events-none select-none";
+        img.referrerPolicy = "no-referrer";
+        img.style.zIndex = isCombo ? "18" : "12";
+        img.style.left = `${star.x}%`;
+        img.style.top = `${star.y}%`;
+        img.style.width = `${star.size}px`;
+        img.style.height = `${star.size}px`;
+        img.style.transform = `translate(-50%, -50%) rotate(${star.rotation}deg) scale(${star.scale})`;
+        img.style.filter = "drop-shadow(0 0 18px rgba(252, 211, 77, 0.95)) drop-shadow(0 0 32px rgba(56, 189, 248, 0.45))";
+
+        container.appendChild(img);
+
+        const label = document.createElement("div");
+        label.className = "star-reward-label absolute pointer-events-none select-none z-20 px-3 py-1 rounded-full bg-amber-300 text-slate-950 border border-white/80 font-black shadow-2xl";
+        label.textContent = isCombo ? `Streak +2 starlight` : `+1 starlight`;
+        label.style.left = `${star.x}%`;
+        label.style.top = `${star.y}%`;
+        container.appendChild(label);
+        window.setTimeout(() => label.remove(), 1700);
+      }
+
+      // Start gameplay flow
+      function startGameChallenge() {
+        playAudioSynthesizer("tap");
+        clearStarsOverlay();
+        activeQuestions = [];
+        currentActiveIndex = 0;
+        scoreCorrect = 0;
+        scoreWrong = 0;
+        currentCombo = 0;
+        maxComboCount = 0;
+        historyQueue = [];
+        typedAnswerStr = "";
+        hasUserAnswered = false;
+        selectedMcqOptionIdx = null;
+        playModeInlineExplanationVisible = false;
+
+        const isEndless = settingsState.questionCount === 0;
+        const count = isEndless ? 10 : settingsState.questionCount;
+        const operators = settingsState.opType === "ADD" ? ["+"] : settingsState.opType === "SUBTRACT" ? ["-"] : ["+", "-"];
+
+        for (let i = 0; i < count; i++) {
+          activeQuestions.push(
+            generateMathQuestionItem(
+              i,
+              settingsState.aMin,
+              settingsState.aMax,
+              operators,
+              settingsState.operandsCount,
+              settingsState.carryMode
+            )
+          );
+        }
+
+        goToScreen("playing");
+        initPlayingActiveQuestionRow();
+
+        // Timer interval bindings
+        if (timerIntervalId) clearInterval(timerIntervalId);
+        if (settingsState.timeLimit > 0) {
+          timerMsLeft = settingsState.timeLimit;
+          document.getElementById("playing-timer-bar-wrapper").classList.remove("hidden");
+          document.getElementById("playing-timer-display").textContent = formatMinutesLabel(timerMsLeft);
+
+          timerIntervalId = setInterval(() => {
+            if (hasUserAnswered) return;
+            timerMsLeft--;
+            document.getElementById("playing-timer-display").textContent = formatMinutesLabel(timerMsLeft);
+            
+            if (timerMsLeft <= 5) {
+              playAudioSynthesizer("tick");
+            }
+            if (timerMsLeft <= 0) {
+              clearInterval(timerIntervalId);
+              triggerTimeoutAnswer();
+            }
+          }, 1000);
+        } else {
+          document.getElementById("playing-timer-bar-wrapper").classList.add("hidden");
+        }
+      }
+
+      function practiceMistakesQueue() {
+        if (mistakesCollection.length === 0) return;
+        playAudioSynthesizer("tap");
+        clearStarsOverlay();
+
+        activeQuestions = [];
+        currentActiveIndex = 0;
+        scoreCorrect = 0;
+        scoreWrong = 0;
+        currentCombo = 0;
+        maxComboCount = 0;
+        historyQueue = [];
+        typedAnswerStr = "";
+        hasUserAnswered = false;
+        selectedMcqOptionIdx = null;
+        playModeInlineExplanationVisible = false;
+
+        mistakesCollection.forEach((m, idx) => {
+          let running = m.nums[0];
+          for (let i = 0; i < m.ops.length; i++) {
+            if (m.ops[i] === "+") running += m.nums[i + 1];
+            else running -= m.nums[i + 1];
+          }
+
+          const optSet = new Set([running]);
+          const offsets = [1, -1, 10, -10, 100, -100];
+          for (const off of offsets) {
+            const val = running + off;
+            if (val >= 0 && val <= 999 && val !== running) optSet.add(val);
+            if (optSet.size >= 4) break;
+          }
+          while (optSet.size < 4) {
+            const val = running + Math.floor(Math.random() * 40) - 20;
+            if (val >= 0 && val <= 999) optSet.add(val);
+          }
+
+          activeQuestions.push({
+            id: idx,
+            nums: m.nums,
+            ops: m.ops,
+            correctAnswer: running,
+            options: Array.from(optSet).sort(() => Math.random() - 0.5),
+            userAnswer: null,
+            isCorrect: false,
+            timeTaken: 0
+          });
+        });
+
+        setQuestionCountControls(activeQuestions.length);
+        setTimeLimitControls(0); // standard practice has no timer limits
+
+        goToScreen("playing");
+        initPlayingActiveQuestionRow();
+      }
+
+      function practiceMistakesCurrentSummaryQueue() {
+        const wrongs = historyQueue.filter((q) => !q.isCorrect);
+        if (wrongs.length === 0) return;
+        playAudioSynthesizer("tap");
+        clearStarsOverlay();
+
+        activeQuestions = wrongs.map((q, idx) => ({
+          id: idx,
+          nums: q.nums,
+          ops: q.ops,
+          correctAnswer: q.correctAnswer,
+          options: q.options,
+          userAnswer: null,
+          isCorrect: false,
+          timeTaken: 0
+        }));
+
+        currentActiveIndex = 0;
+        scoreCorrect = 0;
+        scoreWrong = 0;
+        currentCombo = 0;
+        maxComboCount = 0;
+        historyQueue = [];
+        typedAnswerStr = "";
+        hasUserAnswered = false;
+        selectedMcqOptionIdx = null;
+        playModeInlineExplanationVisible = false;
+
+        setQuestionCountControls(activeQuestions.length);
+        setTimeLimitControls(0);
+
+        goToScreen("playing");
+        initPlayingActiveQuestionRow();
+      }
+
+      function quitActiveGameEarly() {
+        playAudioSynthesizer("tap");
+        if (timerIntervalId) clearInterval(timerIntervalId);
+        finishSessionRun();
+      }
+
+      function triggerTimeoutAnswer() {
+        evaluatePlayingAnswer(-1);
+      }
+
+      // Render standard active in-play layout
+      function initPlayingActiveQuestionRow() {
+        typedAnswerStr = "";
+        hasUserAnswered = false;
+        selectedMcqOptionIdx = null;
+        playModeInlineExplanationVisible = false;
+        questionOpenedTimestamp = Date.now();
+
+        const currentQ = activeQuestions[currentActiveIndex];
+
+        // Header indexes
+        document.getElementById("playing-span-index").textContent = currentActiveIndex + 1;
+        const totalCap = settingsState.questionCount === 0 ? "Endless question bank" : `/ ${settingsState.questionCount}`;
+        document.getElementById("playing-span-total-cap").textContent = totalCap;
+
+        // Progress sliderfiller scale
+        if (settingsState.questionCount > 0) {
+          document.getElementById("playing-progress-container").classList.remove("hidden");
+          const pct = ((currentActiveIndex + 1) / settingsState.questionCount) * 100;
+          document.getElementById("playing-progress-filler").style.width = `${pct}%`;
+        } else {
+          document.getElementById("playing-progress-container").classList.add("hidden");
+        }
+
+        // Combo
+        const comboCapsule = document.getElementById("playing-combo-capsule");
+        if (currentCombo >= 3) {
+          document.getElementById("playing-span-combo").textContent = currentCombo;
+          comboCapsule.classList.remove("hidden");
+        } else {
+          comboCapsule.classList.add("hidden");
+        }
+
+        // Correct count
+        document.getElementById("playing-txt-correct").textContent = scoreCorrect;
+        document.getElementById("playing-txt-wrong").textContent = scoreWrong;
+
+        // Build formula UI
+        const equationBox = document.getElementById("playing-giant-equation");
+        equationBox.innerHTML = "";
+
+        currentQ.nums.forEach((num, idx) => {
+          const numDiv = document.createElement("div");
+          numDiv.className = "flex items-center gap-x-4";
+          numDiv.innerHTML = `<span class="bg-white/5 border border-white/5 py-2 px-4 rounded-2xl font-mono shadow-sm tracking-tight">${num}</span>`;
+          equationBox.appendChild(numDiv);
+
+          if (currentQ.ops[idx]) {
+            const opSpan = document.createElement("span");
+            opSpan.className = "text-sky-400 font-bold font-sans self-center px-1";
+            opSpan.textContent = currentQ.ops[idx];
+            equationBox.appendChild(opSpan);
+          }
+        });
+
+        const equalSpan = document.createElement("span");
+        equalSpan.className = "text-amber-300 font-bold font-sans px-1";
+        equalSpan.textContent = "=";
+        equationBox.appendChild(equalSpan);
+
+        const ansBox = document.createElement("div");
+        ansBox.id = "playing-giant-ans-box";
+        ansBox.className = "min-w-[100px] h-[72px] flex items-center justify-center border-2 border-dashed border-amber-300/40 rounded-2xl bg-slate-900/40 px-4 py-1.5 text-center shadow-lg";
+        ansBox.innerHTML = `<span class="font-mono text-4xl md:text-5xl font-black text-amber-300/50 animate-pulse">?</span>`;
+        equationBox.appendChild(ansBox);
+
+        // Hide evaluation panel
+        document.getElementById("playing-banner-evaluation-box").classList.add("hidden");
+        document.getElementById("playing-inline-explanation-holder").classList.add("hidden");
+
+        const btnCollapse = document.getElementById("btn-playing-collapse-exp");
+        btnCollapse.className = "flex-grow sm:flex-none py-2 px-3.5 rounded-xl text-xs font-bold transition border bg-slate-900 border-white/10 text-slate-300 hover:text-white cursor-pointer";
+        btnCollapse.textContent = "Show Explanation";
+
+        // Display choice vs keypad modes
+        const choiceGrid = document.getElementById("playing-options-choice-grid");
+        const keypadGrid = document.getElementById("playing-options-keypad-grid");
+
+        if (settingsState.questionMode === "CHOICE") {
+          choiceGrid.classList.remove("hidden");
+          keypadGrid.classList.add("hidden");
+
+          choiceGrid.innerHTML = "";
+          currentQ.options.forEach((opt, i) => {
+            const btn = document.createElement("button");
+            btn.className = "py-4 px-5 rounded-2xl border-2 border-white/10 bg-slate-900/45 text-slate-200 text-center font-mono text-2xl font-black hover:border-sky-400 hover:bg-sky-500/10 active:scale-95 cursor-pointer transition flex flex-col items-center justify-center";
+            btn.innerHTML = `
+              <span class="text-[10px] text-sky-400/80 font-bold font-sans mb-1 uppercase tracking-wider">Option ${i + 1}</span>
+              <span>${opt}</span>
+            `;
+            btn.onclick = () => {
+              if (hasUserAnswered) return;
+              selectedMcqOptionIdx = i;
+              evaluatePlayingAnswer(opt);
+            };
+            choiceGrid.appendChild(btn);
+          });
+        } else {
+          choiceGrid.classList.add("hidden");
+          keypadGrid.classList.remove("hidden");
+          document.getElementById("keypad-string-display").innerHTML = `<span class="text-slate-600 font-sans text-xl animate-pulse">Type your answer...</span>`;
+        }
+      }
+
+      function onCustomKeyPress(val) {
+        if (hasUserAnswered) return;
+        playAudioSynthesizer("tap");
+
+        const disp = document.getElementById("keypad-string-display");
+
+        if (val === "DELETE") {
+          typedAnswerStr = typedAnswerStr.slice(0, -1);
+          if (typedAnswerStr !== "") {
+            disp.innerHTML = `<span class="font-mono text-3xl font-black text-sky-300 leading-none">${typedAnswerStr}</span>`;
+          } else {
+            disp.innerHTML = `<span class="text-slate-600 font-sans text-xl animate-pulse">Type your answer...</span>`;
+          }
+        } else if (val === "ENTER") {
+          if (typedAnswerStr.trim() !== "") {
+            evaluatePlayingAnswer(parseInt(typedAnswerStr, 10));
+          }
+        } else {
+          typedAnswerStr += val;
+          disp.innerHTML = `<span class="font-mono text-3xl font-black text-sky-300 leading-none">${typedAnswerStr}</span>`;
+        }
+      }
+
+      function evaluatePlayingAnswer(studentValue) {
+        hasUserAnswered = true;
+        const currentQ = activeQuestions[currentActiveIndex];
+        const elapsed = Date.now() - questionOpenedTimestamp;
+        currentQ.timeTaken = elapsed;
+        currentQ.userAnswer = studentValue;
+
+        const isCorrect = studentValue === currentQ.correctAnswer;
+        currentQ.isCorrect = isCorrect;
+
+        if (isCorrect) {
+          playAudioSynthesizer("correct");
+          currentCombo++;
+          if (currentCombo > maxComboCount) maxComboCount = currentCombo;
+          scoreCorrect++;
+
+          // Star generator triggers
+          appendStarToCanvas();
+          if (currentCombo % 3 === 0) {
+            setTimeout(() => appendStarToCanvas(), 300);
+          }
+        } else {
+          playAudioSynthesizer("incorrect");
+          currentCombo = 0;
+          scoreWrong++;
+
+          // Save Mistakes Database
+          const exists = mistakesCollection.some(m => 
+            m.nums.length === currentQ.nums.length && m.nums.every((num, idx) => num === currentQ.nums[idx]) && m.ops.every((op, idx) => op === currentQ.ops[idx])
+          );
+          if (!exists) {
+            mistakesCollection.push({ nums: currentQ.nums, ops: currentQ.ops });
+            try {
+              localStorage.setItem("starry_mistakes", JSON.stringify(mistakesCollection));
+            } catch {}
+            updateMistakesBadgeText();
+          }
+        }
+
+        historyQueue.push(JSON.parse(JSON.stringify(currentQ)));
+
+        // Update Giant Problem Answer box
+        const ansBox = document.getElementById("playing-giant-ans-box");
+        ansBox.className = `min-w-[100px] h-[72px] flex items-center justify-center border-2 border-dashed rounded-2xl bg-slate-900/40 px-4 py-1.5 text-center shadow-lg ${isCorrect ? 'border-emerald-400 text-emerald-400' : 'border-rose-400 text-rose-400'}`;
+        ansBox.innerHTML = `<span class="font-mono text-4xl md:text-5xl font-black">${studentValue === -1 ? 'Time up' : studentValue}</span>`;
+
+        // Update MCQ grid buttons visually
+        if (settingsState.questionMode === "CHOICE") {
+          const choiceGrid = document.getElementById("playing-options-choice-grid");
+          const btns = choiceGrid.querySelectorAll("button");
+          currentQ.options.forEach((opt, idx) => {
+            const btn = btns[idx];
+            if (opt === currentQ.correctAnswer) {
+              btn.className = "py-4 px-5 rounded-2xl border-2 border-emerald-500 bg-emerald-500/10 text-emerald-300 text-center font-mono text-2xl font-black shadow transition flex flex-col items-center justify-center";
+            } else if (idx === selectedMcqOptionIdx) {
+              btn.className = "py-4 px-5 rounded-2xl border-2 border-rose-500 bg-rose-500/10 text-rose-300 text-center font-mono text-2xl font-black shadow transition flex flex-col items-center justify-center";
+            } else {
+              btn.className = "py-4 px-5 rounded-2xl border-2 border-white/5 bg-slate-900/20 text-slate-500 text-center font-mono text-2xl font-black transition flex flex-col items-center justify-center opacity-40";
+            }
+          });
+        }
+
+        // Setup next button label
+        const btnNextLabel = document.getElementById("playing-btn-next-label");
+        const isEndless = settingsState.questionCount === 0;
+        if (!isEndless && currentActiveIndex + 1 >= activeQuestions.length) {
+          btnNextLabel.textContent = "View Performance Report";
+        } else {
+          btnNextLabel.textContent = "Next Question";
+        }
+
+        // Render Results Banner evaluations with correct styles
+        const evalWrapper = document.getElementById("eval-banner-color-wrapper");
+        const iconBg = document.getElementById("eval-banner-icon-bg");
+        const evalTitle = document.getElementById("eval-banner-title");
+        const evalFormula = document.getElementById("eval-banner-formula");
+
+        if (isCorrect) {
+          evalWrapper.className = "p-4 rounded-2xl border flex flex-col sm:flex-row items-center justify-between gap-4 bg-emerald-500/10 border-emerald-500/30 text-emerald-300";
+          iconBg.className = "w-12 h-12 rounded-xl flex items-center justify-center shrink-0 bg-emerald-500/20 text-emerald-400";
+          iconBg.innerHTML = `<i data-lucide="check-circle" class="w-6 h-6 animate-pulse"></i>`;
+          evalTitle.textContent = "Correct. You lit up a star.";
+        } else {
+          evalWrapper.className = "p-4 rounded-2xl border flex flex-col sm:flex-row items-center justify-between gap-4 bg-rose-500/10 border-rose-500/30 text-rose-300";
+          iconBg.className = "w-12 h-12 rounded-xl flex items-center justify-center shrink-0 bg-rose-500/20 text-rose-400";
+          iconBg.innerHTML = `<i data-lucide="alert-triangle" class="w-6 h-6 animate-bounce"></i>`;
+          evalTitle.textContent = studentValue === -1 ? "Time is up. Review the column-work explanation." : "Not quite. Read the explanation and keep going.";
+        }
+
+        const exprString = currentQ.nums.map((num, i) => num + (currentQ.ops[i] ? ` ${currentQ.ops[i]} ` : "")).join("");
+        evalFormula.innerHTML = `Correct answer: ${exprString} = <strong class="text-emerald-400 font-mono text-sm">${currentQ.correctAnswer}</strong>`;
+
+        // Render Collapse steps in background
+        const stepsContainer = document.getElementById("playing-inline-explanation-holder");
+        stepsContainer.innerHTML = `
+          <div class="text-center font-bold text-sm text-sky-300 mb-2 font-sans tracking-wide">Column Method and Place-Value Explanation</div>
+        `;
+
+        const steps = generateQuestionSteps(currentQ.nums, currentQ.ops);
+        steps.forEach((step, idx) => {
+          if (currentQ.nums.length > 2) {
+            const stepTitle = document.createElement("div");
+            stepTitle.className = "text-center font-bold text-amber-300 text-xs font-sans mt-2";
+            stepTitle.textContent = `Step ${idx + 1}: break down the three-number expression (${step.expression})`;
+            stepsContainer.appendChild(stepTitle);
+          }
+          stepsContainer.appendChild(buildVerticalGridDomNode(step));
+        });
+
+        document.getElementById("playing-banner-evaluation-box").classList.remove("hidden");
+        lucide.createIcons();
+      }
+
+      function toggleActivePlayingExplanationCollapse() {
+        playAudioSynthesizer("tap");
+        const container = document.getElementById("playing-inline-explanation-holder");
+        const btn = document.getElementById("btn-playing-collapse-exp");
+
+        if (playModeInlineExplanationVisible) {
+          container.classList.add("hidden");
+          btn.className = "flex-grow sm:flex-none py-2 px-3.5 rounded-xl text-xs font-bold transition border bg-slate-900 border-white/10 text-slate-300 hover:text-white cursor-pointer";
+          btn.textContent = "Show Explanation";
+          playModeInlineExplanationVisible = false;
+        } else {
+          container.classList.remove("hidden");
+          btn.className = "flex-grow sm:flex-none py-2 px-3.5 rounded-xl text-xs font-bold transition border bg-amber-400 text-slate-950 border-amber-300 shadow cursor-pointer";
+          btn.textContent = "Hide Explanation";
+          playModeInlineExplanationVisible = true;
+        }
+      }
+
+      function proceedToNextQuestion() {
+        playAudioSynthesizer("tap");
+
+        const isEndless = settingsState.questionCount === 0;
+
+        if (currentActiveIndex + 1 >= activeQuestions.length) {
+          if (isEndless) {
+            // seamlessly append 10 more questions
+            const extra = [];
+            const operators = settingsState.opType === "ADD" ? ["+"] : settingsState.opType === "SUBTRACT" ? ["-"] : ["+", "-"];
+            const startIdx = activeQuestions.length;
+
+            for (let i = 0; i < 10; i++) {
+              extra.push(
+                generateMathQuestionItem(
+                  startIdx + i,
+                  settingsState.aMin,
+                  settingsState.aMax,
+                  operators,
+                  settingsState.operandsCount,
+                  settingsState.carryMode
+                )
+              );
+            }
+            activeQuestions = [...activeQuestions, ...extra];
+            currentActiveIndex++;
+            initPlayingActiveQuestionRow();
+          } else {
+            if (timerIntervalId) clearInterval(timerIntervalId);
+            finishSessionRun();
+          }
+        } else {
+          currentActiveIndex++;
+          initPlayingActiveQuestionRow();
+        }
+      }
+
+      function finishSessionRun() {
+        playAudioSynthesizer("win");
+        goToScreen("summary");
+        expandedSummaryIndices.clear();
+
+        // compute ratings
+        const correct = scoreCorrect;
+        const total = historyQueue.length;
+        const rate = total > 0 ? Math.round((correct / total) * 100) : 0;
+        
+        let aggregateMs = 0;
+        historyQueue.forEach((q) => aggregateMs += q.timeTaken);
+        const avg = total > 0 ? ((aggregateMs / total) / 1000).toFixed(1) : "0.0";
+
+        // Summary titles and range texts
+        document.getElementById("summary-meta-range").textContent = `Range: ${settingsState.aMin} to ${settingsState.aMax} | ${settingsState.questionCount === 0 ? "Endless question bank session ended" : `Completed ${total} questions`}`;
+        document.getElementById("summary-txt-accuracy").textContent = `${rate}%`;
+        document.getElementById("summary-txt-fraction").textContent = `(${correct} / ${total})`;
+        document.getElementById("summary-txt-speed").innerHTML = `<i data-lucide="clock" class="w-3.5 h-3.5 text-sky-400 inline mr-0.5"></i> ${avg}sec`;
+        document.getElementById("summary-txt-combo").innerHTML = `<i data-lucide="zap" class="w-3.5 h-3.5 text-amber-400 fill-amber-300 inline mr-0.5 animate-pulse"></i> ${maxComboCount}`;
+
+        // Slowest solved equation
+        const solves = historyQueue.filter((q) => q.isCorrect);
+        const slowest = solves.length > 0 ? solves.reduce((prev, curr) => curr.timeTaken > prev.timeTaken ? curr : prev, solves[0]) : null;
+
+        if (slowest) {
+          const eqString = slowest.nums.map((num, i) => num + (slowest.ops[i] || "")).join("");
+          document.getElementById("summary-slowest-eq").textContent = eqString;
+          document.getElementById("summary-slowest-speed").textContent = `${(slowest.timeTaken / 1000).toFixed(1)} sec`;
+        } else {
+          document.getElementById("summary-slowest-eq").textContent = "-";
+          document.getElementById("summary-slowest-speed").textContent = "0s";
+        }
+
+        // Appraisal Text Config
+        const cardNode = document.getElementById("summary-appraisal-card");
+        if (rate >= 90) {
+          cardNode.className = "p-4 rounded-2xl border text-center sm:text-left bg-emerald-500/10 border-emerald-500/20 text-emerald-300 animate-fade-in";
+          cardNode.innerHTML = `
+            <h3 class="font-extrabold text-sm md:text-base flex items-center gap-1.5 justify-center sm:justify-start">
+              <i data-lucide="sparkles" class="w-5 h-5 text-amber-300 fill-amber-300/20"></i>Excellent mental maths: the whole star field is awake.
+            </h3>
+            <p class="text-xs text-slate-300 leading-relaxed mt-2 font-medium">
+              You achieved ${rate}% accuracy in this session. Your mental calculation logic is clear, and you handled most regrouping challenges successfully. You are becoming a strong addition and subtraction problem solver.
+            </p>
+          `;
+        } else if (rate >= 70) {
+          cardNode.className = "p-4 rounded-2xl border text-center sm:text-left bg-sky-500/10 border-sky-500/20 text-sky-300 animate-fade-in";
+          cardNode.innerHTML = `
+            <h3 class="font-extrabold text-sm md:text-base flex items-center gap-1.5 justify-center sm:justify-start">
+              <i data-lucide="sparkles" class="w-5 h-5 text-amber-300 fill-amber-300/20"></i>Master level: your star field is shining brightly.
+            </h3>
+            <p class="text-xs text-slate-300 leading-relaxed mt-2 font-medium">
+              You stayed steady through a demanding set of calculations. Keep using place-value decomposition, and more practice will help your mental calculation speed improve further.
+            </p>
+          `;
+        } else {
+          cardNode.className = "p-4 rounded-2xl border text-center sm:text-left bg-amber-500/10 border-amber-500/20 text-amber-300 animate-fade-in";
+          cardNode.innerHTML = `
+            <h3 class="font-extrabold text-sm md:text-base flex items-center gap-1.5 justify-center sm:justify-start">
+              <i data-lucide="sparkles" class="w-5 h-5 text-amber-300 fill-amber-300/20"></i>The stars are lighting up: keep practising and build a brighter galaxy.
+            </h3>
+           
+          `;
+        }
+
+        // Show/hide review mistakes buttons
+        const btnPracticeSumMistakes = document.getElementById("btn-summary-practice-mistakes");
+        const spanSumMistakesCnt = document.getElementById("span-sum-mistakes-cnt");
+        const wrongs = historyQueue.filter((q) => !q.isCorrect);
+
+        if (wrongs.length > 0) {
+          spanSumMistakesCnt.textContent = wrongs.length;
+          btnPracticeSumMistakes.classList.remove("hidden");
+        } else {
+          btnPracticeSumMistakes.classList.add("hidden");
+        }
+
+        // Render Graph Histograms
+        renderSummaryGraphSpeedBars();
+
+        // Render detailed step expanded solution list items
+        renderSummaryDetailedSolutionsList();
+
+        lucide.createIcons();
+      }
+
+      function renderSummaryGraphSpeedBars() {
+        const container = document.getElementById("summary-duration-graph-bars");
+        container.innerHTML = "";
+
+        historyQueue.forEach((q, idx) => {
+          const s = q.timeTaken / 1000;
+          const pct = Math.min((s / 20) * 100, 100);
+          
+          const bar = document.createElement("div");
+          bar.className = "flex-1 flex flex-col items-center justify-end h-full group relative min-w-[12px]";
+          
+          const formula = q.nums.map((num, i) => num + (q.ops[i] || "")).join("");
+          bar.innerHTML = `
+            <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block bg-slate-950 text-slate-100 font-mono text-[9px] px-2 py-1.5 rounded-lg border border-white/10 shadow-xl z-20 whitespace-nowrap font-bold">
+              Question ${idx + 1}: ${formula} = ${q.correctAnswer} <br />
+              Time: ${s.toFixed(1)}s | ${q.isCorrect ? 'Correct' : 'Incorrect'}
+            </div>
+            <div class="w-full rounded-t transition-all ${q.isCorrect ? 'bg-emerald-400/80 group-hover:bg-emerald-400' : 'bg-rose-500/85 group-hover:bg-rose-500'}" style="height: ${Math.max(pct, 8)}%"></div>
+            <span class="text-[8px] font-mono font-bold text-slate-500 mt-1">${idx + 1}</span>
+          `;
+          container.appendChild(bar);
+        });
+      }
+
+      function renderSummaryDetailedSolutionsList() {
+        const group = document.getElementById("summary-detailed-solutions-group");
+        group.innerHTML = "";
+
+        historyQueue.forEach((q, idx) => {
+          const isExpanded = expandedSummaryIndices.has(idx);
+          const block = document.createElement("div");
+          block.className = `border rounded-xl overflow-hidden transition ${q.isCorrect ? 'border-sky-500/10 bg-slate-950/20 hover:bg-slate-950/40' : 'border-rose-500/15 bg-rose-500/5 hover:bg-rose-500/10'}`;
+
+          const formulaStr = q.nums.map((num, i) => num + (q.ops[i] ? ` ${q.ops[i]} ` : "")).join("");
+          
+          let breakdownNode = "";
+          if (isExpanded) {
+            let stepsMarkup = "";
+            const steps = generateQuestionSteps(q.nums, q.ops);
+            steps.forEach((step, sIdx) => {
+              if (q.nums.length > 2) {
+                stepsMarkup += `<div class="text-center font-bold text-amber-300 text-xs font-sans mt-2">Step ${sIdx + 1}: three-number breakdown (${step.expression})</div>`;
+              }
+              const grid = buildVerticalGridDomNode(step);
+              stepsMarkup += `<div class="py-2">${grid.outerHTML}</div>`;
+            });
+
+            breakdownNode = `
+              <div class="p-4 bg-slate-950/60 border-t border-white/5 space-y-4">
+                ${stepsMarkup}
+              </div>
+            `;
+          }
+
+          block.innerHTML = `
+            <div onclick="toggleSummaryRowItemExpansion(${idx})" class="p-3 flex items-center justify-between gap-3 text-sm cursor-pointer select-none">
+              <div class="flex items-center gap-2 font-black">
+                <span class="text-slate-500 font-mono text-xs w-5">${idx + 1}.</span>
+                <span class="w-4 h-4 rounded-full flex items-center justify-center text-[9px] ${q.isCorrect ? 'bg-emerald-500/25 text-emerald-400' : 'bg-rose-500/25 text-rose-400'}">
+                  ${q.isCorrect ? "✓" : "✗"}
+                </span>
+                <span class="font-mono text-base text-slate-100">${formulaStr} = ${q.correctAnswer}</span>
+              </div>
+
+              <div class="flex items-center gap-2.5 text-xs font-mono">
+                <span class="text-slate-400">Time: <strong class="font-semibold text-slate-300">${(q.timeTaken / 1000).toFixed(1)}s</strong></span>
+                <span class="font-semibold rounded-lg px-2 py-0.5 ${q.isCorrect ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10'}">
+                  ${q.isCorrect ? "Correct" : q.userAnswer === -1 ? "Time up" : `Your answer: ${q.userAnswer}`}
+                </span>
+                <i data-lucide="${isExpanded ? 'chevron-up' : 'chevron-down'}" class="w-4 h-4 text-slate-400"></i>
+              </div>
+            </div>
+            ${breakdownNode}
+          `;
+          
+          group.appendChild(block);
+        });
+
+        lucide.createIcons();
+      }
+
+      function toggleSummaryRowItemExpansion(idx) {
+        if (expandedSummaryIndices.has(idx)) {
+          expandedSummaryIndices.delete(idx);
+        } else {
+          expandedSummaryIndices.add(idx);
+        }
+        renderSummaryDetailedSolutionsList();
+      }
+
+      // 7. Render Carrying - Borrowing visual HTML elements
+      function buildVerticalGridDomNode(stepSolution) {
+        const { num1, num2, op, result, explanation, carries = [], borrows = [] } = stepSolution;
+
+        const container = document.createElement("div");
+        container.className = "flex flex-col items-center select-none font-mono text-xl py-4 px-6 bg-slate-900/80 rounded-2xl border border-white/10 shadow-lg text-slate-100 max-w-sm mx-auto my-2";
+
+        const digits1 = String(num1).padStart(3, " ").split("");
+        const digits2 = String(num2).padStart(3, " ").split("");
+        const digitsResult = String(result).padStart(Math.max(3, String(result).length), " ").split("");
+
+        const hasCarryTens = carries.includes(0);
+        const hasCarryHundreds = carries.includes(1);
+        const hasBorrowTens = borrows.includes(0);
+        const hasBorrowHundreds = borrows.includes(1);
+
+        // Header Carry/Borrow row markup
+        let notationsRowMarkup = `
+          <div></div>
+          <div class="flex items-center justify-center text-amber-400 col-span-1">
+            ${hasCarryHundreds ? '<span class="bg-amber-500/20 px-1 border border-amber-400/30 rounded text-[10px]">carry 1</span>' : ''}
+            ${hasBorrowHundreds ? '<span class="bg-rose-500/20 px-1 border border-rose-400/30 rounded text-[10px] text-rose-300">borrowed</span>' : ''}
+          </div>
+          <div class="flex items-center justify-center text-amber-400 col-span-1">
+            ${hasCarryTens ? '<span class="bg-amber-500/20 px-1 border border-amber-400/30 rounded text-[10px]">carry 1</span>' : ''}
+            ${hasBorrowTens ? '<span class="bg-rose-500/20 px-1 border border-rose-400/30 rounded text-[10px] text-rose-300">borrowed</span>' : ''}
+          </div>
+          <div></div>
+        `;
+
+        // Operand cells
+        let digits1Markup = "";
+        digits1.forEach((d) => {
+          digits1Markup += `<div class="font-mono text-2xl font-black ${d === ' ' ? 'text-slate-600' : 'text-slate-100'}">${d === ' ' ? '0' : d}</div>`;
+        });
+
+        let digits2Markup = "";
+        digits2.forEach((d) => {
+          digits2Markup += `<div class="font-mono text-2xl font-black ${d === ' ' ? 'text-slate-600' : 'text-slate-100'}">${d === ' ' ? '0' : d}</div>`;
+        });
+
+        let resultMarkup = "";
+        digitsResult.forEach((d) => {
+          resultMarkup += `<div class="font-mono text-3xl font-black text-emerald-400">${d}</div>`;
+        });
+
+        container.innerHTML = `
+          <!-- carries/borrows indicators -->
+          <div class="grid grid-cols-4 gap-x-4 w-full text-center h-7 text-xs font-bold">
+            ${notationsRowMarkup}
+          </div>
+
+          <!-- labels row -->
+          <div class="grid grid-cols-4 gap-x-4 w-full text-center text-[10px] uppercase font-bold tracking-wider text-slate-400 border-b border-white/5 pb-1 mb-2">
+            <div class="text-left font-sans">Value</div>
+            <div class="font-sans">Hundreds</div>
+            <div class="font-sans">Tens</div>
+            <div class="font-sans">Ones</div>
+          </div>
+
+          <!-- Operand 1 -->
+          <div class="grid grid-cols-4 gap-x-4 w-full text-center py-1">
+            <div></div>
+            ${digits1Markup}
+          </div>
+
+          <!-- Operand 2 -->
+          <div class="grid grid-cols-4 gap-x-4 w-full text-center py-1 border-b-2 border-white/20 pb-3">
+            <div class="font-display font-black text-2xl text-blue-400 text-left">${op}</div>
+            ${digits2Markup}
+          </div>
+
+          <!-- Result -->
+          <div class="grid grid-cols-4 gap-x-4 w-full text-center pt-3 font-mono">
+            <div class="text-left text-xs self-center text-slate-400 font-bold font-sans">Answer</div>
+            ${resultMarkup}
+          </div>
+
+          <!-- descriptions -->
+          <div class="mt-4 p-3 bg-slate-950/60 border border-white/5 rounded-xl w-full text-xs leading-relaxed text-slate-300 text-left font-sans font-medium whitespace-pre-line">
+            ${explanation}
+          </div>
+        `;
+
+        return container;
+      }
+
+      // 8. CSV Exporter Sheets Compiler
+      function downloadCSVExportSheet(isMistakesOnly) {
+        playAudioSynthesizer("tap");
+        const namePrefix = prompt(
+          `Enter a file-name prefix, for example: 3A_05, Group_A, or ClassNo_StudentNo.\n\nPrivacy note: this session's ${isMistakesOnly ? "mistake report" : "detailed report"} is stored only in this page's JavaScript memory and is not uploaded to any server. After downloading, you are responsible for keeping the file. Refreshing or closing the page clears this session's records.\n\nPress Cancel to skip the download.`,
+          ""
+        );
+        if (namePrefix === null) return;
+
+        const prefix = namePrefix.trim() || "anonymous_student";
+        const recordType = isMistakesOnly ? "Mistake Summary Report" : "Detailed Learning Report";
+
+        const headers = [
+          "Tool Name",
+          "File Prefix",
+          "Record Type",
+          "Question Number",
+          "Question",
+          "Operation Type",
+          "Number of terms",
+          "Student Answer",
+          "Correct Answer",
+          "Correct?",
+          "Answer Mode",
+          "Question Range",
+          "Total Questions",
+          "Timer Setting",
+          "Response Time (sec)",
+          "Session Correct",
+          "Session Incorrect",
+          "Score",
+          "Record Time"
+        ];
+
+        const list = isMistakesOnly ? historyQueue.filter((q) => !q.isCorrect) : historyQueue;
+        if (list.length === 0) {
+          alert("There are no matching answer records to export in this session.");
+          return;
+        }
+
+        const rows = [headers];
+
+        list.forEach((q, index) => {
+          const formulaStr = q.nums.map((num, i) => num + (q.ops[i] ? ` ${q.ops[i]} ` : "")).join("");
+          const row = [
+            "Starry Addition and Subtraction",
+            prefix,
+            recordType,
+            String(index + 1),
+            formulaStr,
+            settingsState.opType,
+            String(settingsState.operandsCount),
+            q.userAnswer === -1 ? "Timed out" : String(q.userAnswer),
+            String(q.correctAnswer),
+            q.isCorrect ? "Correct" : "Incorrect",
+            settingsState.questionMode === "CHOICE" ? "Multiple choice" : "Typed answer",
+            `${settingsState.aMin} to ${settingsState.aMax}`,
+            String(settingsState.questionCount === 0 ? "Endless Mode" : settingsState.questionCount),
+            formatMinutesLabel(settingsState.timeLimit),
+            (q.timeTaken / 1000).toFixed(1),
+            String(scoreCorrect),
+            String(scoreWrong),
+            String(scoreCorrect * 10),
+            new Date().toLocaleString("en-HK")
+          ];
+          rows.push(row);
+        });
+
+        const csvContent = "\uFEFF" + rows.map((r) => r.map((val) => {
+          const str = val === null || val === undefined ? "" : String(val);
+          return `"${str.replace(/"/g, '""')}"`;
+        }).join(",")).join("\r\n");
+
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+
+        const ts = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+        link.download = `${prefix}_Starry Addition and Subtraction_${recordType}_${ts}.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }
+      function initializeTopControls() {
+        const homeLink = document.getElementById("tool-home-link");
+        const enterFullscreenButton = document.getElementById("enterFullscreen");
+        const exitFullscreenButton = document.getElementById("exitFullscreen");
+        const fullscreenRoot = document.documentElement;
+
+        if (homeLink) {
+          homeLink.textContent = "Tools";
+          homeLink.href = "../../index.html";
+          homeLink.target = "_top";
+          homeLink.setAttribute("aria-label", "Go to tools overview");
+        }
+
+        if (!enterFullscreenButton || !exitFullscreenButton) return;
+
+        enterFullscreenButton.textContent = "Fullscreen";
+        enterFullscreenButton.setAttribute("aria-label", "Enter fullscreen");
+
+        exitFullscreenButton.textContent = "Exit";
+        exitFullscreenButton.setAttribute("aria-label", "Press ESC or this button to exit fullscreen");
+        exitFullscreenButton.title = "Exit";
+
+        async function enterFullscreen() {
+          playAudioSynthesizer("tap");
+          try {
+            if (!document.fullscreenElement && fullscreenRoot.requestFullscreen) {
+              await fullscreenRoot.requestFullscreen();
+            }
+          } catch (error) {}
+          updateFullscreenControls();
+        }
+
+        async function exitFullscreen() {
+          playAudioSynthesizer("tap");
+          try {
+            if (document.fullscreenElement && document.exitFullscreen) {
+              await document.exitFullscreen();
+            }
+          } catch (error) {}
+          updateFullscreenControls();
+        }
+
+        function updateFullscreenControls() {
+          const isFullscreen = Boolean(document.fullscreenElement);
+          enterFullscreenButton.setAttribute("data-fullscreen-active", String(isFullscreen));
+          exitFullscreenButton.setAttribute("data-fullscreen-active", String(isFullscreen));
+        }
+
+        enterFullscreenButton.addEventListener("click", enterFullscreen);
+        exitFullscreenButton.addEventListener("click", exitFullscreen);
+        document.addEventListener("fullscreenchange", updateFullscreenControls);
+        document.addEventListener("keydown", event => {
+          if (event.key === "Escape") {
+            window.setTimeout(updateFullscreenControls, 0);
+          }
+        });
+        updateFullscreenControls();
+      }
+
+      initializeTopControls();
+    </script>
+    <script src="../../assets/tool-home-nav-en.js"></script>
+    
+  </body>
+</html>

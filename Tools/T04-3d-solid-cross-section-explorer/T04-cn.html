@@ -1,0 +1,1880 @@
+<!doctype html>
+<html lang="zh-Hant" data-ldl-tool-id="T04-3d-solid-cross-section-explorer" data-ldl-fingerprint="ldl-yfc-3d-solid-cross-section-explorer-v1">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Yung Fu Chuen">
+  <meta name="company" content="Yung Fu Chuen">
+  <meta name="copyright" content="© 2026 Yung Fu Chuen. All rights reserved.">
+  <meta name="license" content="Free classroom use only. Redistribution, resale, cloning, re-hosting, modification, or derivative use without written permission is prohibited.">
+  <meta name="ldl-product-name" content="立體截面探索器">
+  <meta name="ldl-product-name-en" content="3D Solid Cross-Section Explorer">
+  <meta name="ldl-product-code" content="LDL-MATH-3D-2026-001">
+  <meta name="ldl-tool-id" content="T04-3d-solid-cross-section-explorer">
+  <meta name="ldl-module-id" content="ldl-3d-solid-cross-section-explorer">
+  <meta name="ldl-release-year" content="2026">
+  <meta name="ldl-version" content="1.1.0">
+  <meta name="ldl-build-id" content="LDL-MATH-3D-2026-001">
+  <meta name="ldl-fingerprint" content="ldl-yfc-3d-solid-cross-section-explorer-v1">
+  <meta name="ldl-source-reference" content="LDL Source Reference v1.1 · Yung Fu Chuen · Yung Fu Chuen">
+  <title>立體截面探索器</title>
+  <style>
+    :root {
+      --ldl-product-name: "立體截面探索器";
+      --ldl-product-name-en: "3D Solid Cross-Section Explorer";
+      --ldl-product-code: "LDL-MATH-3D-2026-001";
+      --ldl-tool-id: "T04-3d-solid-cross-section-explorer";
+      --ldl-module-id: "ldl-3d-solid-cross-section-explorer";
+      --ldl-company: "Yung Fu Chuen";
+      --ldl-author: "Yung Fu Chuen";
+      --ldl-release-year: "2026";
+      --ldl-version: "1.1.0";
+      --ldl-build-id: "LDL-MATH-3D-2026-001";
+      --ldl-fingerprint: "ldl-yfc-3d-solid-cross-section-explorer-v1";
+      --bg: #f4f8fb;
+      --panel: #ffffff;
+      --panel-strong: #edf6fb;
+      --line: #d6e4ee;
+      --text: #1d3140;
+      --muted: #638091;
+      --blue: #2f86c7;
+      --blue-dark: #17689f;
+      --teal: #18a99a;
+      --orange: #f26d21;
+      --orange-dark: #cf4f0d;
+      --shadow: 0 18px 42px rgba(31, 75, 104, 0.12);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", system-ui, sans-serif;
+    }
+
+    body {
+      overflow-x: hidden;
+    }
+
+    .app {
+      min-height: 100vh;
+      padding: 18px;
+      display: grid;
+      grid-template-columns: minmax(220px, 280px) minmax(320px, 1fr) minmax(230px, 300px);
+      gap: 16px;
+    }
+
+    .panel,
+    .viewer-shell {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .control-panel,
+    .result-panel {
+      padding: 18px;
+      min-height: 0;
+    }
+
+    h1,
+    h2 {
+      margin: 0;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      font-size: 24px;
+      line-height: 1.25;
+      font-weight: 800;
+      color: #18384d;
+    }
+
+    .tool-subtitle {
+      margin: 7px 0 18px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .group {
+      margin-top: 18px;
+    }
+
+    .group-title {
+      display: block;
+      margin-bottom: 9px;
+      font-size: 15px;
+      font-weight: 800;
+      color: #314d5f;
+    }
+
+    .button-grid {
+      display: grid;
+      gap: 9px;
+    }
+
+    .button-grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .button-grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    button {
+      min-height: 46px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #f8fbfd;
+      color: var(--text);
+      font: inherit;
+      font-size: 17px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease, box-shadow 160ms ease;
+      touch-action: manipulation;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      border-color: #a9cadf;
+      background: #eef7fc;
+    }
+
+    button:focus-visible,
+    input:focus-visible {
+      outline: 3px solid rgba(47, 134, 199, 0.28);
+      outline-offset: 2px;
+    }
+
+    button.active {
+      border-color: var(--blue-dark);
+      background: var(--blue);
+      color: #ffffff;
+      box-shadow: 0 8px 18px rgba(47, 134, 199, 0.22);
+    }
+
+    .cut-button {
+      border-color: #ffd3b9;
+      background: #fff4ec;
+      color: #a43c00;
+    }
+
+    .cut-button.active {
+      border-color: var(--orange-dark);
+      background: var(--orange);
+      color: #ffffff;
+      box-shadow: 0 8px 18px rgba(242, 109, 33, 0.22);
+    }
+
+    .separate-button {
+      width: 100%;
+      min-height: 56px;
+      margin-top: 12px;
+      border-color: #13a84a;
+      background: linear-gradient(180deg, #22c76b, #0a9c45);
+      color: #ffffff;
+      font-size: 1.12rem;
+      box-shadow: 0 12px 22px rgba(10, 156, 69, 0.22);
+    }
+
+    .separate-button:disabled {
+      border-color: #c6d7cc;
+      background: #edf4ef;
+      color: #779482;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    .field {
+      display: grid;
+      grid-template-columns: 1fr 96px;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      background: var(--panel-strong);
+      border: 1px solid #cde2ee;
+      border-radius: var(--radius);
+    }
+
+    label {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid #b9d1df;
+      border-radius: var(--radius);
+      padding: 4px 10px;
+      background: #ffffff;
+      color: var(--text);
+      font: inherit;
+      font-size: 18px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .viewer-shell {
+      position: relative;
+      min-height: 520px;
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .viewer-header {
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #ffffff 0%, #f6fbfe 100%);
+    }
+
+    .solid-name {
+      font-size: 22px;
+      font-weight: 900;
+      color: #17354a;
+      line-height: 1.2;
+    }
+
+    .status {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+      text-align: right;
+      line-height: 1.35;
+    }
+
+    #viewer {
+      position: relative;
+      min-height: 456px;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(128, 199, 224, 0.18), transparent 36%),
+        linear-gradient(180deg, #fafdff 0%, #eaf4f9 100%);
+    }
+
+    #viewer canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .viewer-note {
+      position: absolute;
+      left: 16px;
+      bottom: 14px;
+      padding: 7px 10px;
+      border: 1px solid rgba(24, 102, 150, 0.16);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.78);
+      color: #587487;
+      font-size: 13px;
+      font-weight: 700;
+      pointer-events: none;
+    }
+
+    .result-panel {
+      display: grid;
+      grid-template-rows: 1fr;
+      gap: 14px;
+    }
+
+    .section-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfdff;
+      overflow: hidden;
+    }
+
+    .section-card .card-title {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      background: #edf6fb;
+      color: #314d5f;
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .shape-stage {
+      min-height: 260px;
+      display: grid;
+      place-items: center;
+      padding: 16px;
+    }
+
+    .shape-stage svg {
+      width: min(100%, 230px);
+      height: auto;
+      overflow: visible;
+    }
+
+    .shape-name {
+      min-height: 78px;
+      display: grid;
+      place-items: center;
+      padding: 14px;
+      color: var(--orange-dark);
+      font-size: clamp(26px, 4vw, 38px);
+      font-weight: 950;
+      text-align: center;
+      line-height: 1.18;
+    }
+
+    .shape-placeholder {
+      color: #7f98a8;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .ldl-visible-watermark {
+      position: fixed;
+      z-index: 2147483000;
+      left: max(14px, env(safe-area-inset-left));
+      right: auto;
+      top: max(70px, calc(env(safe-area-inset-top) + 66px));
+      bottom: auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 5px;
+      max-width: min(190px, calc(100vw - 20px));
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      color: rgba(23, 32, 51, 0.56);
+      background: transparent;
+      box-shadow: none;
+      font-size: 8px;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: 0;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+      backdrop-filter: none;
+    }
+
+    /* copy-cost marker: style-beta LD */
+
+    .ldl-visible-watermark img {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+      object-fit: contain;
+      opacity: 0.88;
+    }
+
+    .ldl-visible-watermark span {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    @media (max-width: 520px) {
+      .ldl-visible-watermark {
+        left: max(8px, env(safe-area-inset-left));
+        right: auto;
+        top: max(58px, calc(env(safe-area-inset-top) + 54px));
+        bottom: auto;
+        font-size: 7px;
+      }
+
+      .ldl-visible-watermark img {
+        width: 14px;
+        height: 14px;
+      }
+    }
+
+    .ldl-offscreen-source-reference {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      margin: -1px !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      clip: rect(0 0 0 0) !important;
+      clip-path: inset(50%) !important;
+      border: 0 !important;
+      white-space: nowrap !important;
+    }
+
+    @media (max-width: 1040px) {
+      .app {
+        grid-template-columns: 230px minmax(340px, 1fr);
+        grid-template-areas:
+          "controls viewer"
+          "result result";
+      }
+
+      .control-panel {
+        grid-area: controls;
+      }
+
+      .viewer-shell {
+        grid-area: viewer;
+      }
+
+      .result-panel {
+        grid-area: result;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr;
+      }
+
+      .result-panel .section-card {
+        grid-column: 1 / -1;
+      }
+
+      .shape-stage {
+        min-height: 220px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .app {
+        min-height: auto;
+        padding: 10px;
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "controls"
+          "viewer"
+          "result";
+      }
+
+      .control-panel,
+      .result-panel {
+        padding: 14px;
+      }
+
+      .result-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .viewer-shell {
+        min-height: 430px;
+      }
+
+      #viewer {
+        min-height: 360px;
+      }
+
+      .viewer-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .status {
+        text-align: left;
+      }
+
+      .button-grid.three {
+        grid-template-columns: 1fr;
+      }
+
+      .shape-stage {
+        min-height: 210px;
+      }
+
+      .ldl-visible-watermark {
+        right: max(8px, env(safe-area-inset-right));
+        bottom: max(8px, env(safe-area-inset-bottom));
+        max-width: calc(100vw - 16px);
+        padding: 6px 8px;
+        font-size: 10px;
+      }
+
+      .ldl-visible-watermark img {
+        width: 22px;
+        height: 22px;
+      }
+    }
+  </style>
+</head>
+<body data-ldl-reserve-top-space="true" data-ldl-tool-id="T04-3d-solid-cross-section-explorer">
+  <main class="app" aria-label="立體截面探索器">
+    <aside class="panel control-panel">
+      <h1>立體截面探索器</h1>
+      <p class="tool-subtitle">選擇立體圖形，再按切法觀察截面。</p>
+
+      <section class="group" aria-label="主類別">
+        <span class="group-title">主類別</span>
+        <div class="button-grid three">
+          <button class="category-button active" type="button" data-category="prism">柱體</button>
+          <button class="category-button" type="button" data-category="pyramid">錐體</button>
+          <button class="category-button" type="button" data-category="sphere">球</button>
+        </div>
+      </section>
+
+      <section id="subtypeGroup" class="group" aria-label="細分類別">
+        <span class="group-title">細分類別</span>
+        <div id="prismSubtypes" class="button-grid two">
+          <button class="subtype-button active" type="button" data-subtype="polygonPrism">角柱</button>
+          <button class="subtype-button" type="button" data-subtype="cylinder">圓柱</button>
+        </div>
+        <div id="pyramidSubtypes" class="button-grid two hidden">
+          <button class="subtype-button active" type="button" data-subtype="polygonPyramid">角錐</button>
+          <button class="subtype-button" type="button" data-subtype="cone">圓錐</button>
+        </div>
+      </section>
+
+      <section id="sideCountGroup" class="group">
+        <div class="field">
+          <label for="sideCount">底面邊數</label>
+          <input id="sideCount" type="number" min="3" max="100" value="4" inputmode="numeric">
+        </div>
+      </section>
+
+      <section class="group" aria-label="切法">
+        <span class="group-title">切法</span>
+        <div class="button-grid three">
+          <button class="cut-button" type="button" data-cut="horizontal">橫切</button>
+          <button class="cut-button" type="button" data-cut="vertical">直切</button>
+          <button class="cut-button" type="button" data-cut="slanted">斜切</button>
+        </div>
+        <button id="separateButton" class="separate-button" type="button" disabled>分離</button>
+      </section>
+
+    </aside>
+
+    <section class="viewer-shell" aria-label="3D 模型">
+      <div class="viewer-header">
+        <div id="solidName" class="solid-name">四角柱</div>
+        <div id="status" class="status">拖曳可旋轉<br>滾輪可縮放</div>
+      </div>
+      <div id="viewer">
+      </div>
+    </section>
+
+    <aside class="panel result-panel" aria-label="截面結果">
+      <section class="section-card" aria-label="截面圖">
+        <div class="card-title">截面圖</div>
+        <div id="shapeStage" class="shape-stage">
+          <div class="shape-placeholder">請選擇切法</div>
+        </div>
+        <div class="card-title">截面名稱</div>
+        <div id="shapeName" class="shape-name">--</div>
+      </section>
+    </aside>
+  </main>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+    <template id="ldl-copy-cost-markers" hidden>
+    <!-- copy-cost marker: body-gamma YFC -->
+    <!-- copy-cost marker: body-delta LD -->
+  </template>
+<script type="module">
+    import * as THREE from "three";
+    import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
+"use strict";
+
+    // ==================================================
+    // LDL Source Reference v1.1
+    // Creator credit + hidden ownership markers
+    // ==================================================
+    const LDL_RELEASE_YEAR = 2026;
+    const LDL_VERSION = "1.1.0";
+    const LDL_PRODUCT_NAME = "立體截面探索器";
+    const LDL_PRODUCT_NAME_EN = "3D Solid Cross-Section Explorer";
+    const LDL_PRODUCT_CODE = "LDL-MATH-3D-2026-001";
+    const LDL_TOOL_ID = "T04-3d-solid-cross-section-explorer";
+    const LDL_MODULE_ID = "ldl-3d-solid-cross-section-explorer";
+    const LDL_BUILD_ID = "LDL-MATH-3D-2026-001";
+    const LDL_FINGERPRINT = "ldl-yfc-3d-solid-cross-section-explorer-v1";
+    const LDL_COMPANY = "Yung Fu Chuen";
+    const LDL_AUTHOR = "Yung Fu Chuen";
+    const LDL_VISIBLE_WATERMARK_TEXT = `© ${LDL_RELEASE_YEAR} · Yung Fu Chuen`;
+    const LDL_COPYRIGHT = `© ${LDL_RELEASE_YEAR} Yung Fu Chuen. All rights reserved.`;
+    const LDL_LICENSE = "Free classroom use only. Redistribution, resale, cloning, re-hosting, modification, or derivative use without written permission is prohibited.";
+    const LDL_CONSOLE_MESSAGE = `© ${LDL_RELEASE_YEAR} Yung Fu Chuen｜Created by Yung Fu Chuen｜LDL Source Reference v1.1`;
+    const LDL_MARKER_SIGNATURE = "LDL-SOURCE-REFERENCE-v1.1::Yung-Fu-Chuen::2026";
+
+    function createLDLSourceRecord() {
+      return Object.freeze({
+        productName: LDL_PRODUCT_NAME,
+        productNameEn: LDL_PRODUCT_NAME_EN,
+        productCode: LDL_PRODUCT_CODE,
+        toolId: LDL_TOOL_ID,
+        moduleId: LDL_MODULE_ID,
+        company: LDL_COMPANY,
+        author: LDL_AUTHOR,
+        releaseYear: LDL_RELEASE_YEAR,
+        version: LDL_VERSION,
+        copyright: LDL_COPYRIGHT,
+        license: LDL_LICENSE,
+        buildId: LDL_BUILD_ID,
+        fingerprint: LDL_FINGERPRINT,
+        markerSignature: LDL_MARKER_SIGNATURE
+      });
+    }
+
+    function initLDLSourceReference() {
+      try {
+        const record = createLDLSourceRecord();
+        setLDLCssCustomProperties(record);
+        upsertLDLMetaTags(record);
+        upsertLDLBodyAttributes(record);
+        upsertLDLJsonRecord(record);
+        upsertLDLHiddenDomReference(record);
+        upsertLDLSvgMetadata(record);
+        upsertLDLVisibleWatermark();
+
+        Object.defineProperty(window, "__LDL_SOURCE_REFERENCE__", {
+          value: record,
+          writable: false,
+          configurable: true,
+          enumerable: false
+        });
+
+        console.info(LDL_CONSOLE_MESSAGE);
+      } catch (error) {
+        console.warn("LDL Source Reference failed to initialize.", error);
+      }
+    }
+
+    function setLDLCssCustomProperties(record) {
+      const root = document.documentElement;
+      root.style.setProperty("--ldl-product-name", JSON.stringify(record.productName));
+      root.style.setProperty("--ldl-product-name-en", JSON.stringify(record.productNameEn));
+      root.style.setProperty("--ldl-product-code", JSON.stringify(record.productCode));
+      root.style.setProperty("--ldl-tool-id", JSON.stringify(record.toolId));
+      root.style.setProperty("--ldl-module-id", JSON.stringify(record.moduleId));
+      root.style.setProperty("--ldl-company", JSON.stringify(record.company));
+      root.style.setProperty("--ldl-author", JSON.stringify(record.author));
+      root.style.setProperty("--ldl-release-year", String(record.releaseYear));
+      root.style.setProperty("--ldl-version", JSON.stringify(record.version));
+      root.style.setProperty("--ldl-build-id", JSON.stringify(record.buildId));
+      root.style.setProperty("--ldl-fingerprint", JSON.stringify(record.fingerprint));
+    }
+
+    function upsertLDLMetaTags(record) {
+      const metaValues = {
+        author: record.author,
+        company: record.company,
+        copyright: record.copyright,
+        license: record.license,
+        "ldl-product-name": record.productName,
+        "ldl-product-name-en": record.productNameEn,
+        "ldl-product-code": record.productCode,
+        "ldl-tool-id": record.toolId,
+        "ldl-module-id": record.moduleId,
+        "ldl-release-year": String(record.releaseYear),
+        "ldl-version": record.version,
+        "ldl-build-id": record.buildId,
+        "ldl-fingerprint": record.fingerprint,
+        "ldl-source-reference": `LDL Source Reference ${record.version} · ${record.company} · ${record.author}`
+      };
+
+      Object.entries(metaValues).forEach(([name, content]) => {
+        let meta = document.head.querySelector(`meta[name="${name}"]`);
+        if (!meta) {
+          meta = document.createElement("meta");
+          meta.setAttribute("name", name);
+          document.head.appendChild(meta);
+        }
+        meta.setAttribute("content", content);
+      });
+    }
+
+    function upsertLDLBodyAttributes(record) {
+      const attrs = {
+        "data-ldl-product-name": record.productName,
+        "data-ldl-product-name-en": record.productNameEn,
+        "data-ldl-product-code": record.productCode,
+        "data-ldl-tool-id": record.toolId,
+        "data-ldl-module-id": record.moduleId,
+        "data-ldl-build-id": record.buildId,
+        "data-ldl-fingerprint": record.fingerprint,
+        "data-ldl-marker-signature": record.markerSignature
+      };
+
+      Object.entries(attrs).forEach(([name, value]) => {
+        document.body.setAttribute(name, value);
+      });
+    }
+
+    function upsertLDLJsonRecord(record) {
+      let script = document.getElementById("ldl-source-reference");
+      if (!script) {
+        script = document.createElement("script");
+        script.type = "application/json";
+        script.id = "ldl-source-reference";
+        document.body.appendChild(script);
+      }
+      script.textContent = JSON.stringify(record, null, 2);
+    }
+
+    function upsertLDLHiddenDomReference(record) {
+      const hidden = getOrCreateLDLElement("div", "ldl-hidden-source-reference", document.body);
+      hidden.className = "ldl-offscreen-source-reference";
+      hidden.setAttribute("aria-hidden", "true");
+      hidden.setAttribute("data-ldl-product-name", record.productName);
+      hidden.setAttribute("data-ldl-product-name-en", record.productNameEn);
+      hidden.setAttribute("data-ldl-product-code", record.productCode);
+      hidden.setAttribute("data-ldl-tool-id", record.toolId);
+      hidden.setAttribute("data-ldl-module-id", record.moduleId);
+      hidden.setAttribute("data-ldl-company", record.company);
+      hidden.setAttribute("data-ldl-author", record.author);
+      hidden.setAttribute("data-ldl-release-year", String(record.releaseYear));
+      hidden.setAttribute("data-ldl-version", record.version);
+      hidden.setAttribute("data-ldl-build-id", record.buildId);
+      hidden.setAttribute("data-ldl-fingerprint", record.fingerprint);
+      hidden.setAttribute("data-ldl-marker-signature", record.markerSignature);
+      hidden.textContent = [
+        "LDL Source Reference",
+        record.productName,
+        record.productNameEn,
+        record.productCode,
+        record.toolId,
+        record.moduleId,
+        record.company,
+        record.author,
+        String(record.releaseYear),
+        record.version,
+        record.buildId,
+        record.fingerprint,
+        record.markerSignature,
+        record.license
+      ].join(" | ");
+    }
+
+    function upsertLDLSvgMetadata(record) {
+      let svg = document.getElementById("ldl-hidden-svg-source-reference");
+      if (!svg) {
+        svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.id = "ldl-hidden-svg-source-reference";
+        document.body.appendChild(svg);
+      }
+      svg.setAttribute("class", "ldl-offscreen-source-reference");
+      svg.setAttribute("width", "0");
+      svg.setAttribute("height", "0");
+      svg.setAttribute("aria-hidden", "true");
+      svg.setAttribute("focusable", "false");
+
+      let metadata = svg.querySelector("metadata");
+      if (!metadata) {
+        metadata = document.createElementNS("http://www.w3.org/2000/svg", "metadata");
+        svg.appendChild(metadata);
+      }
+      metadata.textContent = JSON.stringify(record);
+    }
+
+    function upsertLDLVisibleWatermark() {
+      const watermark = getOrCreateLDLElement("div", "ldl-visible-watermark", document.body);
+      watermark.className = "ldl-visible-watermark";
+      watermark.setAttribute("aria-hidden", "true");
+
+      let text = watermark.querySelector("span");
+      if (!text) {
+        text = document.createElement("span");
+        watermark.appendChild(text);
+      }
+      text.textContent = LDL_VISIBLE_WATERMARK_TEXT;
+    }
+
+    function getOrCreateLDLElement(tagName, id, parent) {
+      let element = document.getElementById(id);
+      if (!element) {
+        element = document.createElement(tagName);
+        element.id = id;
+        parent.appendChild(element);
+      }
+      return element;
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", initLDLSourceReference, { once: true });
+    } else {
+      initLDLSourceReference();
+    }
+
+
+    const viewer = document.getElementById("viewer");
+    const solidNameEl = document.getElementById("solidName");
+    const statusEl = document.getElementById("status");
+    const shapeStage = document.getElementById("shapeStage");
+    const shapeName = document.getElementById("shapeName");
+    const sideCountInput = document.getElementById("sideCount");
+    const sideCountGroup = document.getElementById("sideCountGroup");
+    const subtypeGroup = document.getElementById("subtypeGroup");
+    const prismSubtypes = document.getElementById("prismSubtypes");
+    const pyramidSubtypes = document.getElementById("pyramidSubtypes");
+    const categoryButtons = [...document.querySelectorAll(".category-button")];
+    const subtypeButtons = [...document.querySelectorAll(".subtype-button")];
+    const cutButtons = [...document.querySelectorAll(".cut-button")];
+    const separateButton = document.getElementById("separateButton");
+
+    const state = {
+      category: "prism",
+      subtype: "polygonPrism",
+      prismSubtype: "polygonPrism",
+      pyramidSubtype: "polygonPyramid",
+      sideCount: 4,
+      cut: null,
+      animation: null,
+      splitAnimation: null,
+      currentSolid: null,
+      currentSection: null
+    };
+
+    const scene = new THREE.Scene();
+    scene.background = null;
+
+    const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+    camera.position.set(4, 3.2, 4.8);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.localClippingEnabled = true;
+    viewer.prepend(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.minDistance = 3.2;
+    controls.maxDistance = 9;
+    controls.target.set(0, 0, 0);
+
+    scene.add(new THREE.HemisphereLight(0xffffff, 0xd6e9f4, 2.2));
+    const keyLight = new THREE.DirectionalLight(0xffffff, 2.5);
+    keyLight.position.set(4, 6, 5);
+    scene.add(keyLight);
+    const fillLight = new THREE.DirectionalLight(0xaeddf4, 1.2);
+    fillLight.position.set(-3, 2, -4);
+    scene.add(fillLight);
+
+    const modelGroup = new THREE.Group();
+    const splitResultGroup = new THREE.Group();
+    const labelGroup = new THREE.Group();
+    scene.add(modelGroup, splitResultGroup, labelGroup);
+
+    const planeMaterial = new THREE.MeshBasicMaterial({
+      color: 0xf26d21,
+      transparent: true,
+      opacity: 0.58,
+      side: THREE.DoubleSide,
+      depthTest: false,
+      depthWrite: false
+    });
+    const cuttingPlane = new THREE.Mesh(new THREE.PlaneGeometry(3.9, 3.9), planeMaterial);
+    const planeBorderMaterial = new THREE.LineBasicMaterial({ color: 0xd44e0c, transparent: true, opacity: 0.95, depthTest: false });
+    const planeBorder = new THREE.LineSegments(
+      new THREE.EdgesGeometry(cuttingPlane.geometry),
+      planeBorderMaterial
+    );
+    cuttingPlane.add(planeBorder);
+    cuttingPlane.visible = false;
+    cuttingPlane.renderOrder = 20;
+    planeBorder.renderOrder = 21;
+    const sectionFillMaterial = new THREE.MeshBasicMaterial({
+      color: 0x7cff72,
+      transparent: true,
+      opacity: 0.58,
+      side: THREE.DoubleSide,
+      depthTest: false,
+      depthWrite: false
+    });
+    const sectionOutlineMaterial = new THREE.LineBasicMaterial({
+      color: 0x00d12f,
+      transparent: true,
+      opacity: 1,
+      depthTest: false
+    });
+    const sectionFillGroup = new THREE.Group();
+    sectionFillGroup.position.z = 0.003;
+    sectionFillGroup.renderOrder = 35;
+    cuttingPlane.add(sectionFillGroup);
+    scene.add(cuttingPlane);
+
+    const solidMaterial = new THREE.MeshPhysicalMaterial({
+      color: 0x45a9dc,
+      roughness: 0.58,
+      metalness: 0,
+      transparent: true,
+      opacity: 0.46,
+      side: THREE.DoubleSide,
+      flatShading: true
+    });
+    const curvedMaterial = new THREE.MeshPhysicalMaterial({
+      color: 0x31b7c2,
+      roughness: 0.5,
+      metalness: 0,
+      transparent: true,
+      opacity: 0.44,
+      side: THREE.DoubleSide
+    });
+    const baseMaterial = new THREE.MeshBasicMaterial({
+      color: 0x126aa1,
+      transparent: true,
+      opacity: 0.16,
+      side: THREE.DoubleSide,
+      depthWrite: false
+    });
+    const edgeMaterial = new THREE.LineBasicMaterial({ color: 0x111111, transparent: true, opacity: 0.95, depthTest: false });
+    const curveLineMaterial = new THREE.LineBasicMaterial({ color: 0x0b7d85, transparent: true, opacity: 0.42 });
+    const splitSurfaceMaterial = new THREE.MeshPhysicalMaterial({
+      color: 0x5fb9df,
+      roughness: 0.58,
+      metalness: 0,
+      transparent: true,
+      opacity: 0.34,
+      side: THREE.DoubleSide,
+      flatShading: true
+    });
+    const splitCapMaterial = new THREE.MeshBasicMaterial({
+      color: 0x8cff73,
+      transparent: true,
+      opacity: 0.84,
+      side: THREE.DoubleSide,
+      depthTest: false
+    });
+    const splitCapOutlineMaterial = new THREE.LineBasicMaterial({
+      color: 0x008f24,
+      transparent: true,
+      opacity: 1,
+      depthTest: false
+    });
+    const splitEdgeMaterial = new THREE.LineBasicMaterial({
+      color: 0x06384d,
+      transparent: true,
+      opacity: 0.9,
+      depthTest: false
+    });
+
+    function clearGroup(group) {
+      while (group.children.length) {
+        const child = group.children.pop();
+        child.traverse((node) => {
+          if (node.geometry) node.geometry.dispose();
+          if (node.material && node.material.map) node.material.map.dispose();
+          if (node.material && node.material.dispose && node.material !== solidMaterial && node.material !== curvedMaterial && node.material !== baseMaterial && node.material !== edgeMaterial && node.material !== curveLineMaterial && node.material !== sectionFillMaterial && node.material !== sectionOutlineMaterial && node.material !== splitSurfaceMaterial && node.material !== splitCapMaterial && node.material !== splitCapOutlineMaterial && node.material !== splitEdgeMaterial) {
+            node.material.dispose();
+          }
+        });
+      }
+    }
+
+    function makeLabel(text, position, color = "#17354a", scale = 1) {
+      const canvas = document.createElement("canvas");
+      canvas.width = 192;
+      canvas.height = 88;
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = color;
+      ctx.font = "900 40px Microsoft JhengHei, sans-serif";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.shadowColor = "rgba(255,255,255,0.95)";
+      ctx.shadowBlur = 7;
+      ctx.lineWidth = 8;
+      ctx.strokeStyle = "rgba(255,255,255,0.95)";
+      ctx.strokeText(text, 96, 42);
+      ctx.shadowBlur = 0;
+      ctx.fillText(text, 96, 42);
+
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: texture, transparent: true, depthTest: false }));
+      sprite.position.copy(position);
+      sprite.scale.set(1.06 * scale, 0.49 * scale, 1);
+      sprite.renderOrder = 40;
+      labelGroup.add(sprite);
+    }
+
+    function makeBaseDisc(radius, y, sides, rotation = 0) {
+      const geometry = new THREE.CircleGeometry(radius, sides);
+      geometry.rotateX(-Math.PI / 2);
+      geometry.rotateY(rotation);
+      geometry.translate(0, y, 0);
+      return new THREE.Mesh(geometry, baseMaterial);
+    }
+
+    function polygonVertices(sides, radius, y) {
+      const vertices = [];
+      for (let i = 0; i < sides; i++) {
+        const angle = -Math.PI / 2 + (Math.PI * 2 * i) / sides;
+        vertices.push(new THREE.Vector3(Math.cos(angle) * radius, y, Math.sin(angle) * radius));
+      }
+      return vertices;
+    }
+
+    function makePolygonPrismGeometry(sides, radius, height) {
+      const topY = height / 2;
+      const bottomY = -height / 2;
+      const top = polygonVertices(sides, radius, topY);
+      const bottom = polygonVertices(sides, radius, bottomY);
+      const vertices = [...bottom, ...top, new THREE.Vector3(0, bottomY, 0), new THREE.Vector3(0, topY, 0)];
+      const bottomCenter = sides * 2;
+      const topCenter = sides * 2 + 1;
+      const indices = [];
+
+      for (let i = 0; i < sides; i++) {
+        const next = (i + 1) % sides;
+        indices.push(i, next, sides + next, i, sides + next, sides + i);
+        indices.push(bottomCenter, next, i);
+        indices.push(topCenter, sides + i, sides + next);
+      }
+
+      const geometry = new THREE.BufferGeometry().setFromPoints(vertices);
+      geometry.setIndex(indices);
+      geometry.computeVertexNormals();
+      return geometry;
+    }
+
+    function makePolygonPrismSolidData(sides, radius, height) {
+      const topY = height / 2;
+      const bottomY = -height / 2;
+      const bottom = polygonVertices(sides, radius, bottomY);
+      const top = polygonVertices(sides, radius, topY);
+      const vertices = [...bottom, ...top];
+      const edges = [];
+      for (let i = 0; i < sides; i++) {
+        const next = (i + 1) % sides;
+        edges.push([i, next], [sides + i, sides + next], [i, sides + i]);
+      }
+      return { kind: "polyhedron", vertices, edges };
+    }
+
+    function makePolygonPyramidGeometry(sides, radius, height) {
+      const baseY = -height / 2;
+      const base = polygonVertices(sides, radius, baseY);
+      const apexIndex = sides;
+      const centerIndex = sides + 1;
+      const vertices = [...base, new THREE.Vector3(0, height / 2, 0), new THREE.Vector3(0, baseY, 0)];
+      const indices = [];
+
+      for (let i = 0; i < sides; i++) {
+        const next = (i + 1) % sides;
+        indices.push(i, next, apexIndex);
+        indices.push(centerIndex, next, i);
+      }
+
+      const geometry = new THREE.BufferGeometry().setFromPoints(vertices);
+      geometry.setIndex(indices);
+      geometry.computeVertexNormals();
+      return geometry;
+    }
+
+    function makePolygonPyramidSolidData(sides, radius, height) {
+      const baseY = -height / 2;
+      const base = polygonVertices(sides, radius, baseY);
+      const apex = new THREE.Vector3(0, height / 2, 0);
+      const vertices = [...base, apex];
+      const apexIndex = vertices.length - 1;
+      const edges = [];
+      for (let i = 0; i < sides; i++) {
+        const next = (i + 1) % sides;
+        edges.push([i, next], [i, apexIndex]);
+      }
+      return { kind: "polyhedron", vertices, edges };
+    }
+
+    function addPolygonPrismEdges(sides, radius, height) {
+      const topY = height / 2;
+      const bottomY = -height / 2;
+      const points = polygonVertices(sides, radius, 0);
+      const lines = [];
+      for (let i = 0; i < sides; i++) {
+        const next = (i + 1) % sides;
+        lines.push(
+          points[i].clone().setY(topY),
+          points[next].clone().setY(topY),
+          points[i].clone().setY(bottomY),
+          points[next].clone().setY(bottomY),
+          points[i].clone().setY(bottomY),
+          points[i].clone().setY(topY)
+        );
+      }
+
+      const edges = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(lines), edgeMaterial);
+      edges.renderOrder = 30;
+      modelGroup.add(edges);
+    }
+
+    function addPolygonPyramidEdges(sides, radius, height) {
+      const baseY = -height / 2;
+      const apex = new THREE.Vector3(0, height / 2, 0);
+      const points = polygonVertices(sides, radius, baseY);
+
+      const lines = [];
+      for (let i = 0; i < sides; i++) {
+        const next = (i + 1) % sides;
+        lines.push(points[i], points[next], points[i], apex);
+      }
+
+      const edges = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(lines), edgeMaterial);
+      edges.renderOrder = 30;
+      modelGroup.add(edges);
+    }
+
+    function addCircleEdge(radius, y) {
+      const ring = new THREE.LineLoop(
+        new THREE.BufferGeometry().setFromPoints(makeCirclePoints(radius, y, 128)),
+        edgeMaterial
+      );
+      ring.renderOrder = 30;
+      modelGroup.add(ring);
+    }
+
+    function addCurvedGuides(kind) {
+      const guideGroup = new THREE.Group();
+      const ringCount = kind === "sphere" ? 5 : 4;
+      for (let i = 0; i < ringCount; i++) {
+        const y = kind === "sphere" ? -0.8 + i * 0.4 : -0.9 + i * 0.6;
+        let radius = 1.05;
+        if (kind === "cone") radius = Math.max(0.08, (1.2 - (y + 1.2)) / 2.4 * 1.2);
+        if (kind === "sphere") radius = Math.sqrt(Math.max(0.01, 1.2 * 1.2 - y * y));
+        const ring = new THREE.Line(
+          new THREE.BufferGeometry().setFromPoints(makeCirclePoints(radius, y, 96)),
+          curveLineMaterial
+        );
+        guideGroup.add(ring);
+      }
+
+      if (kind !== "sphere") {
+        for (let i = 0; i < 8; i++) {
+          const angle = (Math.PI * 2 * i) / 8;
+          const x = Math.cos(angle) * 1.08;
+          const z = Math.sin(angle) * 1.08;
+          const top = kind === "cone" ? new THREE.Vector3(0, 1.2, 0) : new THREE.Vector3(x, 1.2, z);
+          const bottom = new THREE.Vector3(x, -1.2, z);
+          const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints([bottom, top]), curveLineMaterial);
+          guideGroup.add(line);
+        }
+      } else {
+        for (let i = 0; i < 3; i++) {
+          const circle = new THREE.Line(
+            new THREE.BufferGeometry().setFromPoints(makeCirclePoints(1.2, 0, 128)),
+            curveLineMaterial
+          );
+          circle.rotation.x = (Math.PI / 2) * i;
+          guideGroup.add(circle);
+        }
+      }
+
+      modelGroup.add(guideGroup);
+    }
+
+    function makeCirclePoints(radius, y, segments) {
+      const points = [];
+      for (let i = 0; i <= segments; i++) {
+        const angle = (Math.PI * 2 * i) / segments;
+        points.push(new THREE.Vector3(Math.cos(angle) * radius, y, Math.sin(angle) * radius));
+      }
+      return points;
+    }
+
+    function buildSolid() {
+      clearGroup(modelGroup);
+      clearGroup(splitResultGroup);
+      clearGroup(labelGroup);
+      clearGroup(sectionFillGroup);
+      cuttingPlane.visible = false;
+      modelGroup.visible = true;
+      labelGroup.visible = true;
+      state.animation = null;
+      state.splitAnimation = null;
+      state.cut = null;
+      state.currentSection = null;
+      if (separateButton) separateButton.disabled = true;
+      cutButtons.forEach((button) => button.classList.remove("active"));
+      resetResult();
+
+      let mesh;
+      const n = state.sideCount;
+      const type = getSolidType();
+
+      if (type === "polygonPrism") {
+        mesh = new THREE.Mesh(makePolygonPrismGeometry(n, 1.14, 2.35), solidMaterial);
+        modelGroup.add(mesh);
+        addPolygonPrismEdges(n, 1.14, 2.35);
+        state.currentSolid = makePolygonPrismSolidData(n, 1.14, 2.35);
+      } else if (type === "cylinder") {
+        mesh = new THREE.Mesh(new THREE.CylinderGeometry(1.08, 1.08, 2.35, 96, 1, false), curvedMaterial);
+        modelGroup.add(mesh);
+        modelGroup.add(makeBaseDisc(1.08, -1.19, 96));
+        addCircleEdge(1.08, -1.19);
+        addCircleEdge(1.08, 1.19);
+        state.currentSolid = { kind: "cylinder", radius: 1.08, height: 2.35 };
+      } else if (type === "polygonPyramid") {
+        mesh = new THREE.Mesh(makePolygonPyramidGeometry(n, 1.22, 2.45), solidMaterial);
+        modelGroup.add(mesh);
+        addPolygonPyramidEdges(n, 1.22, 2.45);
+        state.currentSolid = makePolygonPyramidSolidData(n, 1.22, 2.45);
+      } else if (type === "cone") {
+        mesh = new THREE.Mesh(new THREE.ConeGeometry(1.18, 2.45, 96, 1, false), curvedMaterial);
+        modelGroup.add(mesh);
+        modelGroup.add(makeBaseDisc(1.18, -1.23, 96));
+        addCircleEdge(1.18, -1.23);
+        state.currentSolid = { kind: "cone", radius: 1.18, height: 2.45 };
+      } else {
+        mesh = new THREE.Mesh(new THREE.SphereGeometry(1.18, 64, 34), curvedMaterial);
+        modelGroup.add(mesh);
+        state.currentSolid = { kind: "sphere", radius: 1.18 };
+      }
+
+      solidNameEl.textContent = getSolidName();
+      makeLabel(getSolidName(), new THREE.Vector3(0, type === "sphere" ? 1.48 : 1.62, 0), "#17354a", 1.05);
+      statusEl.innerHTML = "拖曳可旋轉<br>滾輪可縮放";
+      camera.up.set(0, 1, 0);
+      controls.reset();
+      camera.position.set(4, 3.2, 4.8);
+      controls.target.set(0, 0, 0);
+      controls.update();
+      resizeRenderer();
+    }
+
+    function getSolidType() {
+      if (state.category === "sphere") return "sphere";
+      return state.subtype;
+    }
+
+    function getSolidName() {
+      const n = state.sideCount;
+      const sideName = toChineseNumber(n);
+      if (state.category === "sphere") return "球";
+      if (state.subtype === "cylinder") return "圓柱";
+      if (state.subtype === "cone") return "圓錐";
+      if (state.subtype === "polygonPrism") return `${sideName}角柱`;
+      return `${sideName}角錐`;
+    }
+
+    function toChineseNumber(value) {
+      const digits = ["零", "一", "二", "三", "四", "五", "六", "七", "八", "九"];
+      const n = Math.max(3, Math.min(100, Number.parseInt(value, 10) || 4));
+      if (n === 100) return "一百";
+      if (n < 10) return digits[n];
+      if (n === 10) return "十";
+      if (n < 20) return `十${digits[n % 10]}`;
+      const tens = Math.floor(n / 10);
+      const ones = n % 10;
+      return `${digits[tens]}十${ones ? digits[ones] : ""}`;
+    }
+
+    function resetResult() {
+      shapeStage.innerHTML = '<div class="shape-placeholder">請選擇切法</div>';
+      shapeName.textContent = "--";
+    }
+
+    function getVerticalCutNormal() {
+      const type = getSolidType();
+      if (type === "polygonPrism" || type === "polygonPyramid") {
+        const sides = Math.max(3, state.sideCount);
+        const sideMidpointAngle = -Math.PI / 2 + Math.PI / sides;
+        const normalAngle = sideMidpointAngle + Math.PI / 2;
+        return new THREE.Vector3(Math.cos(normalAngle), 0, Math.sin(normalAngle)).normalize();
+      }
+      return new THREE.Vector3(1, 0, 0);
+    }
+
+    function startCut(cut) {
+      state.cut = cut;
+      state.splitAnimation = null;
+      modelGroup.visible = true;
+      labelGroup.visible = true;
+      cuttingPlane.visible = true;
+      clearGroup(splitResultGroup);
+      clearGroup(sectionFillGroup);
+      if (separateButton) separateButton.disabled = true;
+      cutButtons.forEach((button) => button.classList.toggle("active", button.dataset.cut === cut));
+
+      const normal = new THREE.Vector3();
+      if (cut === "horizontal") normal.set(0, 1, 0);
+      if (cut === "vertical") normal.copy(getVerticalCutNormal());
+      if (cut === "slanted") normal.set(0.52, 0.78, 0.34).normalize();
+
+      cuttingPlane.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), normal);
+      cuttingPlane.position.copy(normal.clone().multiplyScalar(-2.35));
+      cuttingPlane.visible = true;
+      planeMaterial.opacity = 0.54;
+      statusEl.innerHTML = "正在切割...";
+
+      state.animation = {
+        start: performance.now(),
+        duration: 1050,
+        normal,
+        from: -2.35,
+        to: 0
+      };
+    }
+
+    function finishCut() {
+      updateComputedSection(true);
+      if (separateButton) separateButton.disabled = false;
+      statusEl.innerHTML = "已顯示截面<br>可再選其他切法";
+    }
+
+    function separateCurrentSection() {
+      if (!state.cut || state.animation) return;
+      const section = state.currentSection || updateComputedSection(true);
+      if (!section || !section.points || section.points.length < 3) return;
+      buildSplitResult(section);
+      modelGroup.visible = false;
+      labelGroup.visible = false;
+      cuttingPlane.visible = false;
+      if (separateButton) separateButton.disabled = true;
+    }
+
+    function buildSplitResult(section) {
+      clearGroup(splitResultGroup);
+      state.splitAnimation = null;
+      if (!section || !section.points || section.points.length < 3) return;
+
+      const { normal, point } = getPlaneWorldData();
+      const splitAxis = getLeftRightSplitAxis();
+      const positivePlane = makeOffsetPlane(normal, point, 0);
+      const negativePlane = makeOffsetPlane(normal.clone().negate(), point, 0);
+      const positiveHalf = cloneModelForSplit(positivePlane);
+      const negativeHalf = cloneModelForSplit(negativePlane);
+      const positiveCap = makeSplitCap(section, normal, 0.002);
+      const negativeCap = makeSplitCap(section, normal, -0.002);
+
+      positiveHalf.userData.splitSign = 1;
+      negativeHalf.userData.splitSign = -1;
+      positiveHalf.userData.clipPlane = positivePlane;
+      negativeHalf.userData.clipPlane = negativePlane;
+      positiveCap.userData.splitSign = 1;
+      negativeCap.userData.splitSign = -1;
+
+      splitResultGroup.add(positiveHalf, negativeHalf, positiveCap, negativeCap);
+      state.splitAnimation = {
+        start: performance.now(),
+        duration: 680,
+        normal,
+        point,
+        splitAxis,
+        distance: 1.38,
+        halves: [positiveHalf, negativeHalf],
+        caps: [positiveCap, negativeCap]
+      };
+      updateSplitResult(0);
+    }
+
+    function getLeftRightSplitAxis() {
+      return new THREE.Vector3(1, 0, 0);
+    }
+
+    function makeOffsetPlane(normal, point, offset) {
+      const planePoint = point.clone().addScaledVector(normal, offset);
+      return new THREE.Plane(normal.clone(), -normal.dot(planePoint));
+    }
+
+    function cloneModelForSplit(clipPlane) {
+      const clone = new THREE.Group();
+      modelGroup.children.forEach((child) => {
+        clone.add(cloneSplitNode(child, clipPlane));
+      });
+      return clone;
+    }
+
+    function cloneSplitNode(source, clipPlane) {
+      const clone = source.clone(false);
+      if (source.geometry) clone.geometry = source.geometry.clone();
+
+      if (source.isMesh) {
+        clone.material = splitSurfaceMaterial.clone();
+        clone.material.clippingPlanes = [clipPlane];
+        clone.renderOrder = Math.max(source.renderOrder || 0, 18);
+      } else if (source.isLine || source.isLineSegments || source.isLineLoop) {
+        clone.material = splitEdgeMaterial.clone();
+        clone.material.clippingPlanes = [clipPlane];
+        clone.renderOrder = Math.max(source.renderOrder || 0, 32);
+      } else if (source.material && source.material.clone) {
+        clone.material = source.material.clone();
+        clone.material.clippingPlanes = [clipPlane];
+      }
+
+      source.children.forEach((child) => {
+        clone.add(cloneSplitNode(child, clipPlane));
+      });
+      return clone;
+    }
+
+    function makeSplitCap(section, normal, lift) {
+      const group = new THREE.Group();
+      group.position.copy(cuttingPlane.position).addScaledVector(normal, lift);
+      group.quaternion.copy(cuttingPlane.quaternion);
+      group.renderOrder = 42;
+
+      const shape = new THREE.Shape();
+      shape.moveTo(section.points[0].x, section.points[0].y);
+      for (let i = 1; i < section.points.length; i++) {
+        shape.lineTo(section.points[i].x, section.points[i].y);
+      }
+      shape.closePath();
+
+      const fill = new THREE.Mesh(new THREE.ShapeGeometry(shape), splitCapMaterial.clone());
+      fill.renderOrder = 43;
+      const outlinePoints = section.points.map((sectionPoint) => new THREE.Vector3(sectionPoint.x, sectionPoint.y, 0.004));
+      const outline = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(outlinePoints), splitCapOutlineMaterial.clone());
+      outline.renderOrder = 44;
+      group.add(fill, outline);
+      return group;
+    }
+
+    function updateSplitResult(progress) {
+      if (!state.splitAnimation) return;
+      const { normal, point, splitAxis, distance, halves, caps } = state.splitAnimation;
+      halves.forEach((half) => {
+        const signedDistance = distance * progress * half.userData.splitSign;
+        const offset = splitAxis.clone().multiplyScalar(signedDistance);
+        half.position.copy(offset);
+        const planeNormal = normal.clone().multiplyScalar(half.userData.splitSign);
+        half.userData.clipPlane.normal.copy(planeNormal);
+        half.userData.clipPlane.constant = -planeNormal.dot(point.clone().add(offset));
+      });
+      caps.forEach((cap) => {
+        const signedDistance = distance * progress * cap.userData.splitSign;
+        cap.position.copy(point)
+          .addScaledVector(splitAxis, signedDistance)
+          .addScaledVector(normal, 0.002 * cap.userData.splitSign);
+      });
+    }
+
+    function updateComputedSection(updatePanel = true) {
+      if (!state.cut || !state.currentSolid || !cuttingPlane.visible) return null;
+      const section = computeSectionGeometry();
+      state.currentSection = section;
+      render3DIntersection(section);
+      if (updatePanel) renderRightPanelSection(section);
+      return section;
+    }
+
+    function computeSectionGeometry() {
+      return computePlaneSolidIntersection();
+    }
+
+    function computePlaneSolidIntersection() {
+      cuttingPlane.updateMatrixWorld(true);
+      modelGroup.updateMatrixWorld(true);
+      const solid = state.currentSolid;
+      if (!solid) return null;
+      if (solid.kind === "polyhedron") return computePolyhedronSection(solid);
+      return computeCurvedSolidSection(solid);
+    }
+
+    function getPlaneWorldData() {
+      const normal = new THREE.Vector3(0, 0, 1).applyQuaternion(cuttingPlane.quaternion).normalize();
+      const point = cuttingPlane.position.clone();
+      return { normal, point, constant: normal.dot(point) };
+    }
+
+    function projectWorldToPlane2D(point) {
+      const local = cuttingPlane.worldToLocal(point.clone());
+      return new THREE.Vector2(local.x, local.y);
+    }
+
+    function plane2DToWorld(point) {
+      return cuttingPlane.localToWorld(new THREE.Vector3(point.x, point.y, 0));
+    }
+
+    function computePolyhedronSection(solid) {
+      const { normal, constant } = getPlaneWorldData();
+      const eps = 1e-5;
+      const points = [];
+
+      solid.edges.forEach(([aIndex, bIndex]) => {
+        const a = solid.vertices[aIndex].clone().applyMatrix4(modelGroup.matrixWorld);
+        const b = solid.vertices[bIndex].clone().applyMatrix4(modelGroup.matrixWorld);
+        const da = normal.dot(a) - constant;
+        const db = normal.dot(b) - constant;
+
+        if (Math.abs(da) < eps) points.push(projectWorldToPlane2D(a));
+        if (Math.abs(db) < eps) points.push(projectWorldToPlane2D(b));
+        if (da * db < -eps) {
+          const t = da / (da - db);
+          points.push(projectWorldToPlane2D(a.clone().lerp(b, t)));
+        }
+      });
+
+      const unique = unique2DPoints(points);
+      if (unique.length < 3) return null;
+      const sorted = sortPointsByCentroid(unique);
+      return {
+        kind: "polygon",
+        points: sorted,
+        name: polygonSectionName(sorted.length)
+      };
+    }
+
+    function computeCurvedSolidSection(solid) {
+      const { normal, constant } = getPlaneWorldData();
+      const eps = 1e-4;
+
+      if (solid.kind === "sphere") {
+        const distance = Math.abs(constant);
+        if (distance > solid.radius + eps) return null;
+        const radius = Math.sqrt(Math.max(0, solid.radius * solid.radius - distance * distance));
+        return makePointSection(circlePoints2D(radius, radius, 144), "圓形");
+      }
+
+      if (solid.kind === "cylinder") {
+        const half = solid.height / 2;
+        if (Math.abs(normal.y) > 0.999) {
+          const y = constant / normal.y;
+          if (y < -half - eps || y > half + eps) return null;
+          return makePointSection(circlePoints2D(solid.radius, solid.radius, 144), "圓形");
+        }
+
+        if (Math.abs(normal.y) < eps) {
+          if (Math.abs(constant) > solid.radius + eps) return null;
+          const tangent = new THREE.Vector3(-normal.z, 0, normal.x).normalize();
+          const center = normal.clone().multiplyScalar(constant);
+          const chordHalfWidth = Math.sqrt(Math.max(0, solid.radius * solid.radius - constant * constant));
+          const points = [
+            center.clone().addScaledVector(tangent, -chordHalfWidth).setY(-half),
+            center.clone().addScaledVector(tangent, chordHalfWidth).setY(-half),
+            center.clone().addScaledVector(tangent, chordHalfWidth).setY(half),
+            center.clone().addScaledVector(tangent, -chordHalfWidth).setY(half)
+          ].map(projectWorldToPlane2D);
+          return makePointSection(sortPointsByCentroid(points), polygonSectionName(4));
+        }
+
+        return makePointSection(sampleConvexPlaneSection(solid, 168), "橢圓形");
+      }
+
+      if (solid.kind === "cone") {
+        const half = solid.height / 2;
+        if (Math.abs(normal.y) > 0.999) {
+          const y = constant / normal.y;
+          if (y < -half - eps || y > half + eps) return null;
+          const radius = coneRadiusAtY(solid, y);
+          return makePointSection(circlePoints2D(radius, radius, 144), "圓形");
+        }
+
+        if (Math.abs(normal.y) < eps && Math.abs(constant) < eps) {
+          const tangent = new THREE.Vector3(-normal.z, 0, normal.x).normalize();
+          const points = [
+            new THREE.Vector3(0, half, 0),
+            new THREE.Vector3().copy(tangent).multiplyScalar(solid.radius).setY(-half),
+            new THREE.Vector3().copy(tangent).multiplyScalar(-solid.radius).setY(-half)
+          ].map(projectWorldToPlane2D);
+          return makePointSection(sortPointsByCentroid(points), "三角形");
+        }
+
+        return makePointSection(sampleConvexPlaneSection(solid, 168), "橢圓形");
+      }
+
+      return null;
+    }
+
+    function makePointSection(points, name) {
+      const clean = unique2DPoints(points || []);
+      if (clean.length < 3) return null;
+      return { kind: "computed", points: sortPointsByCentroid(clean), name };
+    }
+
+    function sampleConvexPlaneSection(solid, samples = 144) {
+      const center = findInteriorPointOnPlane(solid);
+      if (!center) return [];
+      const points = [];
+      for (let i = 0; i < samples; i++) {
+        const angle = (Math.PI * 2 * i) / samples;
+        const dir = new THREE.Vector2(Math.cos(angle), Math.sin(angle));
+        let high = 0.02;
+        while (high < 5 && pointInsideSolid(plane2DToWorld(center.clone().addScaledVector(dir, high)), solid)) {
+          high *= 1.8;
+        }
+        let low = 0;
+        for (let step = 0; step < 42; step++) {
+          const mid = (low + high) / 2;
+          if (pointInsideSolid(plane2DToWorld(center.clone().addScaledVector(dir, mid)), solid)) low = mid;
+          else high = mid;
+        }
+        points.push(center.clone().addScaledVector(dir, low));
+      }
+      return points;
+    }
+
+    function findInteriorPointOnPlane(solid) {
+      const candidates = [new THREE.Vector2(0, 0)];
+      for (let ring = 1; ring <= 8; ring++) {
+        const radius = ring * 0.18;
+        for (let i = 0; i < 16; i++) {
+          const angle = (Math.PI * 2 * i) / 16;
+          candidates.push(new THREE.Vector2(Math.cos(angle) * radius, Math.sin(angle) * radius));
+        }
+      }
+      return candidates.find((point) => pointInsideSolid(plane2DToWorld(point), solid)) || null;
+    }
+
+    function pointInsideSolid(point, solid) {
+      const eps = 1e-5;
+      if (solid.kind === "sphere") return point.lengthSq() <= solid.radius * solid.radius + eps;
+      if (solid.kind === "cylinder") {
+        const half = solid.height / 2;
+        return point.y >= -half - eps && point.y <= half + eps && point.x * point.x + point.z * point.z <= solid.radius * solid.radius + eps;
+      }
+      if (solid.kind === "cone") {
+        const half = solid.height / 2;
+        if (point.y < -half - eps || point.y > half + eps) return false;
+        const radius = coneRadiusAtY(solid, point.y);
+        return point.x * point.x + point.z * point.z <= radius * radius + eps;
+      }
+      return false;
+    }
+
+    function coneRadiusAtY(solid, y) {
+      const half = solid.height / 2;
+      return Math.max(0, solid.radius * (half - y) / solid.height);
+    }
+
+    function circlePoints2D(rx, ry, samples) {
+      const points = [];
+      for (let i = 0; i < samples; i++) {
+        const angle = (Math.PI * 2 * i) / samples;
+        points.push(new THREE.Vector2(Math.cos(angle) * rx, Math.sin(angle) * ry));
+      }
+      return points;
+    }
+
+    function unique2DPoints(points) {
+      const eps = 1e-4;
+      const unique = [];
+      points.forEach((point) => {
+        if (!unique.some((other) => other.distanceTo(point) < eps)) unique.push(point.clone());
+      });
+      return unique;
+    }
+
+    function sortPointsByCentroid(points) {
+      const centroid = points.reduce((sum, point) => sum.add(point), new THREE.Vector2()).multiplyScalar(1 / points.length);
+      return [...points].sort((a, b) => Math.atan2(a.y - centroid.y, a.x - centroid.x) - Math.atan2(b.y - centroid.y, b.x - centroid.x));
+    }
+
+    function polygonSectionName(count) {
+      if (count === 3) return "三角形";
+      return `${toChineseNumber(count)}邊形`;
+    }
+
+    function render3DIntersection(section) {
+      clearGroup(sectionFillGroup);
+      if (!section || !section.points || section.points.length < 3) return;
+      const fill = buildGreenSectionPatch(section);
+      const outline = buildGreenSectionOutline(section);
+      sectionFillGroup.add(fill, outline);
+    }
+
+    function buildGreenSectionPatch(section) {
+      const shape = new THREE.Shape();
+      shape.moveTo(section.points[0].x, section.points[0].y);
+      for (let i = 1; i < section.points.length; i++) {
+        shape.lineTo(section.points[i].x, section.points[i].y);
+      }
+      shape.closePath();
+
+      const fill = new THREE.Mesh(new THREE.ShapeGeometry(shape), sectionFillMaterial);
+      fill.renderOrder = 36;
+      return fill;
+    }
+
+    function buildGreenSectionOutline(section) {
+      const outlinePoints = section.points.map((point) => new THREE.Vector3(point.x, point.y, 0.001));
+      const outline = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(outlinePoints), sectionOutlineMaterial);
+      outline.renderOrder = 37;
+      return outline;
+    }
+
+    function renderRightPanelSection(section) {
+      if (!section || !section.points || section.points.length < 3) {
+        resetResult();
+        return;
+      }
+      shapeName.textContent = getSectionNameFromComputedShape(section);
+      shapeStage.innerHTML = renderComputedSectionSvg(section);
+    }
+
+    function render2DSection(section) {
+      renderRightPanelSection(section);
+    }
+
+    function getSectionNameFromComputedShape(section) {
+      if (!section || !section.points) return "--";
+      if (section.name === "圓形" || section.name === "橢圓形") return section.name;
+      return polygonSectionName(section.points.length);
+    }
+
+    function renderComputedSectionSvg(section) {
+      const width = 240;
+      const height = 220;
+      const pad = 34;
+      const xs = section.points.map((point) => point.x);
+      const ys = section.points.map((point) => point.y);
+      const minX = Math.min(...xs);
+      const maxX = Math.max(...xs);
+      const minY = Math.min(...ys);
+      const maxY = Math.max(...ys);
+      const scale = Math.min((width - pad * 2) / Math.max(0.001, maxX - minX), (height - pad * 2) / Math.max(0.001, maxY - minY));
+      const cx = (minX + maxX) / 2;
+      const cy = (minY + maxY) / 2;
+      const svgPoints = section.points
+        .map((point) => {
+          const x = width / 2 + (point.x - cx) * scale;
+          const y = height / 2 - (point.y - cy) * scale;
+          return `${x.toFixed(2)},${y.toFixed(2)}`;
+        })
+        .join(" ");
+
+      return `<svg width="240" height="220" viewBox="0 0 240 220" role="img" aria-label="截面圖">
+        <polygon points="${svgPoints}" fill="rgba(124, 255, 114, 0.34)" stroke="#00a82a" stroke-width="6" stroke-linejoin="round"/>
+      </svg>`;
+    }
+
+    function setCategory(category) {
+      state.category = category;
+      categoryButtons.forEach((button) => button.classList.toggle("active", button.dataset.category === category));
+      subtypeGroup.classList.toggle("hidden", category === "sphere");
+      prismSubtypes.classList.toggle("hidden", category !== "prism");
+      pyramidSubtypes.classList.toggle("hidden", category !== "pyramid");
+
+      if (category === "prism") {
+        state.subtype = state.prismSubtype;
+        updateSubtypeButtons(prismSubtypes, state.subtype);
+      } else if (category === "pyramid") {
+        state.subtype = state.pyramidSubtype;
+        updateSubtypeButtons(pyramidSubtypes, state.subtype);
+      } else {
+        state.subtype = "sphere";
+      }
+
+      updateSideInputVisibility();
+      buildSolid();
+    }
+
+    function setSubtype(subtype) {
+      state.subtype = subtype;
+      if (state.category === "prism") state.prismSubtype = subtype;
+      if (state.category === "pyramid") state.pyramidSubtype = subtype;
+      updateSubtypeButtons(state.category === "prism" ? prismSubtypes : pyramidSubtypes, subtype);
+      updateSideInputVisibility();
+      buildSolid();
+    }
+
+    function updateSubtypeButtons(container, subtype) {
+      [...container.querySelectorAll(".subtype-button")].forEach((button) => {
+        button.classList.toggle("active", button.dataset.subtype === subtype);
+      });
+    }
+
+    function updateSideInputVisibility() {
+      const type = getSolidType();
+      sideCountGroup.classList.toggle("hidden", type !== "polygonPrism" && type !== "polygonPyramid");
+    }
+
+    function clampSideCount(value) {
+      const parsed = Number.parseInt(value, 10);
+      if (Number.isNaN(parsed)) return 4;
+      return Math.max(3, Math.min(100, parsed));
+    }
+
+    categoryButtons.forEach((button) => {
+      button.addEventListener("click", () => setCategory(button.dataset.category));
+    });
+
+    subtypeButtons.forEach((button) => {
+      button.addEventListener("click", () => setSubtype(button.dataset.subtype));
+    });
+
+    sideCountInput.addEventListener("change", () => {
+      state.sideCount = clampSideCount(sideCountInput.value);
+      sideCountInput.value = state.sideCount;
+      buildSolid();
+    });
+
+    sideCountInput.addEventListener("input", () => {
+      const value = Number.parseInt(sideCountInput.value, 10);
+      if (!Number.isNaN(value) && value >= 3 && value <= 100) {
+        state.sideCount = value;
+        buildSolid();
+      }
+    });
+
+    cutButtons.forEach((button) => {
+      button.addEventListener("click", () => startCut(button.dataset.cut));
+    });
+
+    if (separateButton) {
+      separateButton.addEventListener("click", separateCurrentSection);
+    }
+
+    function resizeRenderer() {
+      const rect = viewer.getBoundingClientRect();
+      const width = Math.max(1, Math.floor(rect.width));
+      const height = Math.max(1, Math.floor(rect.height));
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height, false);
+    }
+
+    window.addEventListener("resize", resizeRenderer);
+    new ResizeObserver(resizeRenderer).observe(viewer);
+    controls.addEventListener("change", () => {
+      if (state.cut && !state.animation) updateComputedSection(true);
+    });
+
+    function animate(now) {
+      requestAnimationFrame(animate);
+      controls.update();
+      labelGroup.children.forEach((label) => {
+        label.quaternion.copy(camera.quaternion);
+      });
+
+      if (state.animation) {
+        const progress = Math.min(1, (now - state.animation.start) / state.animation.duration);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const distance = state.animation.from + (state.animation.to - state.animation.from) * eased;
+        cuttingPlane.position.copy(state.animation.normal.clone().multiplyScalar(distance));
+        planeMaterial.opacity = 0.42 + Math.sin(progress * Math.PI) * 0.22;
+        updateComputedSection(true);
+        if (progress >= 1) {
+          state.animation = null;
+          cuttingPlane.position.set(0, 0, 0);
+          planeMaterial.opacity = 0.5;
+          finishCut();
+        }
+      }
+
+      if (state.splitAnimation) {
+        const splitProgress = Math.min(1, (now - state.splitAnimation.start) / state.splitAnimation.duration);
+        const splitEased = 1 - Math.pow(1 - splitProgress, 3);
+        updateSplitResult(splitEased);
+        if (splitProgress >= 1) {
+          updateSplitResult(1);
+          state.splitAnimation = null;
+        }
+      }
+
+      renderer.render(scene, camera);
+    }
+
+    buildSolid();
+    requestAnimationFrame(animate);
+  </script>
+  <script src="../../assets/tool-home-nav.js"></script>
+</body>
+</html>

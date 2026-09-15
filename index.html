@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Learning Tools | Yung Fu Chuen</title>
+  <meta name="description" content="Interactive maths, science and AI learning tools built by Yung Fu Chuen. Free to use, with no account required." />
+  <style>
+    :root {
+      --page: #f7fbfd;
+      --surface: #ffffff;
+      --surface-soft: #eef8fb;
+      --ink: #102642;
+      --muted: #5d7186;
+      --line: rgba(16, 38, 66, 0.12);
+      --blue: #0f63b5;
+      --blue-dark: #073f7c;
+      --teal: #0fa6a0;
+      --teal-soft: rgba(15, 166, 160, 0.12);
+      --shadow: 0 18px 45px rgba(16, 38, 66, 0.12);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", Arial, sans-serif;
+      background:
+        linear-gradient(135deg, rgba(15, 99, 181, 0.06) 0%, transparent 36%),
+        linear-gradient(180deg, #ffffff 0%, var(--page) 58%, #eef8fb 100%);
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .page {
+      width: min(1160px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 34px;
+    }
+
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 16px 0 22px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+      text-decoration: none;
+    }
+
+    .brand-name {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .brand-name h1 {
+      margin: 0;
+      color: var(--blue-dark);
+      font-size: clamp(18px, 2.2vw, 26px);
+      line-height: 1.1;
+      letter-spacing: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .brand-name span {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(220px, 310px);
+      gap: clamp(20px, 3vw, 40px);
+      align-items: center;
+      min-height: 235px;
+      padding: clamp(24px, 4vw, 40px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(120deg, rgba(15, 99, 181, 0.09), rgba(15, 166, 160, 0.05)),
+        var(--surface);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .hero-copy {
+      min-width: 0;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 760px;
+      color: var(--ink);
+      font-size: clamp(32px, 4.2vw, 52px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .hero-points {
+      display: grid;
+      gap: 8px;
+      max-width: 700px;
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+      color: var(--muted);
+      font-size: clamp(15px, 1.5vw, 18px);
+      line-height: 1.5;
+      font-weight: 700;
+    }
+
+    .hero-points li {
+      position: relative;
+      padding-left: 28px;
+    }
+
+    .hero-points li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: var(--teal);
+      font-weight: 950;
+    }
+
+    .hero-custom-note {
+      max-width: 700px;
+      margin: 14px 0 0;
+      color: rgba(93, 113, 134, 0.92);
+      font-size: clamp(13px, 1.25vw, 15px);
+      line-height: 1.55;
+      font-weight: 700;
+    }
+
+    .hero-panel {
+      align-self: stretch;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: 14px;
+      padding: 18px;
+      min-height: 180px;
+      border: 1px solid rgba(15, 99, 181, 0.12);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.72);
+      text-align: center;
+    }
+
+    .hero-logo {
+      width: min(100%, 180px);
+      max-height: 125px;
+      object-fit: contain;
+    }
+
+    .portfolio-intro { margin: 16px 0 8px; color: var(--muted); line-height: 1.6; }
+    .portfolio-access { margin: 0; color: var(--blue-dark); font-size: 14px; font-weight: 700; }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin: 24px 0 18px;
+      flex-wrap: wrap;
+    }
+
+    .search-wrap {
+      position: relative;
+      flex: 1 1 320px;
+      min-width: min(100%, 320px);
+    }
+
+    .search {
+      width: 100%;
+      min-height: 54px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 0 18px;
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 17px;
+      font-weight: 700;
+      outline: none;
+      box-shadow: 0 8px 24px rgba(16, 38, 66, 0.07);
+    }
+
+    .search:focus {
+      border-color: rgba(15, 99, 181, 0.45);
+      box-shadow: 0 0 0 4px rgba(15, 99, 181, 0.1);
+    }
+
+    .language-filter {
+      min-height: 54px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 8px 24px rgba(16, 38, 66, 0.07);
+    }
+
+    .language-toggle {
+      min-width: 48px;
+      min-height: 42px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 17px;
+      font-weight: 950;
+      cursor: pointer;
+    }
+
+    .language-toggle.is-active {
+      background: var(--blue);
+      color: #ffffff;
+      box-shadow: 0 8px 18px rgba(15, 99, 181, 0.2);
+    }
+
+    .count {
+      min-height: 54px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 15px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .subject-overview {
+      display: grid;
+      gap: 28px;
+      margin-top: 16px;
+    }
+
+    .subject-nav {
+      position: sticky;
+      top: 8px;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 18px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.92);
+      box-shadow: 0 10px 24px rgba(16, 38, 66, 0.08);
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+
+    .subject-nav[hidden] {
+      display: none !important;
+    }
+
+    .subject-nav-button {
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--blue-dark);
+      font-size: 14px;
+      font-weight: 950;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .subject-nav-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 12px;
+    }
+
+    .subject-nav-button:hover,
+    .subject-nav-button:focus-visible {
+      border-color: rgba(15, 99, 181, 0.42);
+      outline: none;
+    }
+
+    .subject-nav-button.is-active {
+      border-color: transparent;
+      background: var(--blue);
+      color: #ffffff;
+      box-shadow: 0 8px 18px rgba(15, 99, 181, 0.18);
+    }
+
+    .subject-nav-button.is-active .subject-nav-count {
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .subject-nav-count {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 18px;
+    }
+
+    .activity-card {
+      display: grid;
+      grid-template-rows: auto 1fr;
+      min-height: 390px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 14px 34px rgba(16, 38, 66, 0.1);
+      text-decoration: none;
+      overflow: hidden;
+      transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+    }
+
+    .activity-card:hover,
+    .activity-card:focus-visible {
+      transform: translateY(-3px);
+      border-color: rgba(15, 99, 181, 0.36);
+      box-shadow: 0 20px 45px rgba(16, 38, 66, 0.15);
+      outline: none;
+    }
+
+    .preview {
+      position: relative;
+      --preview-scale: 0.29;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background:
+        linear-gradient(135deg, rgba(15, 99, 181, 0.16), rgba(15, 166, 160, 0.12)),
+        var(--surface-soft);
+    }
+
+    .preview iframe {
+      display: block;
+      width: 1280px;
+      height: 720px;
+      border: 0;
+      transform: scale(var(--preview-scale));
+      transform-origin: 0 0;
+      pointer-events: none;
+      background: #ffffff;
+    }
+
+    .preview::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, transparent 64%, rgba(16, 38, 66, 0.2));
+      pointer-events: none;
+    }
+
+    .preview-label {
+      position: absolute;
+      left: 14px;
+      bottom: 12px;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.92);
+      color: var(--blue-dark);
+      font-size: 13px;
+      font-weight: 900;
+      box-shadow: 0 8px 20px rgba(16, 38, 66, 0.14);
+    }
+
+    .preview-label svg {
+      width: 15px;
+      height: 15px;
+      flex: 0 0 auto;
+    }
+
+    .activity-body {
+      display: grid;
+      gap: 18px;
+      align-content: space-between;
+      padding: 22px;
+    }
+
+    .activity-title {
+      margin: 0;
+      color: var(--ink);
+      font-size: clamp(24px, 2.4vw, 32px);
+      line-height: 1.18;
+      letter-spacing: 0;
+      font-weight: 950;
+    }
+
+    .activity-meta {
+      display: grid;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .activity-tags {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .activity-category {
+      flex: 0 0 auto;
+      padding: 5px 9px;
+      border-radius: var(--radius);
+      background: var(--teal-soft);
+      color: #07736f;
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+    .open-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: fit-content;
+      min-height: 44px;
+      padding: 0 16px;
+      border-radius: var(--radius);
+      background: var(--blue);
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .open-cta svg {
+      width: 17px;
+      height: 17px;
+      flex: 0 0 auto;
+    }
+
+    .activity-access {
+      flex: 0 0 auto;
+      padding: 5px 9px;
+      border-radius: var(--radius);
+      background: rgba(15, 99, 181, 0.1);
+      color: var(--blue-dark);
+      font-size: 12px;
+      font-weight: 950;
+    }
+
+
+    .empty-state {
+      margin-top: 18px;
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 16px;
+      font-weight: 800;
+      line-height: 1.7;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 28px;
+      padding-top: 22px;
+      border-top: 1px solid var(--line);
+      color: rgba(16, 38, 66, 0.68);
+      font-size: 13px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    @media (max-width: 820px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-panel {
+        min-height: 150px;
+      }
+
+      .hero-logo {
+        max-height: 115px;
+      }
+
+    }
+
+    @media (max-width: 620px) {
+      .page {
+        width: min(100% - 20px, 1160px);
+        padding-top: 14px;
+      }
+
+      .site-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .brand-name h1 {
+        white-space: normal;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 22px;
+      }
+
+      .toolbar {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .search-wrap {
+        flex-basis: auto;
+        min-width: 100%;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .activity-card {
+        min-height: 350px;
+      }
+
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="site-header" aria-label="網站標題">
+      <div>
+        <a class="brand" href="./" aria-label="Interactive Learning Tools 首頁">
+          <span class="brand-name">
+            <h1 lang="en">Interactive Learning Tools</h1>
+            <span lang="en">by Yung Fu Chuen</span>
+          </span>
+        </a>
+        <p class="portfolio-intro" lang="en">A collection of interactive maths, science and AI learning tools I built.</p>
+        <p class="portfolio-access" lang="en">Free to use · No account required</p>
+      </div>
+    </header>
+
+    <section class="toolbar" aria-label="活動搜尋">
+      <div class="search-wrap">
+        <input id="searchInput" class="search" type="search" placeholder="搜尋活動名稱 / 課題 / 關鍵字" autocomplete="off" />
+      </div>
+      <div class="language-filter" aria-label="語言篩選">
+        <button id="langCnButton" class="language-toggle" type="button" aria-pressed="false">中</button>
+        <button id="langEnButton" class="language-toggle" type="button" aria-pressed="false">英</button>
+      </div>
+      <div id="toolCount" class="count">載入中</div>
+    </section>
+
+    <nav id="subjectNav" class="subject-nav" aria-label="科目篩選" hidden></nav>
+    <section id="toolGrid" class="grid" aria-label="工具列表"></section>
+    <section id="emptyState" class="empty-state hidden" aria-live="polite"></section>
+
+    <footer class="footer"><span lang="en">Built by Yung Fu Chuen</span></footer>
+  </main>
+
+  <script src="./assets/tool-catalog.js"></script>
+  <script>
+    const CSV_CANDIDATES = [
+      "./tools-manifest.csv",
+      "tools-manifest.csv"
+    ];
+
+    const SUBJECT_LABELS = {
+      math: { zh: "數學", en: "Mathematics" },
+      science: { zh: "科學", en: "Science" },
+      chinese: { zh: "中文", en: "Chinese" },
+      english: { zh: "英文", en: "English" },
+      stem: { zh: "STEM", en: "STEM" },
+      general: { zh: "綜合", en: "General" }
+    };
+
+    const UI_TEXT = {
+      zh: {
+        count: count => `${count} 個工具`,
+        subjectCount: count => `${count} 個工具`,
+        subjectJumpCount: count => `${count}`,
+        allSubjects: "全部",
+        noMatches: "找不到符合條件的工具。",
+        loadFailed: "暫時未能載入工具列表，請稍後再試。",
+        searchPlaceholder: "搜尋工具名稱 / 科目 / 關鍵字",
+        previewLabel: "工具預覽",
+        openTool: "進入工具",
+        free: "免費",
+        untitled: "未命名工具",
+      },
+      en: {
+        count: count => `${count} tools`,
+        subjectCount: count => `${count} tools`,
+        subjectJumpCount: count => `${count}`,
+        allSubjects: "All",
+        noMatches: "No tools match your search.",
+        loadFailed: "The tool list could not be loaded. Please try again later.",
+        searchPlaceholder: "Search tool name / subject / keywords",
+        previewLabel: "Tool Preview",
+        openTool: "Open Tool",
+        free: "Free",
+        untitled: "Untitled Tool",
+      }
+    };
+
+    const grid = document.getElementById("toolGrid");
+    const subjectNav = document.getElementById("subjectNav");
+    const emptyState = document.getElementById("emptyState");
+    const searchInput = document.getElementById("searchInput");
+    const langCnButton = document.getElementById("langCnButton");
+    const langEnButton = document.getElementById("langEnButton");
+    const toolCount = document.getElementById("toolCount");
+    const ROOT_FOLDER = "github_upload_tools";
+    const PREVIEW_CANVAS_WIDTH = 1280;
+
+    let allTools = [];
+    const INTERFACE_LANGUAGE = "zh";
+    let toolLoadFailed = false;
+    const selectedSubjects = new Set();
+    const languageState = {
+      zh: false,
+      en: false
+    };
+
+    const previewResizeObserver = "ResizeObserver" in window
+      ? new ResizeObserver(entries => {
+          entries.forEach(entry => {
+            setPreviewScale(entry.target, entry.contentRect.width);
+          });
+        })
+      : null;
+
+    function setPreviewScale(preview, width = preview.clientWidth) {
+      if (!width) return;
+      preview.style.setProperty("--preview-scale", (width / PREVIEW_CANVAS_WIDTH).toFixed(4));
+    }
+
+    function syncPreviewScales() {
+      if (previewResizeObserver) previewResizeObserver.disconnect();
+
+      grid.querySelectorAll(".preview").forEach(preview => {
+        setPreviewScale(preview);
+        if (previewResizeObserver) previewResizeObserver.observe(preview);
+      });
+    }
+
+    function parseCSV(text) {
+      const rows = [];
+      let row = [];
+      let cell = "";
+      let insideQuotes = false;
+
+      for (let i = 0; i < text.length; i++) {
+        const char = text[i];
+        const nextChar = text[i + 1];
+
+        if (char === '"' && insideQuotes && nextChar === '"') {
+          cell += '"';
+          i++;
+        } else if (char === '"') {
+          insideQuotes = !insideQuotes;
+        } else if (char === "," && !insideQuotes) {
+          row.push(cell.trim());
+          cell = "";
+        } else if ((char === "\n" || char === "\r") && !insideQuotes) {
+          if (char === "\r" && nextChar === "\n") i++;
+          row.push(cell.trim());
+          if (row.some(value => value !== "")) rows.push(row);
+          row = [];
+          cell = "";
+        } else {
+          cell += char;
+        }
+      }
+
+      if (cell || row.length) {
+        row.push(cell.trim());
+        if (row.some(value => value !== "")) rows.push(row);
+      }
+
+      if (!rows.length) return [];
+
+      const headers = rows[0].map(header => header.replace(/^\uFEFF/, "").trim());
+      return rows.slice(1).map(values => {
+        const item = {};
+        headers.forEach((header, index) => {
+          item[header] = (values[index] || "").trim();
+        });
+        return item;
+      });
+    }
+
+    function readFirst(tool, keys, fallback = "") {
+      for (const key of keys) {
+        const value = tool[key];
+        if (value && String(value).trim()) return String(value).trim();
+      }
+      return fallback;
+    }
+
+    function normalizePath(folder, fileName) {
+      const cleanFolder = (folder || "").replaceAll("\\", "/").replace(/^\/+|\/+$/g, "");
+      const cleanFile = (fileName || "").replaceAll("\\", "/").replace(/^\/+/g, "");
+
+      if (/^https?:\/\//i.test(cleanFile)) return cleanFile;
+      if (!cleanFolder && !cleanFile) return "#";
+      if (!cleanFolder) return cleanFile;
+      if (!cleanFile) return `${cleanFolder}/`;
+
+      return `${cleanFolder}/${cleanFile}`;
+    }
+
+    function removeRootFolder(path) {
+      const cleanPath = (path || "").replaceAll("\\", "/").replace(/^\.?\//, "").replace(/\/+$/g, "");
+      if (cleanPath === ROOT_FOLDER) return "";
+      if (cleanPath.startsWith(`${ROOT_FOLDER}/`)) return cleanPath.slice(ROOT_FOLDER.length + 1);
+      return cleanPath;
+    }
+
+    function getUIText() {
+      return UI_TEXT[INTERFACE_LANGUAGE];
+    }
+
+    function getToolLanguage(tool) {
+      return tool.DisplayLanguage || INTERFACE_LANGUAGE;
+    }
+
+    function getToolTitle(tool) {
+      if (getToolLanguage(tool) === "en") {
+        return readFirst(tool, ["English Name"], getUIText().untitled);
+      }
+      return readFirst(tool, ["Chinese Name"], getUIText().untitled);
+    }
+
+    function getToolId(tool) {
+      return readFirst(tool, ["Tool ID", "File Name", "Folder", "ID", "Game ID"], "");
+    }
+
+    function getToolCategory(tool) {
+      return readFirst(tool, ["Category", "Type", "Group"], "Tools");
+    }
+
+    function getToolCategoryLabel(tool) {
+      return getToolCategory(tool);
+    }
+
+    function getToolUrl(tool) {
+      const location = removeRootFolder(readFirst(tool, ["File Location", "Location"], ""));
+      const fallbackFolder = normalizePath(readFirst(tool, ["Category", "Type", "Group"], ""), readFirst(tool, ["File Name", "Folder", "ID"], ""));
+      const folder = location || fallbackFolder;
+      const htmlFile = getToolHtmlFile(tool);
+      const url = normalizePath(folder, htmlFile);
+      if (url === "#" || /^https?:\/\//i.test(url) || url.startsWith("/")) return url;
+      return url;
+    }
+
+    function getToolHtmlFile(tool) {
+      if (getToolLanguage(tool) === "en") {
+        return readFirst(tool, ["HTML File Name EN"], "");
+      }
+      return readFirst(tool, ["HTML File Name CN"], "");
+    }
+
+    function hasToolVersion(tool, language = INTERFACE_LANGUAGE) {
+      const htmlKey = language === "en" ? "HTML File Name EN" : "HTML File Name CN";
+      return Boolean(readFirst(tool, [htmlKey], ""));
+    }
+
+    function getToolSubjects(tool) {
+      const rawSubject = readFirst(tool, ["Subject"], "general");
+      const subjects = rawSubject
+        .split(";")
+        .map(subject => subject.trim())
+        .filter(Boolean);
+      const uniqueSubjects = subjects.length ? subjects : ["general"];
+      const seen = new Set();
+
+      return uniqueSubjects.reduce((items, subject) => {
+        const key = subject.toLowerCase();
+        if (seen.has(key)) return items;
+        seen.add(key);
+        items.push({ key, raw: subject });
+        return items;
+      }, []);
+    }
+
+    function getSubjectLabel(subject) {
+      const labels = SUBJECT_LABELS[subject.key];
+      if (labels) return labels[INTERFACE_LANGUAGE] || labels.zh || subject.raw;
+      return subject.raw;
+    }
+
+    function groupToolsBySubject(tools) {
+      const groups = new Map();
+
+      tools.forEach(tool => {
+        getToolSubjects(tool).forEach(subject => {
+          if (!groups.has(subject.key)) {
+            groups.set(subject.key, { ...subject, tools: [] });
+          }
+          groups.get(subject.key).tools.push(tool);
+        });
+      });
+
+      return Array.from(groups.values());
+    }
+
+    function renderSubjectNav(groups, totalCount) {
+      subjectNav.innerHTML = "";
+      subjectNav.hidden = !groups.length;
+      if (!groups.length) return;
+
+      const fragment = document.createDocumentFragment();
+      const allButton = document.createElement("button");
+      const isAllActive = selectedSubjects.size === 0;
+      allButton.className = `subject-nav-button${isAllActive ? " is-active" : ""}`;
+      allButton.type = "button";
+      allButton.setAttribute("aria-pressed", String(isAllActive));
+      allButton.innerHTML = `
+        <span>${escapeHTML(getUIText().allSubjects)}</span>
+        <span class="subject-nav-count">${escapeHTML(getUIText().subjectJumpCount(totalCount))}</span>
+      `;
+      allButton.addEventListener("click", () => {
+        selectedSubjects.clear();
+        renderFilteredTools();
+      });
+      fragment.appendChild(allButton);
+
+      groups.forEach(group => {
+        const button = document.createElement("button");
+        const isActive = selectedSubjects.has(group.key);
+        button.className = `subject-nav-button${isActive ? " is-active" : ""}`;
+        button.type = "button";
+        button.dataset.subjectFilter = group.key;
+        button.setAttribute("aria-pressed", String(isActive));
+        button.innerHTML = `
+          <span>${escapeHTML(getSubjectLabel(group))}</span>
+          <span class="subject-nav-count">${escapeHTML(getUIText().subjectJumpCount(group.tools.length))}</span>
+        `;
+        button.addEventListener("click", () => {
+          if (selectedSubjects.has(group.key)) {
+            selectedSubjects.delete(group.key);
+          } else {
+            selectedSubjects.add(group.key);
+          }
+          renderFilteredTools();
+        });
+        fragment.appendChild(button);
+      });
+
+      subjectNav.appendChild(fragment);
+    }
+
+    function getPreviewUrl(tool, url) {
+      if (getToolId(tool) === "G02-quadrilateral") {
+        return `${url}${url.includes("?") ? "&" : "?"}preview=duo&mute=1`;
+      }
+      return `${url}${url.includes("?") ? "&" : "?"}preview=card&mute=1`;
+    }
+
+    function escapeHTML(value) {
+      return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function getLaunchIcon() {
+      return '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 17 17 7m0 0H8m9 0v9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    }
+
+    function getPreviewIcon() {
+      return '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7Zm8 10v3m-4 0h8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    }
+
+    function createToolCard(tool) {
+      const title = getToolTitle(tool);
+      const url = getToolUrl(tool);
+      const previewUrl = getPreviewUrl(tool, url);
+      const card = document.createElement("a");
+      card.className = "activity-card";
+      card.href = url;
+      card.dataset.toolId = getToolId(tool);
+      card.setAttribute("aria-label", `${title} ${getUIText().free}`);
+
+      card.innerHTML = `
+        <div class="preview" aria-hidden="true">
+          <iframe src="${escapeHTML(previewUrl)}" title="${escapeHTML(title)} ${escapeHTML(getUIText().previewLabel)}" loading="lazy" tabindex="-1" scrolling="no" allow="autoplay 'none'"></iframe>
+          <span class="preview-label">${getPreviewIcon()}${escapeHTML(getUIText().previewLabel)}</span>
+        </div>
+        <div class="activity-body">
+          <div>
+            <h3 class="activity-title">${escapeHTML(title)}</h3>
+            <div class="activity-meta">
+              <span class="activity-tags">
+                <span class="activity-category">${escapeHTML(getToolCategoryLabel(tool))}</span>
+                <span class="activity-access">${escapeHTML(getUIText().free)}</span>
+              </span>
+            </div>
+          </div>
+          <span class="open-cta">${escapeHTML(getUIText().openTool)} ${getLaunchIcon()}</span>
+        </div>
+      `;
+
+      return card;
+    }
+
+    function renderTools(tools) {
+      grid.innerHTML = "";
+      if (previewResizeObserver) previewResizeObserver.disconnect();
+      const visibleTools = getVisibleToolVariants();
+      renderSubjectNav(groupToolsBySubject(visibleTools), visibleTools.length);
+
+      if (!tools.length) {
+        toolCount.textContent = getUIText().count(0);
+        emptyState.classList.remove("hidden");
+        emptyState.textContent = allTools.length && !toolLoadFailed ? getUIText().noMatches : getUIText().loadFailed;
+        return;
+      }
+
+      emptyState.classList.add("hidden");
+      toolCount.textContent = getUIText().count(tools.length);
+
+      const fragment = document.createDocumentFragment();
+      tools
+        .slice()
+        .sort(compareTools)
+        .forEach(tool => fragment.appendChild(createToolCard(tool)));
+
+      grid.appendChild(fragment);
+      syncPreviewScales();
+    }
+
+    function renderFilteredTools() {
+      const keyword = searchInput.value.trim().toLowerCase();
+      const visibleTools = getVisibleToolVariants();
+      const availableSubjectKeys = new Set(
+        visibleTools.flatMap(tool => getToolSubjects(tool).map(subject => subject.key))
+      );
+
+      selectedSubjects.forEach(subject => {
+        if (!availableSubjectKeys.has(subject)) selectedSubjects.delete(subject);
+      });
+
+      const filtered = visibleTools.filter(tool => {
+        const toolSubjectKeys = new Set(getToolSubjects(tool).map(subject => subject.key));
+        if ([...selectedSubjects].some(subject => !toolSubjectKeys.has(subject))) return false;
+        if (!keyword) return true;
+        return getToolSearchText(tool).includes(keyword);
+      });
+
+      renderTools(filtered);
+    }
+
+    function getActiveLanguages() {
+      const active = [];
+      if (languageState.zh) active.push("zh");
+      if (languageState.en) active.push("en");
+      return active.length === 1 ? active : ["zh", "en"];
+    }
+
+    function getVisibleToolVariants() {
+      const variants = [];
+      getActiveLanguages().forEach(language => {
+        allTools.forEach(tool => {
+          if (!hasToolVersion(tool, language)) return;
+          variants.push({
+            ...tool,
+            DisplayLanguage: language
+          });
+        });
+      });
+      return variants;
+    }
+
+    function getToolSearchText(tool) {
+      return [
+        getToolTitle(tool),
+        readFirst(tool, ["Chinese Name"], ""),
+        readFirst(tool, ["English Name"], ""),
+        getToolId(tool),
+        getToolSubjects(tool).map(subject => `${subject.raw} ${getSubjectLabel(subject)}`).join(" "),
+        getToolCategory(tool),
+        readFirst(tool, ["Search Keywords"], "")
+      ].join(" ").toLowerCase();
+    }
+
+    function syncLanguageButtons() {
+      langCnButton.classList.toggle("is-active", languageState.zh);
+      langEnButton.classList.toggle("is-active", languageState.en);
+      langCnButton.setAttribute("aria-pressed", String(languageState.zh));
+      langEnButton.setAttribute("aria-pressed", String(languageState.en));
+      document.documentElement.lang = "zh-Hant";
+      searchInput.placeholder = getUIText().searchPlaceholder;
+    }
+
+    async function fetchFirstAvailableCSV() {
+      const errors = [];
+
+      for (const path of CSV_CANDIDATES) {
+        try {
+          const response = await fetch(`${path}?v=${Date.now()}`, { cache: "no-store" });
+
+          if (response.ok) {
+            const text = decodeCSVBuffer(await response.arrayBuffer());
+            return { path, text };
+          }
+
+          errors.push(`${path}: HTTP ${response.status}`);
+        } catch (error) {
+          errors.push(`${path}: ${error.message}`);
+        }
+      }
+
+      throw new Error(errors.join("\n"));
+    }
+
+    function countReplacementChars(text) {
+      return (text.match(/\uFFFD/g) || []).length;
+    }
+
+    function decodeCSVBuffer(buffer) {
+      const utf8Text = new TextDecoder("utf-8").decode(buffer);
+      const utf8Errors = countReplacementChars(utf8Text);
+
+      if (!utf8Errors) return utf8Text;
+
+      try {
+        const big5Text = new TextDecoder("big5").decode(buffer);
+        if (countReplacementChars(big5Text) < utf8Errors) return big5Text;
+      } catch (error) {
+        console.warn("Big5 CSV decoding is not available in this browser.", error);
+      }
+
+      return utf8Text;
+    }
+
+    async function loadTools() {
+      try {
+        // Browsers block fetch() of local CSV files when index.html is double-clicked.
+        // Hosted pages keep reading the CSV so deployment errors remain visible.
+        const catalog = window.location.protocol === "file:"
+          ? window.PORTFOLIO_TOOL_CATALOG
+          : parseCSV((await fetchFirstAvailableCSV()).text);
+        if (!Array.isArray(catalog)) throw new Error("The local tool catalog is unavailable.");
+        const csvTools = catalog
+          .filter(tool => getToolId(tool) || getToolTitle(tool));
+
+        if (!csvTools.length) throw new Error("tools-manifest.csv did not contain usable tool rows.");
+        allTools = csvTools;
+        toolLoadFailed = false;
+      } catch (error) {
+        console.warn("Unable to load tools-manifest.csv.", error);
+        allTools = [];
+        toolLoadFailed = true;
+      }
+
+      allTools = allTools.sort(compareTools);
+      renderFilteredTools();
+    }
+
+    function compareTools(a, b) {
+      const categoryCompare = getToolCategory(a).localeCompare(getToolCategory(b), "zh-Hant", { numeric: true });
+      const idCompare = getToolId(a).localeCompare(getToolId(b), "zh-Hant", { numeric: true });
+      return categoryCompare || idCompare || getToolTitle(a).localeCompare(getToolTitle(b), "zh-Hant", { numeric: true });
+    }
+
+    searchInput.addEventListener("input", renderFilteredTools);
+    langCnButton.addEventListener("click", () => {
+      languageState.zh = !languageState.zh;
+      syncLanguageButtons();
+      renderFilteredTools();
+    });
+    langEnButton.addEventListener("click", () => {
+      languageState.en = !languageState.en;
+      syncLanguageButtons();
+      renderFilteredTools();
+    });
+    syncLanguageButtons();
+    loadTools();
+  </script>
+</body>
+</html>

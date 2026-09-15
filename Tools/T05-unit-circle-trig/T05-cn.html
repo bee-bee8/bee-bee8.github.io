@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-ldl-tool-id="T05-unit-circle-trig" data-ldl-fingerprint="ldl-yfc-t05-unit-circle-trig-v1">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="author" content="Yung Fu Chuen">
+  <meta name="company" content="Yung Fu Chuen">
+  <meta name="copyright" content="© 2026 Yung Fu Chuen. All rights reserved.">
+  <meta name="license" content="Free classroom use only. Redistribution, resale, cloning, re-hosting, modification, or derivative use without written permission is prohibited.">
+  <meta name="ldl-product-name" content="單位圓三角函數探索器">
+  <meta name="ldl-product-name-en" content="Unit Circle Trigonometry Explorer">
+  <meta name="ldl-product-code" content="LDL-MATH-T05-2026-001">
+  <meta name="ldl-tool-id" content="T05-unit-circle-trig">
+  <meta name="ldl-module-id" content="ldl-t05-unit-circle-trig">
+  <meta name="ldl-release-year" content="2026">
+  <meta name="ldl-version" content="1.1.0">
+  <meta name="ldl-build-id" content="LDL-MATH-T05-2026-001">
+  <meta name="ldl-fingerprint" content="ldl-yfc-t05-unit-circle-trig-v1">
+  <meta name="ldl-source-reference" content="LDL Source Reference v1.1 - Yung Fu Chuen - Yung Fu Chuen">
+  <title>單位圓三角函數探索器</title>
+  <!-- copy-cost marker: head-alpha YFC -->
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --ink: #142033;
+      --muted: #687386;
+      --line: #d8e0eb;
+      --axis: #29364a;
+      --radius: #2563eb;
+      --cos: #16a34a;
+      --sin: #f97316;
+      --tan: #7c3aed;
+      --warn: #dc2626;
+      --soft-blue: #eaf1ff;
+      --shadow: 0 16px 40px rgba(20, 32, 51, 0.08);
+      --radius-lg: 8px;
+      font-family: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    .app {
+      width: min(1500px, calc(100vw - 32px));
+      margin: 0 auto;
+      padding: 94px 0 24px;
+    }
+
+    .app:fullscreen,
+    .app:-webkit-full-screen {
+      width: 100vw;
+      min-height: 100dvh;
+      margin: 0;
+      padding: 94px 16px 24px;
+      overflow: auto;
+      background: var(--bg);
+    }
+
+    .top-button {
+      position: fixed;
+      z-index: 2147483647;
+      top: max(14px, env(safe-area-inset-top));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: auto;
+      min-width: 0;
+      min-height: 38px;
+      padding: 0 12px;
+      border: 1px solid rgba(255, 255, 255, 0.82);
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: 0;
+      white-space: nowrap;
+      cursor: pointer;
+      box-shadow: 0 12px 24px rgba(14, 31, 58, 0.24), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+      transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+    }
+
+    .top-button:hover,
+    .top-button:focus-visible {
+      outline: none;
+      transform: translateY(-2px);
+      box-shadow: 0 16px 28px rgba(14, 31, 58, 0.28), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+    }
+
+    .top-button:active {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    .exit-fullscreen {
+      left: max(158px, calc(env(safe-area-inset-left) + 158px));
+      background: linear-gradient(135deg, #3949ab, #1e2d66);
+    }
+
+    .enter-fullscreen {
+      right: max(14px, env(safe-area-inset-right));
+      background: linear-gradient(135deg, #1d78d6, #124c91);
+    }
+
+    #tool-home-link {
+      position: fixed;
+      z-index: 2147483647;
+      top: max(14px, env(safe-area-inset-top));
+      left: max(14px, env(safe-area-inset-left));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: auto;
+      min-height: 38px;
+      padding: 0 14px;
+      border: 1px solid rgba(255, 255, 255, 0.82);
+      border-radius: 8px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #0f766e, #134e4a);
+      box-shadow: 0 12px 24px rgba(14, 31, 58, 0.24), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+      font-size: 15px !important;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: 0;
+      text-decoration: none;
+      white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+    }
+
+    #tool-home-link:hover,
+    #tool-home-link:focus-visible {
+      outline: none;
+      transform: translateY(-2px);
+      box-shadow: 0 16px 28px rgba(14, 31, 58, 0.28), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+    }
+
+    #tool-home-link:active {
+      transform: scale(0.97);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(520px, 1.35fr) minmax(380px, 0.85fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .circle-panel,
+    .side-panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .circle-panel {
+      padding: 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-height: 760px;
+    }
+
+    .topline {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(30px, 3vw, 46px);
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 18px;
+      line-height: 1.5;
+    }
+
+    .quadrant-pill {
+      min-width: 150px;
+      border: 1px solid rgba(37, 99, 235, 0.35);
+      color: #1d4ed8;
+      background: var(--soft-blue);
+      border-radius: 8px;
+      padding: 11px 14px;
+      font-size: 20px;
+      font-weight: 700;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .circle-wrap {
+      position: relative;
+      flex: 1;
+      min-height: 520px;
+      display: grid;
+      place-items: center;
+      border: 1px solid #e6edf6;
+      border-radius: var(--radius-lg);
+      background: #fff;
+      overflow: hidden;
+    }
+
+    svg {
+      width: min(100%, 760px);
+      height: auto;
+      display: block;
+      touch-action: none;
+      user-select: none;
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: #1f2937;
+      font-size: 16px;
+      background: #fbfdff;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-width: max-content;
+    }
+
+    .legend-swatch {
+      width: 34px;
+      height: 3px;
+      border-radius: 99px;
+      background: var(--axis);
+    }
+
+    .legend-swatch.radius { background: var(--radius); }
+    .legend-swatch.cos { background: var(--cos); }
+    .legend-swatch.sin { background: var(--sin); }
+    .legend-swatch.tan { background: var(--tan); }
+
+    .side-panel {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      background: #fff;
+    }
+
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 0 0 18px;
+      color: #0f4f76;
+      font-size: 27px;
+      line-height: 1.2;
+    }
+
+    .section-icon {
+      width: 34px;
+      height: 34px;
+      color: currentColor;
+      flex: 0 0 auto;
+    }
+
+    .angle-card-grid {
+      display: grid;
+      grid-template-columns: 1fr 150px;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .angle-field {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .angle-field + .angle-field {
+      border-left: 1px solid var(--line);
+      padding-left: 28px;
+    }
+
+    .field label {
+      display: block;
+      color: #364152;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 11px 12px;
+      color: var(--ink);
+      background: #fff;
+      font-size: 20px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      padding: 11px 12px;
+      color: var(--ink);
+      background: #fff;
+      font-size: 20px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--radius);
+      cursor: pointer;
+    }
+
+    .range-row {
+      display: grid;
+      grid-template-columns: 46px 1fr 54px;
+      gap: 10px;
+      align-items: center;
+      color: var(--muted);
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .radian-approx {
+      color: #334155;
+      font-size: 16px;
+      line-height: 1.45;
+      min-height: 24px;
+      padding-top: 12px;
+    }
+
+    .answer-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+    }
+
+    .answer {
+      text-align: center;
+      padding: 0 12px;
+      border-left: 1px solid var(--line);
+    }
+
+    .answer:first-child {
+      border-left: 0;
+    }
+
+    .answer-label {
+      display: block;
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .answer-value {
+      font-size: clamp(30px, 3vw, 42px);
+      line-height: 1.45;
+      font-weight: 800;
+    }
+
+    .answer-extra {
+      min-height: 46px;
+      color: #111827;
+      font-size: 18px;
+      line-height: 1.2;
+      margin-top: 8px;
+    }
+
+    .answer-extra .fraction {
+      display: inline-grid;
+      gap: 1px;
+      justify-items: center;
+      vertical-align: middle;
+    }
+
+    .answer-extra .fraction span:last-child {
+      border-top: 1.5px solid currentColor;
+      min-width: 28px;
+      padding-top: 1px;
+    }
+
+    .sign-head {
+      display: grid;
+      grid-template-columns: 74px 1fr 72px;
+      gap: 10px;
+      color: #111827;
+      font-size: 16px;
+      font-weight: 800;
+      align-items: end;
+      margin: -4px 0 10px;
+    }
+
+    .axis-labels {
+      grid-column: 2;
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: end;
+      padding: 0 4px;
+    }
+
+    .unit-label {
+      color: #334155;
+      font-weight: 600;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .negative-label {
+      color: var(--warn);
+      justify-self: start;
+      padding-left: 16%;
+    }
+
+    .zero-label {
+      justify-self: center;
+      color: #111827;
+    }
+
+    .positive-label {
+      justify-self: end;
+      color: #0f766e;
+      padding-right: 16%;
+    }
+
+    .bar-list {
+      display: grid;
+      gap: 17px;
+    }
+
+    .bar-row {
+      display: grid;
+      grid-template-columns: 74px 1fr 72px;
+      align-items: center;
+      gap: 10px;
+      min-height: 44px;
+    }
+
+    .bar-name {
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .bar-value {
+      font-size: 21px;
+      font-weight: 800;
+      text-align: right;
+    }
+
+    .track-cell {
+      display: grid;
+      gap: 7px;
+    }
+
+    .bar-track {
+      position: relative;
+      height: 17px;
+      background:
+        linear-gradient(to right, rgba(239, 68, 68, 0.28) 0 50%, #e8edf4 50% 100%);
+      overflow: visible;
+    }
+
+    .bar-track::before {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: -5px;
+      width: 3px;
+      height: 27px;
+      background: #111827;
+      z-index: 2;
+    }
+
+    .bar-fill {
+      position: absolute;
+      top: 0;
+      height: 17px;
+      min-width: 0;
+      z-index: 1;
+    }
+
+    .bar-fill.positive {
+      left: 50%;
+      transform-origin: left center;
+    }
+
+    .bar-fill.negative {
+      right: 50%;
+      transform-origin: right center;
+    }
+
+    .bar-fill.sin { background: var(--sin); }
+    .bar-fill.cos { background: var(--cos); }
+    .bar-fill.tan { background: var(--tan); }
+
+    .bar-scale {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      color: #111827;
+      font-size: 15px;
+      line-height: 1;
+    }
+
+    .bar-scale span:nth-child(2) { text-align: right; }
+
+    .undefined-bar {
+      position: absolute;
+      inset: -3px 0 auto 0;
+      z-index: 3;
+      color: var(--warn);
+      background: #fff;
+      text-align: center;
+      font-size: 17px;
+      font-weight: 800;
+      padding: 2px 0;
+    }
+
+    .sin-text { color: var(--sin); }
+    .cos-text { color: var(--cos); }
+    .tan-text { color: var(--tan); }
+    .warn-text { color: var(--warn); }
+
+    .svg-text {
+      font-family: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", Arial, sans-serif;
+      fill: var(--ink);
+    }
+
+    .small-svg {
+      font-size: 19px;
+      font-weight: 700;
+    }
+
+    .large-svg {
+      font-size: 25px;
+      font-weight: 800;
+    }
+
+    .point-handle {
+      cursor: grab;
+      filter: drop-shadow(0 4px 8px rgba(37, 99, 235, 0.32));
+    }
+
+    .point-handle:active {
+      cursor: grabbing;
+    }
+
+    @media (max-width: 1050px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .circle-panel {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .app {
+        width: min(100vw - 18px, 1500px);
+        padding: 82px 0 10px;
+      }
+
+      .app:fullscreen,
+      .app:-webkit-full-screen {
+        width: 100vw;
+        min-height: 100dvh;
+        padding: 82px 9px 10px;
+        background: var(--bg);
+      }
+
+      .top-button,
+      #tool-home-link {
+        width: auto;
+        min-height: 34px;
+        padding: 0 9px;
+        font-size: 13px !important;
+      }
+
+      #tool-home-link {
+        left: max(8px, env(safe-area-inset-left));
+      }
+
+      .exit-fullscreen {
+        left: max(118px, calc(env(safe-area-inset-left) + 118px));
+      }
+
+      .enter-fullscreen {
+        right: max(8px, env(safe-area-inset-right));
+      }
+
+      .circle-panel,
+      .side-panel {
+        padding: 12px;
+      }
+
+      .topline,
+      .angle-card-grid,
+      .answer-grid {
+        grid-template-columns: 1fr;
+        display: grid;
+      }
+
+      .angle-field + .angle-field,
+      .answer {
+        border-left: 0;
+        padding-left: 0;
+      }
+
+      .answer {
+        border-top: 1px solid var(--line);
+        padding-top: 14px;
+      }
+
+      .answer:first-child {
+        border-top: 0;
+        padding-top: 0;
+      }
+
+      .quadrant-pill {
+        width: 100%;
+      }
+
+      .circle-wrap {
+        min-height: 360px;
+      }
+
+      .section-title {
+        font-size: 21px;
+      }
+
+      .bar-row,
+      .sign-head {
+        grid-template-columns: 58px 1fr 64px;
+        gap: 8px;
+      }
+    }
+
+    .ldl-visible-watermark {
+      position: fixed;
+      z-index: 35;
+      left: max(10px, env(safe-area-inset-left));
+      right: auto;
+      top: max(70px, calc(env(safe-area-inset-top) + 66px));
+      bottom: auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 5px;
+      max-width: min(190px, calc(100vw - 20px));
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      color: rgba(23, 32, 51, 0.56);
+      background: transparent;
+      box-shadow: none;
+      font-size: 8px;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: 0;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+      backdrop-filter: none;
+    }
+
+    /* copy-cost marker: style-beta LD */
+
+    .ldl-visible-watermark img {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+      object-fit: contain;
+      opacity: 0.88;
+    }
+
+    .ldl-visible-watermark span {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .ldl-offscreen-source-reference {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      margin: -1px !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      clip: rect(0 0 0 0) !important;
+      clip-path: inset(50%) !important;
+      border: 0 !important;
+      white-space: nowrap !important;
+    }
+
+    @media (max-width: 520px) {
+      .ldl-visible-watermark {
+        left: max(8px, env(safe-area-inset-left));
+        right: auto;
+        top: max(58px, calc(env(safe-area-inset-top) + 54px));
+        bottom: auto;
+        font-size: 7px;
+      }
+
+      .ldl-visible-watermark img {
+        width: 14px;
+        height: 14px;
+      }
+    }
+  </style>
+</head>
+<body
+  data-ldl-product-name="單位圓三角函數探索器"
+  data-ldl-product-name-en="Unit Circle Trigonometry Explorer"
+  data-ldl-product-code="LDL-MATH-T05-2026-001"
+  data-ldl-tool-id="T05-unit-circle-trig"
+  data-ldl-module-id="ldl-t05-unit-circle-trig"
+  data-ldl-build-id="LDL-MATH-T05-2026-001"
+  data-ldl-fingerprint="ldl-yfc-t05-unit-circle-trig-v1"
+>
+  <main class="app" data-tool-home-nav-root>
+    <a id="tool-home-link" href="../../index.html" target="_top" aria-label="前往工具總覽">工具總覽</a>
+    <button class="top-button exit-fullscreen" id="exitFullscreen" type="button" aria-label="退出">退出</button>
+    <button class="top-button enter-fullscreen" id="enterFullscreen" type="button" aria-label="進入全螢幕">全螢幕</button>
+
+    <div class="layout">
+      <section class="circle-panel" aria-label="互動單位圓">
+        <div class="topline">
+          <div>
+            <h1>單位圓三角函數探索器</h1>
+            <p class="subtitle">拖曳圓周上的點或調整角度，觀察 sin θ、cos θ、tan θ 的幾何意義。</p>
+          </div>
+          <div class="quadrant-pill" id="quadrantLabel">第一象限</div>
+        </div>
+
+        <div class="circle-wrap">
+          <svg id="unitCircle" viewBox="0 0 720 720" role="img" aria-labelledby="svgTitle svgDesc">
+            <title id="svgTitle">單位圓互動圖</title>
+            <desc id="svgDesc">顯示半徑、角度、x 軸投影 cos θ、y 軸投影 sin θ，以及 tan θ 輔助線。</desc>
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#29364a"></path>
+              </marker>
+              <marker id="tanArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+                <path d="M 0 0 L 10 5 L 0 10 z" fill="#7c3aed"></path>
+              </marker>
+            </defs>
+
+            <line x1="70" y1="360" x2="650" y2="360" stroke="#29364a" stroke-width="2.4" marker-end="url(#arrow)"></line>
+            <line x1="360" y1="650" x2="360" y2="70" stroke="#29364a" stroke-width="2.4" marker-end="url(#arrow)"></line>
+            <line x1="110" y1="360" x2="610" y2="360" stroke="#cbd5e1" stroke-width="1.4" stroke-dasharray="7 8"></line>
+            <line x1="360" y1="110" x2="360" y2="610" stroke="#cbd5e1" stroke-width="1.4" stroke-dasharray="7 8"></line>
+            <circle cx="360" cy="360" r="250" fill="none" stroke="#1f2937" stroke-width="2.8"></circle>
+
+            <text x="662" y="366" class="svg-text large-svg">x</text>
+            <text x="368" y="78" class="svg-text large-svg">y</text>
+            <text x="620" y="386" class="svg-text large-svg">1</text>
+            <text x="82" y="386" class="svg-text large-svg">-1</text>
+            <text x="338" y="104" class="svg-text large-svg">1</text>
+            <text x="326" y="632" class="svg-text large-svg">-1</text>
+
+            <line id="cosLine" x1="360" y1="360" x2="360" y2="360" stroke="#16a34a" stroke-width="5" stroke-linecap="round"></line>
+            <line id="sinLine" x1="360" y1="360" x2="360" y2="360" stroke="#f97316" stroke-width="5" stroke-linecap="round"></line>
+            <line id="projectionX" x1="360" y1="360" x2="360" y2="360" stroke="#16a34a" stroke-width="2" stroke-dasharray="6 7"></line>
+            <line id="projectionY" x1="360" y1="360" x2="360" y2="360" stroke="#f97316" stroke-width="2" stroke-dasharray="6 7"></line>
+            <line id="tanLine" x1="610" y1="360" x2="610" y2="360" stroke="#7c3aed" stroke-width="4" stroke-linecap="round"></line>
+            <line id="tanGuide" x1="360" y1="360" x2="610" y2="360" stroke="#7c3aed" stroke-width="1.7" stroke-dasharray="5 7"></line>
+            <path id="angleArc" d="" fill="none" stroke="#111827" stroke-width="3" stroke-linecap="round"></path>
+            <line id="radiusLine" x1="360" y1="360" x2="360" y2="360" stroke="#2563eb" stroke-width="5" stroke-linecap="round"></line>
+
+            <circle cx="360" cy="360" r="4.5" fill="#111827"></circle>
+            <circle id="cosDot" cx="360" cy="360" r="7" fill="#16a34a"></circle>
+            <circle id="sinDot" cx="360" cy="360" r="7" fill="#f97316"></circle>
+            <circle id="point" class="point-handle" cx="360" cy="360" r="16" fill="#2563eb" stroke="#ffffff" stroke-width="5"></circle>
+
+            <text id="pointLabel" x="0" y="0" class="svg-text small-svg" fill="#1d4ed8"></text>
+            <text id="cosLabel" x="0" y="0" class="svg-text small-svg" fill="#15803d"></text>
+            <text id="sinLabel" x="0" y="0" class="svg-text small-svg" fill="#ea580c"></text>
+            <text id="tanLabel" x="0" y="0" class="svg-text small-svg" fill="#6d28d9"></text>
+            <text id="thetaLabel" x="0" y="0" class="svg-text large-svg">θ</text>
+          </svg>
+        </div>
+
+        <div class="legend" aria-label="圖例">
+          <span class="legend-item"><span class="legend-swatch radius"></span>半徑 r = 1</span>
+          <span class="legend-item"><span class="legend-swatch cos"></span>cos θ（x 軸投影）</span>
+          <span class="legend-item"><span class="legend-swatch sin"></span>sin θ（y 軸投影）</span>
+          <span class="legend-item"><span class="legend-swatch tan"></span>tan θ（y ÷ x）</span>
+        </div>
+      </section>
+
+      <aside class="side-panel" aria-label="控制與答案面板">
+        <section class="card">
+          <h2 class="section-title">
+            <svg class="section-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 19h16" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"></path>
+              <path d="M4 19L17 6" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"></path>
+              <path d="M8 19a4 4 0 0 0-1.15-2.8" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"></path>
+            </svg>
+            輸入角度
+          </h2>
+          <div class="angle-card-grid">
+            <div class="angle-field field">
+              <label for="angleInput">度（°）</label>
+              <input id="angleInput" type="number" step="1" value="45" inputmode="decimal">
+              <div class="range-row">
+                <span>-180°</span>
+                <input id="angleSlider" type="range" min="-180" max="180" step="1" value="45">
+                <span>180°</span>
+              </div>
+            </div>
+            <div class="angle-field field">
+              <label for="radianInput">弧度（rad）</label>
+              <input id="radianInput" type="text" value="π/4" inputmode="text">
+              <div class="radian-approx" id="radianApprox">≈ 0.785398 rad</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2 class="section-title">
+            <svg class="section-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="4" y="3" width="16" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="2"></rect>
+              <path d="M8 7h8M8 11h2M12 11h2M16 11h2M8 15h2M12 15h2M16 15h2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+            </svg>
+            三個函數
+          </h2>
+          <div class="answer-grid">
+            <div class="answer">
+              <span class="answer-label sin-text">sin θ</span>
+              <div class="answer-value sin-text" id="sinValue">0.7071</div>
+              <div class="answer-extra" id="sinExact">= √2/2</div>
+            </div>
+            <div class="answer">
+              <span class="answer-label cos-text">cos θ</span>
+              <div class="answer-value cos-text" id="cosValue">0.7071</div>
+              <div class="answer-extra" id="cosExact">= √2/2</div>
+            </div>
+            <div class="answer">
+              <span class="answer-label tan-text">tan θ</span>
+              <div class="answer-value tan-text" id="tanValue">1.0000</div>
+              <div class="answer-extra" id="tanExact">= 1</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2 class="section-title">
+            <svg class="section-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 20h14M7 5h10M12 5v15M6 8l-3 7h6L6 8Zm12 0-3 7h6l-3-7Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+            直觀比較
+          </h2>
+          <div class="sign-head" aria-hidden="true">
+            <span></span>
+            <div class="axis-labels">
+              <span class="negative-label">負</span>
+              <span class="zero-label">0</span>
+              <span class="positive-label">正</span>
+            </div>
+            <span class="unit-label">單位：長度</span>
+          </div>
+          <div class="bar-list">
+            <div class="bar-row">
+              <div class="bar-name sin-text">sin θ</div>
+              <div class="track-cell">
+                <div class="bar-track">
+                  <div id="sinBar" class="bar-fill sin positive"></div>
+                </div>
+                <div class="bar-scale"><span>-1</span><span>1</span></div>
+              </div>
+              <div class="bar-value sin-text" id="sinBarValue">0.7071</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-name cos-text">cos θ</div>
+              <div class="track-cell">
+                <div class="bar-track">
+                  <div id="cosBar" class="bar-fill cos positive"></div>
+                </div>
+                <div class="bar-scale"><span>-1</span><span>1</span></div>
+              </div>
+              <div class="bar-value cos-text" id="cosBarValue">0.7071</div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-name tan-text">tan θ</div>
+              <div class="track-cell">
+                <div class="bar-track" id="tanTrack">
+                  <div id="tanBar" class="bar-fill tan positive"></div>
+                  <div id="tanUndefinedBar" class="undefined-bar" hidden>無定義</div>
+                </div>
+                <div class="bar-scale"><span id="tanScaleMin">-1</span><span id="tanScaleMax">1</span></div>
+              </div>
+              <div class="bar-value tan-text" id="tanBarValue">1.0000</div>
+            </div>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <script>
+    const centerX = 360;
+    const centerY = 360;
+    const radius = 250;
+
+    const state = {
+      angle: 45,
+      displayAngle: 45,
+      dragging: false
+    };
+
+    const els = {
+      svg: document.getElementById("unitCircle"),
+      slider: document.getElementById("angleSlider"),
+      input: document.getElementById("angleInput"),
+      radianInput: document.getElementById("radianInput"),
+      radianApprox: document.getElementById("radianApprox"),
+      quadrantLabel: document.getElementById("quadrantLabel"),
+      radiusLine: document.getElementById("radiusLine"),
+      cosLine: document.getElementById("cosLine"),
+      sinLine: document.getElementById("sinLine"),
+      projectionX: document.getElementById("projectionX"),
+      projectionY: document.getElementById("projectionY"),
+      tanLine: document.getElementById("tanLine"),
+      tanGuide: document.getElementById("tanGuide"),
+      angleArc: document.getElementById("angleArc"),
+      point: document.getElementById("point"),
+      cosDot: document.getElementById("cosDot"),
+      sinDot: document.getElementById("sinDot"),
+      pointLabel: document.getElementById("pointLabel"),
+      cosLabel: document.getElementById("cosLabel"),
+      sinLabel: document.getElementById("sinLabel"),
+      tanLabel: document.getElementById("tanLabel"),
+      thetaLabel: document.getElementById("thetaLabel"),
+      sinValue: document.getElementById("sinValue"),
+      cosValue: document.getElementById("cosValue"),
+      tanValue: document.getElementById("tanValue"),
+      sinExact: document.getElementById("sinExact"),
+      cosExact: document.getElementById("cosExact"),
+      tanExact: document.getElementById("tanExact"),
+      sinBar: document.getElementById("sinBar"),
+      cosBar: document.getElementById("cosBar"),
+      tanBar: document.getElementById("tanBar"),
+      tanUndefinedBar: document.getElementById("tanUndefinedBar"),
+      tanScaleMin: document.getElementById("tanScaleMin"),
+      tanScaleMax: document.getElementById("tanScaleMax"),
+      sinBarValue: document.getElementById("sinBarValue"),
+      cosBarValue: document.getElementById("cosBarValue"),
+      tanBarValue: document.getElementById("tanBarValue")
+    };
+
+    function degToRad(degrees) {
+      return degrees * Math.PI / 180;
+    }
+
+    function normalizeAngle(angle) {
+      if (!Number.isFinite(angle)) return 0;
+      const normalized = ((angle % 360) + 360) % 360;
+      return Object.is(normalized, -0) ? 0 : normalized;
+    }
+
+    function normalizeDisplayAngle(angle) {
+      if (angle === 360) return 360;
+      return normalizeAngle(angle);
+    }
+
+    function updateFromAngle(rawAngle, options = {}) {
+      let displayAngle = normalizeDisplayAngle(Number(rawAngle));
+
+      const angle = displayAngle === 360 ? 0 : normalizeAngle(displayAngle);
+      state.angle = angle;
+      state.displayAngle = displayAngle;
+
+      updatePointPosition();
+      updateLabels();
+    }
+
+    function updatePointPosition() {
+      const rad = degToRad(state.angle);
+      const x = Math.cos(rad);
+      const y = Math.sin(rad);
+      const screenX = centerX + x * radius;
+      const screenY = centerY - y * radius;
+      const xFoot = centerX + x * radius;
+      const yFoot = centerY - y * radius;
+      const tanValue = Math.tan(rad);
+      const tanY = centerY - tanValue * radius;
+      const tanDefined = Math.abs(x) >= 0.0001;
+      const tanClampedY = Math.max(70, Math.min(650, tanY));
+      const tanOverflow = tanDefined && (tanY < 70 || tanY > 650);
+      const tanBeyondUnit = tanDefined && Math.abs(tanValue) > 1;
+
+      setLine(els.radiusLine, centerX, centerY, screenX, screenY);
+      setLine(els.cosLine, centerX, centerY, xFoot, centerY);
+      setLine(els.sinLine, centerX, centerY, centerX, yFoot);
+      setLine(els.projectionX, screenX, screenY, xFoot, centerY);
+      setLine(els.projectionY, screenX, screenY, centerX, yFoot);
+      setCircle(els.point, screenX, screenY);
+      setCircle(els.cosDot, xFoot, centerY);
+      setCircle(els.sinDot, centerX, yFoot);
+
+      if (tanDefined) {
+        setLine(els.tanLine, centerX + radius, centerY, centerX + radius, tanClampedY);
+        setLine(els.tanGuide, centerX, centerY, centerX + radius, tanClampedY);
+        if (tanBeyondUnit) {
+          els.tanLine.setAttribute("marker-end", "url(#tanArrow)");
+        } else {
+          els.tanLine.removeAttribute("marker-end");
+        }
+        els.tanLine.style.display = "block";
+        els.tanGuide.style.display = "block";
+      } else {
+        els.tanLine.removeAttribute("marker-end");
+        els.tanLine.style.display = "none";
+        els.tanGuide.style.display = "none";
+      }
+
+      els.pointLabel.setAttribute("x", clamp(screenX + (x >= 0 ? 18 : -150), 88, 610));
+      els.pointLabel.setAttribute("y", clamp(screenY + (y >= 0 ? -18 : 32), 80, 640));
+      els.cosLabel.setAttribute("x", clamp((centerX + xFoot) / 2 - 40, 90, 590));
+      els.cosLabel.setAttribute("y", centerY + (y >= 0 ? 42 : -24));
+      els.sinLabel.setAttribute("x", centerX + (x >= 0 ? 18 : -120));
+      els.sinLabel.setAttribute("y", clamp((centerY + yFoot) / 2, 95, 630));
+      els.tanLabel.dataset.beyondUnit = tanBeyondUnit ? "true" : "false";
+      els.tanLabel.dataset.tanValue = tanDefined ? String(tanValue) : "";
+      els.tanLabel.setAttribute("x", tanBeyondUnit ? centerX + radius - 150 : centerX + radius + 16);
+      els.tanLabel.setAttribute("y", tanBeyondUnit
+        ? clamp(tanClampedY + (tanValue > 0 ? -14 : 28), 92, 632)
+        : clamp(tanClampedY, 95, 630));
+      const thetaRad = degToRad(Math.max(state.angle, 12));
+      els.thetaLabel.setAttribute("x", centerX + Math.cos(thetaRad / 2) * 74);
+      els.thetaLabel.setAttribute("y", centerY - Math.sin(thetaRad / 2) * 74 + 8);
+      els.angleArc.setAttribute("d", describeArc(centerX, centerY, 58, 0, state.angle));
+    }
+
+    function updateLabels() {
+      const rad = degToRad(state.angle);
+      let sin = Math.sin(rad);
+      let cos = Math.cos(rad);
+      sin = Math.abs(sin) < 0.0000001 ? 0 : sin;
+      cos = Math.abs(cos) < 0.0000001 ? 0 : cos;
+      const tanUndefined = Math.abs(cos) < 0.0001;
+      const tan = tanUndefined ? null : sin / cos;
+      const sinText = formatNumber(sin);
+      const cosText = formatNumber(cos);
+      const tanText = tanUndefined ? "無定義" : formatNumber(tan);
+      const exact = getCommonExact(state.displayAngle);
+
+      els.slider.value = toSignedAngle(state.angle);
+      els.input.value = state.displayAngle;
+      els.radianInput.value = getPiLabel(state.displayAngle);
+      els.radianApprox.textContent = "≈ " + formatRadians(rad) + " rad";
+      els.quadrantLabel.textContent = getQuadrant(state.displayAngle);
+
+      els.pointLabel.textContent = "(" + cosText + ", " + sinText + ")";
+      els.cosLabel.textContent = "cos θ";
+      els.sinLabel.textContent = "sin θ";
+      if (tanUndefined) {
+        els.tanLabel.textContent = "tan θ 無定義";
+      } else if (els.tanLabel.dataset.beyondUnit === "true") {
+        els.tanLabel.textContent = "tan θ = " + tanText;
+      } else {
+        els.tanLabel.textContent = "tan θ";
+      }
+
+      els.sinValue.textContent = sinText;
+      els.cosValue.textContent = cosText;
+      els.tanValue.textContent = tanText;
+      els.tanValue.classList.toggle("warn-text", tanUndefined);
+      els.tanValue.classList.toggle("tan-text", !tanUndefined);
+      els.sinExact.innerHTML = exact ? exact.sin : "";
+      els.cosExact.innerHTML = exact ? exact.cos : "";
+      els.tanExact.innerHTML = exact ? exact.tan : "";
+
+      updateBar(els.sinBar, sin, 1);
+      updateBar(els.cosBar, cos, 1);
+      els.sinBarValue.textContent = sinText;
+      els.cosBarValue.textContent = cosText;
+      if (tanUndefined) {
+        els.tanBar.hidden = true;
+        els.tanUndefinedBar.hidden = false;
+        els.tanScaleMin.textContent = "-∞";
+        els.tanScaleMax.textContent = "+∞";
+        els.tanBarValue.textContent = "無定義";
+        els.tanBarValue.classList.add("warn-text");
+      } else {
+        const tanScale = getTanScale(tan);
+        els.tanBar.hidden = false;
+        els.tanUndefinedBar.hidden = true;
+        els.tanScaleMin.textContent = "-" + formatScaleLabel(tanScale);
+        els.tanScaleMax.textContent = formatScaleLabel(tanScale);
+        els.tanBarValue.textContent = tanText;
+        els.tanBarValue.classList.remove("warn-text");
+        updateBar(els.tanBar, tan, tanScale);
+      }
+    }
+
+    function toSignedAngle(angle) {
+      const normalized = normalizeAngle(angle);
+      return normalized > 180 ? normalized - 360 : normalized;
+    }
+
+    function formatNumber(value) {
+      if (!Number.isFinite(value)) return "無定義";
+      let rounded = Math.round(value * 10000) / 10000;
+      if (Object.is(rounded, -0) || Math.abs(rounded) < 0.00005) rounded = 0;
+      return rounded.toFixed(4);
+    }
+
+    function formatRadians(value) {
+      let rounded = Math.round(value * 1000000) / 1000000;
+      if (Object.is(rounded, -0) || Math.abs(rounded) < 0.0000005) rounded = 0;
+      return rounded.toFixed(6);
+    }
+
+    function getPiLabel(angle) {
+      const normalized = angle === 360 ? 360 : normalizeAngle(angle);
+      const labels = {
+        0: "0",
+        30: "π/6",
+        45: "π/4",
+        60: "π/3",
+        90: "π/2",
+        120: "2π/3",
+        135: "3π/4",
+        150: "5π/6",
+        180: "π",
+        210: "7π/6",
+        225: "5π/4",
+        240: "4π/3",
+        270: "3π/2",
+        300: "5π/3",
+        315: "7π/4",
+        330: "11π/6",
+        360: "2π"
+      };
+      return labels[normalized] || formatRadians(degToRad(normalized));
+    }
+
+    function getCommonExact(angle) {
+      const normalized = angle === 360 ? 360 : normalizeAngle(angle);
+      const half = '<span class="fraction"><span>1</span><span>2</span></span>';
+      const sqrt2 = '<span class="fraction"><span>√2</span><span>2</span></span>';
+      const sqrt3 = '<span class="fraction"><span>√3</span><span>2</span></span>';
+      const sqrt3third = '<span class="fraction"><span>√3</span><span>3</span></span>';
+      const exact = {
+        0: { sin: "= 0", cos: "= 1", tan: "= 0" },
+        30: { sin: "= " + half, cos: "= " + sqrt3, tan: "= " + sqrt3third },
+        45: { sin: "= " + sqrt2, cos: "= " + sqrt2, tan: "= 1" },
+        60: { sin: "= " + sqrt3, cos: "= " + half, tan: "= √3" },
+        90: { sin: "= 1", cos: "= 0", tan: "無定義" },
+        120: { sin: "= " + sqrt3, cos: "= -" + half, tan: "= -√3" },
+        135: { sin: "= " + sqrt2, cos: "= -" + sqrt2, tan: "= -1" },
+        150: { sin: "= " + half, cos: "= -" + sqrt3, tan: "= -" + sqrt3third },
+        180: { sin: "= 0", cos: "= -1", tan: "= 0" },
+        210: { sin: "= -" + half, cos: "= -" + sqrt3, tan: "= " + sqrt3third },
+        225: { sin: "= -" + sqrt2, cos: "= -" + sqrt2, tan: "= 1" },
+        240: { sin: "= -" + sqrt3, cos: "= -" + half, tan: "= √3" },
+        270: { sin: "= -1", cos: "= 0", tan: "無定義" },
+        300: { sin: "= -" + sqrt3, cos: "= " + half, tan: "= -√3" },
+        315: { sin: "= -" + sqrt2, cos: "= " + sqrt2, tan: "= -1" },
+        330: { sin: "= -" + half, cos: "= " + sqrt3, tan: "= -" + sqrt3third },
+        360: { sin: "= 0", cos: "= 1", tan: "= 0" }
+      };
+      return exact[normalized] || null;
+    }
+
+    function updateBar(element, value, range) {
+      const capped = Math.max(-range, Math.min(range, value));
+      const widthPercent = Math.abs(capped) / range * 50;
+      element.classList.toggle("positive", capped >= 0);
+      element.classList.toggle("negative", capped < 0);
+      element.style.width = widthPercent + "%";
+    }
+
+    function getTanScale(value) {
+      const target = Math.max(1, Math.abs(value));
+      const bases = [1, 2, 5];
+      let power = 0;
+
+      while (power < 8) {
+        const multiplier = Math.pow(10, power);
+        for (const base of bases) {
+          const scale = base * multiplier;
+          if (scale >= target) return scale;
+        }
+        power += 1;
+      }
+
+      return Math.pow(10, power);
+    }
+
+    function formatScaleLabel(value) {
+      return value >= 1000 ? value.toExponential(0) : String(value);
+    }
+
+    function getQuadrant(angle) {
+      const normalized = angle === 360 ? 360 : normalizeAngle(angle);
+      if (normalized === 0 || normalized === 360) return "正 x 軸";
+      if (normalized === 90) return "正 y 軸";
+      if (normalized === 180) return "負 x 軸";
+      if (normalized === 270) return "負 y 軸";
+      if (normalized > 0 && normalized < 90) return "第一象限";
+      if (normalized > 90 && normalized < 180) return "第二象限";
+      if (normalized > 180 && normalized < 270) return "第三象限";
+      return "第四象限";
+    }
+
+    function parseRadianInput(value) {
+      const cleaned = String(value)
+        .trim()
+        .replaceAll(" ", "")
+        .replaceAll("π", "pi")
+        .replaceAll("Π", "pi")
+        .toLowerCase();
+
+      if (!cleaned) return null;
+      const match = cleaned.match(/^([+-]?(?:\d+(?:\.\d+)?)?)\*?pi(?:\/([+-]?\d+(?:\.\d+)?))?$/);
+      if (match) {
+        const coefficient = match[1] === "" || match[1] === "+" ? 1 : match[1] === "-" ? -1 : Number(match[1]);
+        const denominator = match[2] ? Number(match[2]) : 1;
+        if (Number.isFinite(coefficient) && Number.isFinite(denominator) && denominator !== 0) {
+          return coefficient * Math.PI / denominator;
+        }
+      }
+
+      const fractionMatch = cleaned.match(/^([+-]?\d+(?:\.\d+)?)\/([+-]?\d+(?:\.\d+)?)$/);
+      if (fractionMatch) {
+        const numerator = Number(fractionMatch[1]);
+        const denominator = Number(fractionMatch[2]);
+        if (Number.isFinite(numerator) && Number.isFinite(denominator) && denominator !== 0) {
+          return numerator / denominator;
+        }
+      }
+
+      const decimal = Number(cleaned);
+      return Number.isFinite(decimal) ? decimal : null;
+    }
+
+    function describeArc(cx, cy, r, startAngle, endAngle) {
+      if (endAngle <= 0) return "";
+      const safeEnd = Math.min(endAngle, 359.99);
+      const start = polarToScreen(cx, cy, r, startAngle);
+      const end = polarToScreen(cx, cy, r, safeEnd);
+      const largeArcFlag = safeEnd - startAngle <= 180 ? "0" : "1";
+      return ["M", start.x, start.y, "A", r, r, 0, largeArcFlag, 0, end.x, end.y].join(" ");
+    }
+
+    function polarToScreen(cx, cy, r, angle) {
+      const rad = degToRad(angle);
+      return {
+        x: cx + Math.cos(rad) * r,
+        y: cy - Math.sin(rad) * r
+      };
+    }
+
+    function setLine(element, x1, y1, x2, y2) {
+      element.setAttribute("x1", x1);
+      element.setAttribute("y1", y1);
+      element.setAttribute("x2", x2);
+      element.setAttribute("y2", y2);
+    }
+
+    function setCircle(element, cx, cy) {
+      element.setAttribute("cx", cx);
+      element.setAttribute("cy", cy);
+    }
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function pointerToSvg(event) {
+      const point = els.svg.createSVGPoint();
+      point.x = event.clientX;
+      point.y = event.clientY;
+      return point.matrixTransform(els.svg.getScreenCTM().inverse());
+    }
+
+    function angleFromPointer(event) {
+      const point = pointerToSvg(event);
+      const dx = point.x - centerX;
+      const dy = centerY - point.y;
+      return normalizeAngle(Math.atan2(dy, dx) * 180 / Math.PI);
+    }
+
+    els.slider.addEventListener("input", (event) => {
+      updateFromAngle(Number(event.target.value), { source: "slider" });
+    });
+
+    els.input.addEventListener("change", (event) => {
+      updateFromAngle(Number(event.target.value), { source: "input" });
+    });
+
+    els.input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        updateFromAngle(Number(event.currentTarget.value), { source: "input" });
+        event.currentTarget.blur();
+      }
+    });
+
+    els.radianInput.addEventListener("change", (event) => {
+      const radians = parseRadianInput(event.target.value);
+      if (radians === null) {
+        els.radianInput.value = getPiLabel(state.displayAngle);
+        return;
+      }
+      updateFromAngle(radians * 180 / Math.PI, { source: "radian" });
+    });
+
+    els.radianInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        const radians = parseRadianInput(event.currentTarget.value);
+        if (radians !== null) {
+          updateFromAngle(radians * 180 / Math.PI, { source: "radian" });
+        } else {
+          els.radianInput.value = getPiLabel(state.displayAngle);
+        }
+        event.currentTarget.blur();
+      }
+    });
+
+    els.svg.addEventListener("pointerdown", (event) => {
+      state.dragging = true;
+      els.svg.setPointerCapture(event.pointerId);
+      updateFromAngle(angleFromPointer(event), { source: "drag" });
+    });
+
+    els.svg.addEventListener("pointermove", (event) => {
+      if (!state.dragging) return;
+      updateFromAngle(angleFromPointer(event), { source: "drag" });
+    });
+
+    els.svg.addEventListener("pointerup", (event) => {
+      state.dragging = false;
+      if (els.svg.hasPointerCapture(event.pointerId)) {
+        els.svg.releasePointerCapture(event.pointerId);
+      }
+    });
+
+    els.svg.addEventListener("pointercancel", () => {
+      state.dragging = false;
+    });
+
+    updateFromAngle(45);
+  </script>
+  <template id="ldl-copy-cost-markers" hidden>
+    <!-- copy-cost marker: body-gamma YFC -->
+    <!-- copy-cost marker: body-delta LD -->
+  </template>
+  <script src="../../assets/tool-home-nav.js"></script>
+  <script>
+    (() => {
+      "use strict";
+
+      const root = document.querySelector("[data-tool-home-nav-root]") || document.documentElement;
+      const homeLink = document.getElementById("tool-home-link");
+      const enterFullscreenButton = document.getElementById("enterFullscreen");
+      const exitFullscreenButton = document.getElementById("exitFullscreen");
+
+      if (homeLink) {
+        homeLink.textContent = "工具總覽";
+        homeLink.href = "../../index.html";
+        homeLink.target = "_top";
+        homeLink.setAttribute("aria-label", "前往工具總覽");
+      }
+
+      async function enterFullscreen() {
+        try {
+          if (!document.fullscreenElement && root.requestFullscreen) {
+            await root.requestFullscreen();
+          }
+        } catch (error) {
+          if (enterFullscreenButton) enterFullscreenButton.style.filter = "grayscale(0.4)";
+        }
+      }
+
+      async function exitFullscreen() {
+        try {
+          if (document.fullscreenElement && document.exitFullscreen) {
+            await document.exitFullscreen();
+          }
+        } catch (error) {
+          if (exitFullscreenButton) exitFullscreenButton.style.filter = "grayscale(0.4)";
+        }
+      }
+
+      if (enterFullscreenButton) enterFullscreenButton.addEventListener("click", enterFullscreen);
+      if (exitFullscreenButton) exitFullscreenButton.addEventListener("click", exitFullscreen);
+      window.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") exitFullscreen();
+      });
+
+      const record = Object.freeze({
+        productName: "單位圓三角函數探索器",
+        productNameEn: "Unit Circle Trigonometry Explorer",
+        productCode: "LDL-MATH-T05-2026-001",
+        toolId: "t05-unit-circle-trig",
+        moduleId: "ldl-t05-unit-circle-trig",
+        company: "Yung Fu Chuen",
+        author: "Yung Fu Chuen",
+        releaseYear: 2026,
+        version: "1.1.0",
+        copyright: "© 2026 Yung Fu Chuen. All rights reserved.",
+        license: "Free classroom use only. Redistribution, resale, cloning, re-hosting, modification, or derivative use without written permission is prohibited.",
+        buildId: "LDL-MATH-T05-2026-001",
+        fingerprint: "ldl-yfc-t05-unit-circle-trig-v1",
+        markerSignature: "LDL-SOURCE-REFERENCE-v1.1::Yung-Fu-Chuen::2026::t05-unit-circle-trig"
+      });
+
+      function setCssCustomProperties() {
+        const html = document.documentElement;
+        html.style.setProperty("--ldl-product-name", JSON.stringify(record.productName));
+        html.style.setProperty("--ldl-product-name-en", JSON.stringify(record.productNameEn));
+        html.style.setProperty("--ldl-product-code", JSON.stringify(record.productCode));
+        html.style.setProperty("--ldl-tool-id", JSON.stringify(record.toolId));
+        html.style.setProperty("--ldl-module-id", JSON.stringify(record.moduleId));
+        html.style.setProperty("--ldl-company", JSON.stringify(record.company));
+        html.style.setProperty("--ldl-author", JSON.stringify(record.author));
+        html.style.setProperty("--ldl-release-year", String(record.releaseYear));
+        html.style.setProperty("--ldl-version", JSON.stringify(record.version));
+        html.style.setProperty("--ldl-build-id", JSON.stringify(record.buildId));
+        html.style.setProperty("--ldl-fingerprint", JSON.stringify(record.fingerprint));
+      }
+
+      function upsertMetaTags() {
+        Object.entries({
+          author: record.author,
+          company: record.company,
+          copyright: record.copyright,
+          license: record.license,
+          "ldl-product-name": record.productName,
+          "ldl-product-name-en": record.productNameEn,
+          "ldl-product-code": record.productCode,
+          "ldl-tool-id": record.toolId,
+          "ldl-module-id": record.moduleId,
+          "ldl-release-year": String(record.releaseYear),
+          "ldl-version": record.version,
+          "ldl-build-id": record.buildId,
+          "ldl-fingerprint": record.fingerprint,
+          "ldl-source-reference": `LDL Source Reference ${record.version} - ${record.company} - ${record.author}`
+        }).forEach(([name, content]) => {
+          let meta = document.head.querySelector(`meta[name="${name}"]`);
+          if (!meta) {
+            meta = document.createElement("meta");
+            meta.name = name;
+            document.head.appendChild(meta);
+          }
+          meta.content = content;
+        });
+      }
+
+      function upsertBodyAttributes() {
+        Object.entries({
+          "data-ldl-product-name": record.productName,
+          "data-ldl-product-name-en": record.productNameEn,
+          "data-ldl-product-code": record.productCode,
+          "data-ldl-tool-id": record.toolId,
+          "data-ldl-module-id": record.moduleId,
+          "data-ldl-build-id": record.buildId,
+          "data-ldl-fingerprint": record.fingerprint,
+          "data-ldl-marker-signature": record.markerSignature
+        }).forEach(([name, value]) => document.body.setAttribute(name, value));
+      }
+
+      function getOrCreateElement(tagName, id, parent) {
+        let element = document.getElementById(id);
+        if (!element) {
+          element = document.createElement(tagName);
+          element.id = id;
+          parent.appendChild(element);
+        }
+        return element;
+      }
+
+      function upsertJsonRecord() {
+        const script = getOrCreateElement("script", "ldl-source-reference", document.body);
+        script.type = "application/json";
+        script.textContent = JSON.stringify(record, null, 2);
+      }
+
+      function upsertHiddenDomReference() {
+        const hidden = getOrCreateElement("div", "ldl-hidden-source-reference", document.body);
+        hidden.className = "ldl-offscreen-source-reference";
+        hidden.setAttribute("aria-hidden", "true");
+        Object.entries({
+          "data-ldl-product-name": record.productName,
+          "data-ldl-product-name-en": record.productNameEn,
+          "data-ldl-product-code": record.productCode,
+          "data-ldl-tool-id": record.toolId,
+          "data-ldl-module-id": record.moduleId,
+          "data-ldl-company": record.company,
+          "data-ldl-author": record.author,
+          "data-ldl-release-year": String(record.releaseYear),
+          "data-ldl-version": record.version,
+          "data-ldl-build-id": record.buildId,
+          "data-ldl-fingerprint": record.fingerprint,
+          "data-ldl-marker-signature": record.markerSignature
+        }).forEach(([name, value]) => hidden.setAttribute(name, value));
+        hidden.textContent = Object.values(record).join(" | ");
+      }
+
+      function upsertSvgMetadata() {
+        let svg = document.getElementById("ldl-hidden-svg-source-reference");
+        if (!svg) {
+          svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          svg.id = "ldl-hidden-svg-source-reference";
+          document.body.appendChild(svg);
+        }
+        svg.setAttribute("class", "ldl-offscreen-source-reference");
+        svg.setAttribute("width", "0");
+        svg.setAttribute("height", "0");
+        svg.setAttribute("aria-hidden", "true");
+        svg.setAttribute("focusable", "false");
+
+        let metadata = svg.querySelector("metadata");
+        if (!metadata) {
+          metadata = document.createElementNS("http://www.w3.org/2000/svg", "metadata");
+          svg.appendChild(metadata);
+        }
+        metadata.textContent = JSON.stringify(record);
+      }
+
+      function upsertVisibleWatermark() {
+        const watermark = getOrCreateElement("div", "ldl-visible-watermark", document.body);
+        watermark.className = "ldl-visible-watermark";
+        watermark.setAttribute("aria-hidden", "true");
+        watermark.innerHTML = "";
+
+        const text = document.createElement("span");
+        text.textContent = `© ${record.releaseYear} - Yung Fu Chuen`;
+
+        watermark.append(text);
+      }
+
+      try {
+        setCssCustomProperties();
+        upsertMetaTags();
+        upsertBodyAttributes();
+        upsertJsonRecord();
+        upsertHiddenDomReference();
+        upsertSvgMetadata();
+        upsertVisibleWatermark();
+        Object.defineProperty(window, "__LDL_SOURCE_REFERENCE__", {
+          value: record,
+          writable: false,
+          configurable: true,
+          enumerable: false
+        });
+        console.info(`© ${record.releaseYear} Yung Fu Chuen - Created by ${record.author} - LDL Source Reference v${record.version}`);
+      } catch (error) {
+        console.warn("LDL Source Reference failed to initialize.", error);
+      }
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-ldl-tool-id="A01-teach-ai-to-see-shapes">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="ldl-tool-id" content="A01-teach-ai-to-see-shapes">
+  <title>AI 判斷圖形：教 AI 看世界</title>
+  <style>
+    :root {
+      --bg: #f7f4ee;
+      --surface: #ffffff;
+      --surface-soft: #f1f5f9;
+      --surface-strong: #172033;
+      --line: #d9e0e8;
+      --line-strong: #9aa9bb;
+      --text: #162033;
+      --muted: #5f6f82;
+      --blue: #2563eb;
+      --green: #0f9f6e;
+      --amber: #d97706;
+      --rose: #e05268;
+      --ink: #1f2937;
+      --focus: #0ea5e9;
+      --shadow: 0 18px 45px rgba(31, 41, 55, 0.12);
+      --radius: 8px;
+      --top-space: var(--ldl-page-content-start, 76px);
+      --ldl-tool-id: "A01-teach-ai-to-see-shapes";
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--bg);
+    }
+
+    html:fullscreen,
+    html:fullscreen body {
+      overflow-y: auto;
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      padding: var(--top-space) clamp(14px, 2.5vw, 28px) 28px;
+      color: var(--text);
+      font-family: "Noto Sans TC", "Microsoft JhengHei", "PingFang TC", Arial, sans-serif;
+      background:
+        linear-gradient(135deg, rgba(37, 99, 235, 0.08), transparent 38%),
+        linear-gradient(315deg, rgba(224, 82, 104, 0.07), transparent 42%),
+        var(--bg);
+      line-height: 1.45;
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+    }
+
+    button:focus-visible,
+    select:focus-visible,
+    input:focus-visible {
+      outline: 3px solid rgba(14, 165, 233, 0.28);
+      outline-offset: 2px;
+    }
+
+    #tool-home-link,
+    .ldl-fullscreen-controls {
+      position: fixed;
+      top: max(14px, env(safe-area-inset-top));
+      z-index: 30;
+    }
+
+    #tool-home-link {
+      left: max(14px, env(safe-area-inset-left));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 0 14px;
+      border: 1px solid rgba(22, 32, 51, 0.12);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--text);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 800;
+      box-shadow: 0 8px 22px rgba(31, 41, 55, 0.12);
+      backdrop-filter: blur(12px);
+    }
+
+    .ldl-fullscreen-controls {
+      right: max(14px, env(safe-area-inset-right));
+      display: flex;
+      gap: 8px;
+    }
+
+    .ldl-fullscreen-controls button {
+      min-height: 38px;
+      padding: 0 12px;
+      border: 1px solid rgba(22, 32, 51, 0.12);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 8px 22px rgba(31, 41, 55, 0.12);
+      backdrop-filter: blur(12px);
+    }
+
+    #ldl-visible-watermark {
+      position: fixed;
+      top: 58px;
+      left: max(14px, env(safe-area-inset-left));
+      z-index: 29;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: rgba(22, 32, 51, 0.52);
+      font-size: 8px;
+      font-weight: 700;
+      letter-spacing: 0;
+      pointer-events: none;
+    }
+
+    #ldl-visible-watermark span {
+      font-size: 8px;
+      line-height: 1.25;
+    }
+
+    #ldl-visible-watermark img {
+      width: 16px;
+      height: 16px;
+      object-fit: contain;
+      opacity: 0.72;
+    }
+
+    .ldl-offscreen-source-reference {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .app-shell {
+      width: min(1480px, 100%);
+      margin: 0 auto;
+      display: grid;
+      gap: 16px;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: end;
+      padding-bottom: 4px;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--text);
+      font-size: clamp(1.6rem, 3vw, 2.6rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 760px;
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .status-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 32px;
+      padding: 0 10px;
+      border: 1px solid rgba(22, 32, 51, 0.12);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--text);
+      font-size: 0.86rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: var(--green);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(280px, 330px) minmax(420px, 1fr) minmax(300px, 370px);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .right-column {
+      align-self: stretch;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      height: 100%;
+    }
+
+    .layout > .panel {
+      height: 100%;
+    }
+
+    .drawing-panel {
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .panel {
+      min-width: 0;
+      border: 1px solid rgba(22, 32, 51, 0.11);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      min-height: 58px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, #ffffff, #f8fafc);
+    }
+
+    .panel-title {
+      margin: 0;
+      color: var(--text);
+      font-size: 1rem;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .panel-note {
+      margin: 2px 0 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .panel-body {
+      padding: 16px;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .stack {
+      display: grid;
+      gap: 12px;
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      font-weight: 900;
+    }
+
+    .select,
+    .number-input {
+      width: 100%;
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+      color: var(--text);
+      padding: 0 12px;
+      font-weight: 800;
+    }
+
+    .shape-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .shape-choice {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-height: 44px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+      color: var(--text);
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    .shape-choice:hover {
+      transform: translateY(-1px);
+      border-color: var(--line-strong);
+    }
+
+    .shape-choice.is-active {
+      border-color: currentColor;
+      box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 18%, transparent);
+    }
+
+    .shape-icon {
+      position: relative;
+      display: inline-block;
+      width: 22px;
+      height: 22px;
+      flex: 0 0 22px;
+    }
+
+    .shape-circle .shape-icon {
+      border-radius: 50%;
+      background: var(--blue);
+    }
+
+    .shape-square .shape-icon {
+      background: var(--amber);
+    }
+
+    .shape-rectangle .shape-icon {
+      width: 26px;
+      border-radius: 4px;
+      background: var(--rose);
+    }
+
+    .shape-triangle .shape-icon {
+      width: 0;
+      height: 0;
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-bottom: 22px solid var(--green);
+    }
+
+    .shape-circle { color: var(--blue); }
+    .shape-triangle { color: var(--green); }
+    .shape-square { color: var(--amber); }
+    .shape-rectangle { color: var(--rose); }
+
+    .segmented {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface-soft);
+    }
+
+    .segmented button {
+      min-height: 34px;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .segmented button.is-active {
+      background: #ffffff;
+      color: var(--text);
+      box-shadow: 0 4px 14px rgba(31, 41, 55, 0.1);
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 0 14px;
+      border-radius: var(--radius);
+      color: #ffffff;
+      background: var(--ink);
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform 0.16s ease, box-shadow 0.16s ease, opacity 0.16s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 22px rgba(31, 41, 55, 0.18);
+    }
+
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn.primary {
+      background: var(--blue);
+    }
+
+    .btn.success {
+      background: var(--green);
+    }
+
+    .btn.warning {
+      background: var(--amber);
+    }
+
+    .btn.ghost {
+      border: 1px solid var(--line);
+      background: #ffffff;
+      color: var(--text);
+    }
+
+    .drawing-panel .panel-body {
+      display: grid;
+      grid-template-rows: 1fr auto;
+      gap: 14px;
+    }
+
+    .canvas-stage {
+      position: relative;
+      display: grid;
+      place-items: center;
+      min-height: 400px;
+      padding: clamp(10px, 1.6vw, 16px);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(90deg, rgba(22, 32, 51, 0.05) 1px, transparent 1px),
+        linear-gradient(rgba(22, 32, 51, 0.05) 1px, transparent 1px),
+        #ffffff;
+      background-size: 24px 24px;
+      overflow: hidden;
+    }
+
+    .canvas-stage.is-scanning::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent, rgba(14, 165, 233, 0.18), transparent);
+      transform: translateY(-100%);
+      animation: scan 1s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes scan {
+      to { transform: translateY(100%); }
+    }
+
+    #drawing-canvas {
+      width: min(560px, 100%);
+      aspect-ratio: 14 / 9;
+      height: auto;
+      border: 2px solid #162033;
+      border-radius: var(--radius);
+      background: #ffffff;
+      cursor: crosshair;
+      touch-action: none;
+      box-shadow: 0 16px 34px rgba(31, 41, 55, 0.14);
+    }
+
+    .canvas-toolbar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .canvas-metric {
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 800;
+    }
+
+    .canvas-metric strong {
+      color: var(--text);
+    }
+
+    .result-hero {
+      display: grid;
+      gap: 9px;
+      min-height: 150px;
+      padding: 16px;
+      align-content: start;
+      border-radius: var(--radius);
+      background: var(--surface-strong);
+      color: #ffffff;
+    }
+
+    .right-column > .panel:first-child .panel-body {
+      padding: 14px 16px 16px;
+    }
+
+    .result-kicker {
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.82rem;
+      font-weight: 900;
+    }
+
+    .result-shape {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 48px;
+    }
+
+    .result-shape .shape-icon {
+      transform: scale(1.15);
+    }
+
+    #bestLabel {
+      color: #ffffff;
+      font-size: clamp(1.55rem, 3vw, 2.15rem);
+      font-weight: 1000;
+      letter-spacing: 0;
+    }
+
+    .confidence-number {
+      font-size: 1.2rem;
+      font-weight: 1000;
+      color: #ffffff;
+    }
+
+    .bar {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.16);
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--focus);
+      transition: width 0.28s ease;
+    }
+
+    .confidence-list {
+      display: grid;
+      gap: 9px;
+    }
+
+    .confidence-row {
+      display: grid;
+      grid-template-columns: 76px 1fr 44px;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.88rem;
+      font-weight: 900;
+    }
+
+    .confidence-row .mini-bar {
+      height: 8px;
+      border-radius: 999px;
+      background: #e5eaf0;
+      overflow: hidden;
+    }
+
+    .confidence-row .mini-bar span {
+      display: block;
+      width: 0%;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--blue);
+      transition: width 0.24s ease;
+    }
+
+    .student-note {
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      background: #ffffff;
+      color: var(--text);
+      font-size: 0.9rem;
+      font-weight: 900;
+    }
+
+    .teacher-toggle {
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: var(--radius);
+      background: var(--blue);
+      color: #ffffff;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow: 0 10px 22px rgba(37, 99, 235, 0.18);
+    }
+
+    .teacher-toggle::after {
+      content: "＋";
+      margin-left: 10px;
+      font-weight: 900;
+    }
+
+    .teacher-toggle[aria-expanded="true"]::after {
+      content: "－";
+    }
+
+    .teacher-guide .panel-body {
+      display: grid;
+      gap: 16px;
+    }
+
+    .guide-intro {
+      margin: 0;
+      max-width: 900px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .guide-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .guide-card {
+      display: grid;
+      gap: 10px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+    }
+
+    .guide-card h3 {
+      margin: 0;
+      color: var(--text);
+      font-size: 1rem;
+      line-height: 1.3;
+    }
+
+    .guide-card ul {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .guide-card ul {
+      padding-left: 1.15rem;
+    }
+
+    .guide-card li + li {
+      margin-top: 6px;
+    }
+
+    .teaching-point {
+      padding: 10px;
+      border-left: 4px solid var(--blue);
+      border-radius: 6px;
+      background: #eff6ff;
+      color: #1e3a8a;
+      font-size: 0.9rem;
+      font-weight: 900;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .stat {
+      min-height: 70px;
+      padding: 11px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+    }
+
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 900;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 4px;
+      color: var(--text);
+      font-size: 1.45rem;
+      line-height: 1;
+    }
+
+    .task-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .task {
+      display: grid;
+      grid-template-columns: 22px 1fr;
+      gap: 9px;
+      align-items: start;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .task input {
+      width: 18px;
+      height: 18px;
+      margin: 2px 0 0;
+      accent-color: var(--blue);
+    }
+
+    .task strong {
+      display: block;
+      color: var(--text);
+      font-size: 0.9rem;
+    }
+
+    .task span {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .log {
+      display: grid;
+      gap: 6px;
+      max-height: 200px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .log-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #ffffff;
+      color: var(--muted);
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .log-item strong {
+      color: var(--text);
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 20px;
+      z-index: 40;
+      transform: translateX(-50%) translateY(18px);
+      min-width: min(420px, calc(100vw - 28px));
+      padding: 12px 14px;
+      border-radius: var(--radius);
+      background: #162033;
+      color: #ffffff;
+      font-weight: 800;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      box-shadow: var(--shadow);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media (max-width: 1180px) {
+      .layout {
+        grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+      }
+
+      .right-column {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+        gap: 16px;
+        height: auto;
+        align-self: start;
+      }
+    }
+
+    @media (max-width: 820px) {
+      body {
+        padding-inline: 12px;
+      }
+
+      .topbar,
+      .layout,
+      .right-column,
+      .guide-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .status-strip {
+        justify-content: flex-start;
+      }
+
+      .canvas-stage {
+        min-height: auto;
+      }
+
+      .canvas-toolbar {
+        grid-template-columns: 1fr;
+      }
+
+      #tool-home-link,
+      .ldl-fullscreen-controls button {
+        min-height: 34px;
+        font-size: 13px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      #ldl-visible-watermark span {
+        font-size: 7px;
+      }
+
+      #ldl-visible-watermark img {
+        width: 14px;
+        height: 14px;
+      }
+
+      .shape-grid,
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .ldl-fullscreen-controls {
+        gap: 6px;
+      }
+
+      .ldl-fullscreen-controls button {
+        padding: 0 9px;
+      }
+    }
+  </style>
+</head>
+<body data-tool-home-nav-root data-ldl-reserve-top-space="true" data-ldl-tool-id="A01-teach-ai-to-see-shapes">
+  <div id="ldl-visible-watermark" aria-hidden="true">
+    <span>© 2026 · Yung Fu Chuen</span>
+  </div>
+  <div
+    id="ldl-hidden-source-reference"
+    class="ldl-offscreen-source-reference"
+    data-ldl-company="Yung Fu Chuen"
+    data-ldl-author="Yung Fu Chuen"
+    data-ldl-product-name="教 AI 看世界"
+    data-ldl-tool-id="A01-teach-ai-to-see-shapes"
+    data-ldl-subject="AI"
+    data-ldl-category="Tools"
+    data-ldl-access-level="free"
+    data-ldl-chinese-name="教 AI 看世界"
+    data-ldl-release-year="2026"
+    data-ldl-version="1.0.0"></div>
+
+  <main class="app-shell">
+    <section class="topbar" aria-labelledby="pageTitle">
+      <div>
+        <h1 id="pageTitle">AI 判斷圖形：教 AI 看世界</h1>
+        <p class="subtitle">讓學生了解 AI 如何學習例子，然後用相似度判斷問題。</p>
+      </div>
+      <div class="status-strip" aria-label="目前狀態">
+        <span class="pill"><span class="dot"></span><span id="modelStatus">等待訓練</span></span>
+        <span class="pill">資料量 <strong id="sampleCount">0</strong></span>
+      </div>
+    </section>
+
+    <section class="layout">
+      <aside class="panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">訓練資料</h2>
+            <p class="panel-note">先標籤，再加入 AI 記憶庫</p>
+          </div>
+        </div>
+        <div class="panel-body stack">
+          <div>
+            <span class="label">這張圖是甚麼？</span>
+            <div class="shape-grid" id="shapeChoices" role="radiogroup" aria-label="選擇圖形標籤">
+              <button class="shape-choice shape-circle is-active" type="button" data-shape="圓形" role="radio" aria-checked="true"><span class="shape-icon"></span>圓形</button>
+              <button class="shape-choice shape-triangle" type="button" data-shape="三角形" role="radio" aria-checked="false"><span class="shape-icon"></span>三角形</button>
+              <button class="shape-choice shape-square" type="button" data-shape="正方形" role="radio" aria-checked="false"><span class="shape-icon"></span>正方形</button>
+              <button class="shape-choice shape-rectangle" type="button" data-shape="長方形" role="radio" aria-checked="false"><span class="shape-icon"></span>長方形</button>
+            </div>
+          </div>
+
+          <div>
+            <span class="label">筆觸粗細</span>
+            <div class="segmented" id="brushChoices" aria-label="筆觸粗細">
+              <button type="button" data-size="5">細</button>
+              <button type="button" data-size="9" class="is-active">中</button>
+              <button type="button" data-size="14">粗</button>
+            </div>
+          </div>
+
+          <div class="btn-row">
+            <button class="btn success" id="addSample" type="button">加入例子</button>
+            <button class="btn warning" id="loadDemo" type="button">載入示範</button>
+            <button class="btn ghost" id="clearData" type="button">清空資料</button>
+          </div>
+
+          <div class="stats-grid" aria-label="各類圖形訓練數量">
+            <div class="stat"><span>圓形</span><strong id="countCircle">0</strong></div>
+            <div class="stat"><span>三角形</span><strong id="countTriangle">0</strong></div>
+            <div class="stat"><span>正方形</span><strong id="countSquare">0</strong></div>
+            <div class="stat"><span>長方形</span><strong id="countRectangle">0</strong></div>
+          </div>
+
+          <div class="panel-note">提示：示範資料只存在於本次頁面，重新整理後會回到空白狀態。</div>
+        </div>
+      </aside>
+
+      <section class="panel drawing-panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">畫布</h2>
+            <p class="panel-note">畫一個圖形，或用示範資料立即開始</p>
+          </div>
+          <button class="btn ghost" id="clearCanvas" type="button">清除畫布</button>
+        </div>
+        <div class="panel-body">
+          <div class="canvas-stage" id="canvasStage">
+            <canvas id="drawing-canvas" width="560" height="360" aria-label="繪畫圖形畫布"></canvas>
+          </div>
+          <div class="canvas-toolbar">
+            <div class="canvas-metric">
+              <span>畫布狀態</span>
+              <strong id="inkCoverage">請先畫一個圖形</strong>
+            </div>
+            <div class="btn-row">
+              <button class="btn primary" id="guessButton" type="button">請 AI 判斷</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="right-column stack">
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2 class="panel-title">AI 判斷</h2>
+              <p class="panel-note">AI 會找出最相似的例子</p>
+            </div>
+          </div>
+          <div class="panel-body stack">
+            <div class="result-hero">
+              <div class="result-kicker" id="resultKicker">未有結果</div>
+              <div class="result-shape" id="resultShape">
+                <span class="shape-icon" aria-hidden="true"></span>
+                <span id="bestLabel">等待繪畫</span>
+              </div>
+              <div class="confidence-number" id="bestConfidence">AI 的肯定程度：0%</div>
+              <div class="bar"><span class="bar-fill" id="bestBar"></span></div>
+              <div id="reasonText">加入訓練資料後，AI 會用相似圖形判斷答案。</div>
+            </div>
+            <div class="confidence-list" id="confidenceList" aria-label="其他可能答案"></div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h2 class="panel-title">課堂任務</h2>
+              <p class="panel-note">逐步比較資料量與準確度</p>
+            </div>
+          </div>
+          <div class="panel-body task-list">
+            <label class="task"><input type="checkbox"><span><strong>每種圖形教 AI 三次</strong><span>觀察例子增加後，AI 是否能判斷得更準確。</span></span></label>
+            <label class="task"><input type="checkbox"><span><strong>畫一個有點奇怪的圖形</strong><span>例如傾斜的正方形、較扁的圓形，觀察 AI 會如何判斷。</span></span></label>
+            <label class="task"><input type="checkbox"><span><strong>觀察 AI 是否猶豫</strong><span>如果兩個答案很接近，思考這個圖形較像哪一種。</span></span></label>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <section class="panel teacher-guide" aria-labelledby="teacherGuideTitle">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title" id="teacherGuideTitle">教學建議</h2>
+          <p class="panel-note">需要時可展開教師說明</p>
+        </div>
+        <button class="teacher-toggle" id="teacherGuideToggle" type="button" aria-expanded="false" aria-controls="teacherGuideContent">教師使用說明</button>
+      </div>
+      <div class="panel-body" id="teacherGuideContent" hidden>
+        <div class="guide-grid">
+          <article class="guide-card">
+            <h3>1. 先讓學生「教 AI」認圖形</h3>
+            <ul>
+              <li>請學生在畫布上畫出不同圖形，例如圓形、三角形、正方形和長方形。</li>
+              <li>畫完後，選擇正確標籤，按「加入訓練資料」。</li>
+              <li>每加入一張圖，AI 便會多一個學習例子。</li>
+            </ul>
+            <div class="teaching-point">教學重點：AI 並非一開始便懂得辨認圖形，它需要依靠例子學習。</div>
+          </article>
+          <article class="guide-card">
+            <h3>2. 再讓 AI 判斷新圖形</h3>
+            <ul>
+              <li>當每類圖形都有一些訓練資料後，請學生再畫一個新圖形。</li>
+              <li>按「請 AI 判斷」。</li>
+              <li>系統會顯示 AI 的答案、AI 的肯定程度和可能原因。</li>
+            </ul>
+            <div class="teaching-point">教學重點：AI 會根據以前學過的資料，找出最相似的例子來判斷。</div>
+          </article>
+          <article class="guide-card">
+            <h3>3. 引導學生觀察 AI 何時會出錯</h3>
+            <ul>
+              <li>老師可以安排學生測試不同情況。</li>
+              <li>每類只提供一至兩個樣本</li>
+              <li>故意把圖形標籤設錯</li>
+              <li>畫一個介乎正方形和長方形之間的圖形</li>
+              <li>只提供很相似的訓練圖</li>
+            </ul>
+            <div class="teaching-point">教學重點：資料太少、標籤錯誤或樣本不夠多樣化，都會令 AI 判斷不準。學生可由此理解「機器學習」其實是從資料中找規律，而不是魔法。</div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const shapes = [
+        { label: "圓形", key: "circle", color: "#2563eb" },
+        { label: "三角形", key: "triangle", color: "#0f9f6e" },
+        { label: "正方形", key: "square", color: "#d97706" },
+        { label: "長方形", key: "rectangle", color: "#e05268" }
+      ];
+
+      const canvas = document.getElementById("drawing-canvas");
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+      const canvasStage = document.getElementById("canvasStage");
+
+      let selectedShape = "圓形";
+      let brushSize = 9;
+      let isDrawing = false;
+      let hasDrawing = false;
+      let trainingData = [];
+      let lastNeighbors = [];
+      let lastScores = [];
+      let currentFeatures = new Array(64).fill(0);
+
+      function $(id) {
+        return document.getElementById(id);
+      }
+
+      function shapeInfo(label) {
+        return shapes.find((shape) => shape.label === label) || shapes[0];
+      }
+
+      function setupCanvas() {
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.strokeStyle = "#162033";
+        ctx.lineWidth = brushSize;
+      }
+
+      function canvasPoint(event) {
+        const rect = canvas.getBoundingClientRect();
+        return {
+          x: (event.clientX - rect.left) * (canvas.width / rect.width),
+          y: (event.clientY - rect.top) * (canvas.height / rect.height)
+        };
+      }
+
+      function startDraw(event) {
+        isDrawing = true;
+        hasDrawing = true;
+        const point = canvasPoint(event);
+        ctx.beginPath();
+        ctx.moveTo(point.x, point.y);
+        updateCoverage();
+      }
+
+      function draw(event) {
+        if (!isDrawing) return;
+        const point = canvasPoint(event);
+        ctx.lineWidth = brushSize;
+        ctx.lineTo(point.x, point.y);
+        ctx.stroke();
+        updateCoverage();
+      }
+
+      function stopDraw() {
+        if (!isDrawing) return;
+        isDrawing = false;
+        ctx.closePath();
+        currentFeatures = extractFeatures(ctx, canvas.width, canvas.height);
+      }
+
+      function clearCanvas() {
+        setupCanvas();
+        hasDrawing = false;
+        currentFeatures = new Array(64).fill(0);
+        lastNeighbors = [];
+        lastScores = [];
+        updateCoverage();
+        resetResult();
+      }
+
+      function inkCoverage(context = ctx, width = canvas.width, height = canvas.height) {
+        const data = context.getImageData(0, 0, width, height).data;
+        let ink = 0;
+        for (let i = 0; i < data.length; i += 4) {
+          if (data[i] < 245 || data[i + 1] < 245 || data[i + 2] < 245) ink++;
+        }
+        return ink / (width * height);
+      }
+
+      function drawingStatusText(coverage) {
+        if (!hasDrawing) return "請先畫一個圖形";
+        if (coverage < 0.005) return "請把圖形畫得更清楚";
+        return "已完成繪畫";
+      }
+
+      function updateCoverage() {
+        const coverage = inkCoverage();
+        $("inkCoverage").textContent = drawingStatusText(coverage);
+      }
+
+      function extractFeatures(context, width, height) {
+        const grid = [];
+        const data = context.getImageData(0, 0, width, height).data;
+        const cols = 8;
+        const rows = 8;
+        const cellW = width / cols;
+        const cellH = height / rows;
+
+        for (let row = 0; row < rows; row++) {
+          for (let col = 0; col < cols; col++) {
+            let ink = 0;
+            let total = 0;
+            const startX = Math.floor(col * cellW);
+            const endX = Math.floor((col + 1) * cellW);
+            const startY = Math.floor(row * cellH);
+            const endY = Math.floor((row + 1) * cellH);
+            for (let y = startY; y < endY; y++) {
+              for (let x = startX; x < endX; x++) {
+                const i = (y * width + x) * 4;
+                if (data[i] < 245 || data[i + 1] < 245 || data[i + 2] < 245) ink++;
+                total++;
+              }
+            }
+            grid.push(total ? ink / total : 0);
+          }
+        }
+        return grid;
+      }
+
+      function featureSummary(features) {
+        let ink = 0;
+        let cx = 0;
+        let cy = 0;
+        let top = 0;
+        let bottom = 0;
+        let left = 0;
+        let right = 0;
+        features.forEach((value, index) => {
+          const x = index % 8;
+          const y = Math.floor(index / 8);
+          ink += value;
+          cx += value * x;
+          cy += value * y;
+          if (y < 4) top += value; else bottom += value;
+          if (x < 4) left += value; else right += value;
+        });
+        const safeInk = ink || 1;
+        return {
+          density: Math.min(1, ink / 16),
+          centerX: cx / safeInk / 7,
+          centerY: cy / safeInk / 7,
+          verticalBalance: top / safeInk,
+          horizontalBalance: left / safeInk,
+          aspectSignal: Math.abs(left - right) + Math.abs(top - bottom)
+        };
+      }
+
+      function distance(a, b) {
+        let total = 0;
+        for (let i = 0; i < a.length; i++) {
+          const diff = a[i] - b[i];
+          total += diff * diff;
+        }
+        return Math.sqrt(total);
+      }
+
+      function classify(features) {
+        if (trainingData.length < 3) return null;
+        const k = Math.min(5, trainingData.length);
+        const neighbors = trainingData
+          .map((sample) => ({ ...sample, distance: distance(features, sample.features) }))
+          .sort((a, b) => a.distance - b.distance)
+          .slice(0, k);
+
+        const votes = Object.fromEntries(shapes.map((shape) => [shape.label, 0]));
+        neighbors.forEach((sample) => {
+          votes[sample.label] += 1 / (sample.distance + 0.08);
+        });
+        const total = Object.values(votes).reduce((sum, value) => sum + value, 0) || 1;
+        const scores = shapes
+          .map((shape) => ({
+            label: shape.label,
+            confidence: votes[shape.label] / total,
+            color: shape.color
+          }))
+          .sort((a, b) => b.confidence - a.confidence);
+
+        return { scores, neighbors };
+      }
+
+      function addCurrentSample() {
+        if (!hasDrawing || inkCoverage() < 0.005) {
+          showToast("請先在畫布畫一個圖形。");
+          return;
+        }
+        const features = extractFeatures(ctx, canvas.width, canvas.height);
+        trainingData.push({
+          id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()),
+          label: selectedShape,
+          features,
+          summary: featureSummary(features),
+          createdAt: new Date().toLocaleTimeString("zh-Hant", { hour: "2-digit", minute: "2-digit" })
+        });
+        currentFeatures = features;
+        addLog("加入例子", selectedShape);
+        updateStats();
+        showToast(`已加入「${selectedShape}」訓練例子。`);
+      }
+
+      function guess() {
+        if (!hasDrawing || inkCoverage() < 0.005) {
+          showToast("請先畫一個要讓 AI 判斷的圖形。");
+          return;
+        }
+        if (trainingData.length < 3) {
+          showToast("AI 至少需要 3 個訓練例子才可判斷。");
+          return;
+        }
+        canvasStage.classList.add("is-scanning");
+        $("modelStatus").textContent = "分析中";
+        setTimeout(() => {
+          const features = extractFeatures(ctx, canvas.width, canvas.height);
+          currentFeatures = features;
+          const result = classify(features);
+          canvasStage.classList.remove("is-scanning");
+          if (!result) return;
+          lastNeighbors = result.neighbors;
+          renderResult(result);
+          addLog("AI 判斷", result.scores[0].label);
+          $("modelStatus").textContent = "已訓練";
+        }, 620);
+      }
+
+      function renderResult(result) {
+        const best = result.scores[0];
+        const second = result.scores[1];
+        lastScores = result.scores;
+        const info = shapeInfo(best.label);
+        const shapeEl = $("resultShape");
+        shapeEl.className = `result-shape shape-${info.key}`;
+        $("resultKicker").textContent = "AI 判斷為";
+        $("bestLabel").textContent = best.label;
+        $("bestConfidence").textContent = `AI 的肯定程度：${Math.round(best.confidence * 100)}%`;
+        $("bestBar").style.width = `${Math.round(best.confidence * 100)}%`;
+        $("bestBar").style.background = info.color;
+
+        const nearest = result.neighbors[0];
+        $("reasonText").textContent = `原因：你畫的圖形和 AI 學過的「${nearest.label}」很相似。AI 判斷你的圖形最像「${nearest.label}」。`;
+
+        const closeSecond = second && second.label !== best.label && best.confidence - second.confidence <= 0.15;
+        $("confidenceList").innerHTML = closeSecond ? `<div class="student-note">另一個可能：${second.label}</div>` : "";
+      }
+
+      function loadDemoData() {
+        const temp = document.createElement("canvas");
+        temp.width = canvas.width;
+        temp.height = canvas.height;
+        const tctx = temp.getContext("2d", { willReadFrequently: true });
+        const variants = 5;
+        const generated = [];
+        const centerX = temp.width / 2;
+        const centerY = temp.height / 2;
+        const unit = Math.min(temp.width, temp.height);
+
+        function resetTemp() {
+          tctx.fillStyle = "#ffffff";
+          tctx.fillRect(0, 0, temp.width, temp.height);
+          tctx.strokeStyle = "#162033";
+          tctx.lineWidth = 13;
+          tctx.lineCap = "round";
+          tctx.lineJoin = "round";
+        }
+
+        function jitter(index, base) {
+          return base + (index - 2) * 8;
+        }
+
+        for (let i = 0; i < variants; i++) {
+          resetTemp();
+          tctx.beginPath();
+          tctx.arc(centerX + (i - 2) * 5, centerY, unit * 0.22 + i * 3, 0.1, Math.PI * 2 - 0.05);
+          tctx.stroke();
+          generated.push(sampleFromTemp("圓形", tctx));
+
+          resetTemp();
+          tctx.beginPath();
+          tctx.moveTo(centerX, jitter(i, temp.height * 0.18));
+          tctx.lineTo(jitter(i, centerX - unit * 0.28), jitter(i, temp.height * 0.78));
+          tctx.lineTo(jitter(4 - i, centerX + unit * 0.28), jitter(i, temp.height * 0.78));
+          tctx.closePath();
+          tctx.stroke();
+          generated.push(sampleFromTemp("三角形", tctx));
+
+          resetTemp();
+          tctx.strokeRect(jitter(i, centerX - unit * 0.24), jitter(4 - i, centerY - unit * 0.24), unit * 0.48 + i * 4, unit * 0.48 - i * 2);
+          generated.push(sampleFromTemp("正方形", tctx));
+
+          resetTemp();
+          tctx.strokeRect(jitter(i, centerX - unit * 0.36), jitter(4 - i, centerY - unit * 0.17), unit * 0.72 - i * 6, unit * 0.34 + i * 5);
+          generated.push(sampleFromTemp("長方形", tctx));
+        }
+
+        trainingData = generated;
+        drawDemoChallenge();
+        updateStats();
+        addLog("載入示範", `${generated.length} 個例子`);
+        $("modelStatus").textContent = "已訓練";
+        showToast("已載入 20 個示範訓練例子，並放上一個待判斷圖形。");
+      }
+
+      function sampleFromTemp(label, context) {
+        const features = extractFeatures(context, canvas.width, canvas.height);
+        return {
+          id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()),
+          label,
+          features,
+          summary: featureSummary(features),
+          createdAt: new Date().toLocaleTimeString("zh-Hant", { hour: "2-digit", minute: "2-digit" })
+        };
+      }
+
+      function drawDemoChallenge() {
+        setupCanvas();
+        const label = shapes[Math.floor(Math.random() * shapes.length)].label;
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const unit = Math.min(canvas.width, canvas.height);
+        ctx.strokeStyle = "#162033";
+        ctx.lineWidth = 13;
+        ctx.lineCap = "round";
+        ctx.lineJoin = "round";
+        ctx.beginPath();
+        if (label === "圓形") {
+          ctx.arc(centerX, centerY, unit * 0.24, 0.12, Math.PI * 2 - 0.08);
+        } else if (label === "三角形") {
+          ctx.moveTo(centerX, canvas.height * 0.18);
+          ctx.lineTo(centerX - unit * 0.28, canvas.height * 0.78);
+          ctx.lineTo(centerX + unit * 0.28, canvas.height * 0.76);
+          ctx.closePath();
+        } else if (label === "正方形") {
+          ctx.rect(centerX - unit * 0.24, centerY - unit * 0.24, unit * 0.48, unit * 0.48);
+        } else {
+          ctx.rect(centerX - unit * 0.36, centerY - unit * 0.17, unit * 0.72, unit * 0.34);
+        }
+        ctx.stroke();
+        hasDrawing = true;
+        currentFeatures = extractFeatures(ctx, canvas.width, canvas.height);
+        lastNeighbors = [];
+        lastScores = [];
+        updateCoverage();
+        resetResult();
+      }
+
+      function clearTrainingData() {
+        trainingData = [];
+        lastNeighbors = [];
+        lastScores = [];
+        updateStats();
+        resetResult();
+        addLog("清空資料", "0 個例子");
+        $("modelStatus").textContent = "等待訓練";
+        showToast("訓練資料已清空。");
+      }
+
+      function updateStats() {
+        const counts = Object.fromEntries(shapes.map((shape) => [shape.label, 0]));
+        trainingData.forEach((sample) => counts[sample.label]++);
+        $("countCircle").textContent = counts["圓形"];
+        $("countTriangle").textContent = counts["三角形"];
+        $("countSquare").textContent = counts["正方形"];
+        $("countRectangle").textContent = counts["長方形"];
+        $("sampleCount").textContent = trainingData.length;
+        $("guessButton").disabled = trainingData.length < 3;
+      }
+
+      function resetResult() {
+        $("resultShape").className = "result-shape";
+        $("resultKicker").textContent = "未有結果";
+        $("bestLabel").textContent = "等待繪畫";
+        $("bestConfidence").textContent = "AI 的肯定程度：0%";
+        $("bestBar").style.width = "0%";
+        $("bestBar").style.background = "var(--focus)";
+        $("reasonText").textContent = "加入訓練資料後，AI 會用相似圖形判斷答案。";
+        $("confidenceList").innerHTML = "";
+      }
+
+      function addLog(action, detail) {
+        const log = $("activityLog");
+        if (!log) return;
+        const item = document.createElement("div");
+        item.className = "log-item";
+        item.innerHTML = `<strong>${action}</strong><span>${detail}</span>`;
+        log.prepend(item);
+        while (log.children.length > 8) log.lastElementChild.remove();
+      }
+
+      function showToast(message) {
+        const toast = $("toast");
+        toast.textContent = message;
+        toast.classList.add("show");
+        clearTimeout(showToast.timer);
+        showToast.timer = setTimeout(() => toast.classList.remove("show"), 2200);
+      }
+
+      function bindControls() {
+        canvas.addEventListener("pointerdown", (event) => {
+          canvas.setPointerCapture(event.pointerId);
+          startDraw(event);
+        });
+        canvas.addEventListener("pointermove", draw);
+        canvas.addEventListener("pointerup", stopDraw);
+        canvas.addEventListener("pointercancel", stopDraw);
+
+        $("shapeChoices").addEventListener("click", (event) => {
+          const button = event.target.closest(".shape-choice");
+          if (!button) return;
+          selectedShape = button.dataset.shape;
+          document.querySelectorAll(".shape-choice").forEach((choice) => {
+            const active = choice === button;
+            choice.classList.toggle("is-active", active);
+            choice.setAttribute("aria-checked", String(active));
+          });
+        });
+
+        $("brushChoices").addEventListener("click", (event) => {
+          const button = event.target.closest("button");
+          if (!button) return;
+          brushSize = Number(button.dataset.size);
+          ctx.lineWidth = brushSize;
+          document.querySelectorAll("#brushChoices button").forEach((choice) => {
+            choice.classList.toggle("is-active", choice === button);
+          });
+        });
+
+        $("clearCanvas").addEventListener("click", clearCanvas);
+        $("addSample").addEventListener("click", addCurrentSample);
+        $("guessButton").addEventListener("click", guess);
+        $("loadDemo").addEventListener("click", loadDemoData);
+        $("clearData").addEventListener("click", clearTrainingData);
+
+        $("teacherGuideToggle").addEventListener("click", () => {
+          const button = $("teacherGuideToggle");
+          const content = $("teacherGuideContent");
+          const expanded = button.getAttribute("aria-expanded") === "true";
+          button.setAttribute("aria-expanded", String(!expanded));
+          content.hidden = expanded;
+        });
+
+        // The shared navigation creates and binds the fullscreen controls.
+      }
+
+      setupCanvas();
+      bindControls();
+      updateCoverage();
+      updateStats();
+      resetResult();
+    })();
+  </script>
+  <script src="../../assets/tool-home-nav.js"></script>
+</body>
+</html>
+
+

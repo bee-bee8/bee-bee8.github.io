@@ -1,0 +1,1209 @@
+<!doctype html>
+<html lang="zh-Hant" data-ldl-tool-id="S01-Shadow-and-Sunlight-Explorer" data-ldl-fingerprint="ldl-yfc-s01-shadow-and-sunlight-explorer-v1">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Yung Fu Chuen">
+  <meta name="company" content="Yung Fu Chuen">
+  <meta name="copyright" content="© 2026 Yung Fu Chuen. All rights reserved.">
+  <meta name="license" content="Free classroom use only. Redistribution, resale, cloning, re-hosting, modification, or derivative use without written permission is prohibited.">
+  <meta name="ldl-product-name" content="太陽與影子互動模型">
+  <meta name="ldl-product-name-en" content="Shadow and Sunlight Explorer">
+  <meta name="ldl-product-code" content="LDL-SCI-S01-2026-001">
+  <meta name="ldl-tool-id" content="S01-Shadow-and-Sunlight-Explorer">
+  <meta name="ldl-module-id" content="ldl-s01-shadow-and-sunlight-explorer">
+  <meta name="ldl-release-year" content="2026">
+  <meta name="ldl-version" content="1.0.0">
+  <meta name="ldl-build-id" content="LDL-SCI-S01-2026-001">
+  <meta name="ldl-fingerprint" content="ldl-yfc-s01-shadow-and-sunlight-explorer-v1">
+  <meta name="ldl-source-reference" content="LDL Source Reference v1.0.0 - Yung Fu Chuen - Yung Fu Chuen">
+  <title>太陽與影子互動模型</title>
+  <style>
+    :root {
+      --bg: #edf5fb;
+      --panel: #ffffff;
+      --ink: #142033;
+      --muted: #637083;
+      --line: #d8e3ee;
+      --brand: #2563eb;
+      --green: #15803d;
+      --shadow: 0 18px 38px rgba(20, 32, 51, 0.10);
+      --radius: 8px;
+      font-family: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    html:fullscreen,
+    html:fullscreen body {
+      overflow-y: auto;
+      background: var(--bg);
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .app {
+      width: min(1540px, calc(100vw - 28px));
+      margin: 0 auto;
+      padding: 94px 0 28px;
+    }
+
+    .top-button,
+    #tool-home-link {
+      position: fixed;
+      z-index: 2147483647;
+      top: max(14px, env(safe-area-inset-top));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 132px;
+      min-height: 54px;
+      padding: 0 14px;
+      border: 2px solid rgba(255, 255, 255, 0.84);
+      border-radius: 999px;
+      color: #ffffff;
+      box-shadow: 0 12px 24px rgba(14, 31, 58, 0.24), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+      font-size: 18px;
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: 0;
+      text-decoration: none;
+      white-space: nowrap;
+      cursor: pointer;
+      transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+    }
+
+    .top-button:hover,
+    .top-button:focus-visible,
+    #tool-home-link:hover,
+    #tool-home-link:focus-visible {
+      outline: none;
+      transform: translateY(-2px);
+      box-shadow: 0 16px 28px rgba(14, 31, 58, 0.28), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+    }
+
+    .top-button:active,
+    #tool-home-link:active {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    #tool-home-link {
+      left: max(14px, env(safe-area-inset-left));
+      background: linear-gradient(135deg, #0f766e, #134e4a);
+    }
+
+    .exit-fullscreen {
+      left: max(158px, calc(env(safe-area-inset-left) + 158px));
+      background: linear-gradient(135deg, #3949ab, #1e2d66);
+    }
+
+    .enter-fullscreen {
+      right: max(14px, env(safe-area-inset-right));
+      background: linear-gradient(135deg, #1d78d6, #124c91);
+    }
+
+    .ldl-visible-watermark {
+      position: fixed;
+      z-index: 35;
+      left: max(10px, env(safe-area-inset-left));
+      top: max(70px, calc(env(safe-area-inset-top) + 66px));
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      max-width: min(210px, calc(100vw - 20px));
+      padding: 0;
+      border: 0;
+      color: rgba(23, 32, 51, 0.56);
+      background: transparent;
+      box-shadow: none;
+      font-size: 8px;
+      font-weight: 600;
+      line-height: 1.25;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .ldl-watermark-mark {
+      display: inline-grid;
+      place-items: center;
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+      border-radius: 4px;
+      background: rgba(37, 99, 235, 0.18);
+      color: rgba(15, 23, 42, 0.66);
+      font-size: 7px;
+      font-weight: 900;
+    }
+
+    .ldl-offscreen-source-reference {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      margin: -1px !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      clip: rect(0 0 0 0) !important;
+      clip-path: inset(50%) !important;
+      border: 0 !important;
+      white-space: nowrap !important;
+    }
+
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 18px;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 3vw, 42px);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.55;
+    }
+
+    .readout-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 178px;
+      padding: 12px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+      box-shadow: var(--shadow);
+      font-size: 22px;
+      font-weight: 900;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    .sky-panel {
+      position: relative;
+      min-height: 520px;
+      overflow: hidden;
+      border: 6px solid #ffffff;
+      border-radius: 22px;
+      box-shadow: 0 22px 44px rgba(20, 32, 51, 0.16);
+      cursor: grab;
+      touch-action: none;
+      user-select: none;
+      background: linear-gradient(to top, rgb(224, 242, 254), rgb(2, 132, 199));
+    }
+
+    .sky-panel:active {
+      cursor: grabbing;
+    }
+
+    .sun-path {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .cloud-layer {
+      position: absolute;
+      inset: 28px 0 auto;
+      z-index: 2;
+      height: 92px;
+      overflow: hidden;
+      pointer-events: none;
+      color: #ffffff;
+    }
+
+    .cloud {
+      position: absolute;
+      opacity: 0.34;
+      filter: blur(0.2px);
+    }
+
+    .cloud.one {
+      top: 6px;
+      width: 140px;
+      animation: drift-right 46s linear infinite;
+    }
+
+    .cloud.two {
+      top: 42px;
+      width: 174px;
+      opacity: 0.25;
+      animation: drift-left 38s linear infinite;
+    }
+
+    @keyframes drift-right {
+      from { transform: translateX(-18vw); }
+      to { transform: translateX(110vw); }
+    }
+
+    @keyframes drift-left {
+      from { transform: translateX(112vw); }
+      to { transform: translateX(-22vw); }
+    }
+
+    .sun {
+      position: absolute;
+      z-index: 4;
+      left: 50%;
+      top: 50%;
+      width: 92px;
+      height: 92px;
+      margin: -46px 0 0 -46px;
+      border-radius: 999px;
+      transition: left 700ms cubic-bezier(0.25, 1, 0.5, 1), top 700ms cubic-bezier(0.25, 1, 0.5, 1);
+      pointer-events: none;
+    }
+
+    .sun.no-transition {
+      transition: none;
+    }
+
+    .sun::before {
+      content: "";
+      position: absolute;
+      inset: -10px;
+      border: 2px dashed rgba(255, 245, 157, 0.65);
+      border-radius: inherit;
+      animation: spin 20s linear infinite;
+    }
+
+    .sun::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: #facc15;
+      box-shadow: 0 0 34px #facc15, 0 0 76px rgba(253, 224, 71, 0.58);
+      filter: blur(8px);
+      opacity: 0.84;
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+
+    .sun-core {
+      position: absolute;
+      inset: 14px;
+      z-index: 1;
+      display: grid;
+      place-items: center;
+      border: 2px solid #f59e0b;
+      border-radius: inherit;
+      background: #fde047;
+      color: #451a03;
+      font: 900 13px/1 "JetBrains Mono", Consolas, monospace;
+      box-shadow: inset 0 -6px 0 rgba(0, 0, 0, 0.08);
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(0.96); opacity: 0.76; }
+      50% { transform: scale(1.08); opacity: 0.95; }
+    }
+
+    .ground {
+      position: absolute;
+      z-index: 3;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 188px;
+      border-top: 4px solid #22c55e;
+      background: linear-gradient(to top, #16a34a, #4ade80);
+      transition: filter 600ms ease;
+    }
+
+    .ground-labels {
+      position: absolute;
+      inset: auto 22px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #082f1f;
+      font-weight: 900;
+      pointer-events: none;
+    }
+
+    .ground-labels span {
+      padding: 8px 14px;
+      border: 1px solid rgba(6, 78, 59, 0.25);
+      border-radius: var(--radius);
+      background: rgba(6, 78, 59, 0.16);
+    }
+
+    .ruler-grid {
+      position: absolute;
+      left: 12%;
+      right: 12%;
+      bottom: 80px;
+      height: 34px;
+      color: rgba(6, 78, 59, 0.78);
+      pointer-events: none;
+    }
+
+    .object-stage {
+      position: absolute;
+      z-index: 5;
+      left: 50%;
+      bottom: 130px;
+      width: 150px;
+      height: 210px;
+      transform: translateX(-50%);
+      transform-origin: bottom center;
+      pointer-events: none;
+    }
+
+    .object-stage svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      filter: drop-shadow(0 6px 8px rgba(15, 23, 42, 0.18));
+    }
+
+    .shadow-stage {
+      position: absolute;
+      z-index: 4;
+      left: 50%;
+      bottom: 130px;
+      width: 150px;
+      height: 210px;
+      transform: translateX(-50%) scaleY(-0.35) skewX(0deg) scaleX(0.6);
+      transform-origin: bottom center;
+      filter: brightness(0) opacity(0.58) blur(1.2px);
+      pointer-events: none;
+      transition: transform 700ms cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    .shadow-stage.no-transition {
+      transition: none;
+    }
+
+    .pin {
+      position: absolute;
+      z-index: 6;
+      left: 50%;
+      bottom: 130px;
+      width: 8px;
+      height: 8px;
+      margin-left: -4px;
+      border: 1px solid #111827;
+      border-radius: 50%;
+      background: #facc15;
+      pointer-events: none;
+    }
+
+    .control-panel {
+      display: grid;
+      grid-template-columns: auto minmax(320px, 1fr) auto;
+      gap: 18px;
+      align-items: center;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .button-row,
+    .object-switcher {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      min-height: 46px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+      color: var(--ink);
+      padding: 10px 15px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform 120ms ease, border-color 160ms ease, background 160ms ease;
+    }
+
+    .btn:hover,
+    .btn:focus-visible {
+      outline: none;
+      transform: translateY(-1px);
+      border-color: #b8c4d5;
+      background: #f8fafc;
+    }
+
+    .btn.primary {
+      min-width: 112px;
+      border-color: #047857;
+      background: #059669;
+      color: #ffffff;
+      box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.15);
+    }
+
+    .btn.primary.is-playing {
+      border-color: #b91c1c;
+      background: #ef4444;
+    }
+
+    .btn.object-btn[aria-pressed="true"] {
+      border-color: var(--brand);
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+
+    .time-control {
+      display: grid;
+      gap: 8px;
+    }
+
+    .time-control-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    .time-control input[type="range"] {
+      width: 100%;
+      height: 12px;
+      accent-color: var(--brand);
+      cursor: pointer;
+    }
+
+    .ticks {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      color: #7b8797;
+      font-size: 12px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .preset-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: -4px;
+    }
+
+    .preset-btn {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #f8fafc;
+      color: #334155;
+      padding: 7px 12px;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .info-card {
+      min-height: 96px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+      box-shadow: var(--shadow);
+    }
+
+    .info-label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .info-value {
+      display: block;
+      color: var(--ink);
+      font-size: clamp(20px, 1.6vw, 26px);
+      font-weight: 900;
+      line-height: 1.2;
+    }
+
+    .explain {
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #ffffff;
+      box-shadow: var(--shadow);
+    }
+
+    .explain h2 {
+      margin: 0 0 10px;
+      font-size: 22px;
+    }
+
+    .explain ul {
+      margin: 0;
+      padding-left: 1.25em;
+      color: #344054;
+      font-size: 16px;
+      line-height: 1.75;
+    }
+
+    @media (max-width: 920px) {
+      .hero,
+      .control-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        display: grid;
+        align-items: start;
+      }
+
+      .readout-pill {
+        width: fit-content;
+      }
+
+      .control-panel {
+        display: grid;
+      }
+
+      .button-row,
+      .object-switcher {
+        width: 100%;
+      }
+
+      .info-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 620px) {
+      .app {
+        width: min(100vw - 18px, 1540px);
+        padding: 82px 0 18px;
+      }
+
+      .top-button,
+      #tool-home-link {
+        width: 104px;
+        min-height: 46px;
+        padding: 0 6px;
+        font-size: 18px;
+      }
+
+      #tool-home-link {
+        left: max(8px, env(safe-area-inset-left));
+      }
+
+      .exit-fullscreen {
+        left: max(118px, calc(env(safe-area-inset-left) + 118px));
+      }
+
+      .enter-fullscreen {
+        right: max(8px, env(safe-area-inset-right));
+      }
+
+      .ldl-visible-watermark {
+        left: max(8px, env(safe-area-inset-left));
+        top: max(58px, calc(env(safe-area-inset-top) + 54px));
+        font-size: 7px;
+      }
+
+      .ldl-watermark-mark {
+        width: 14px;
+        height: 14px;
+        font-size: 6px;
+      }
+
+      .sky-panel {
+        min-height: 430px;
+        border-width: 4px;
+        border-radius: 14px;
+      }
+
+      .ground {
+        height: 158px;
+      }
+
+      .object-stage,
+      .shadow-stage {
+        width: 120px;
+        height: 168px;
+        bottom: 112px;
+      }
+
+      .pin {
+        bottom: 112px;
+      }
+
+      .ground-labels {
+        inset: auto 10px 10px;
+        font-size: 13px;
+      }
+
+      .ruler-grid {
+        bottom: 66px;
+      }
+
+      .button-row .btn,
+      .object-switcher .btn {
+        flex: 1 1 116px;
+      }
+
+      .ticks {
+        font-size: 10px;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body
+  data-ldl-reserve-top-space="true"
+  data-ldl-product-name="太陽與影子互動模型"
+  data-ldl-product-name-en="Shadow and Sunlight Explorer"
+  data-ldl-product-code="LDL-SCI-S01-2026-001"
+  data-ldl-tool-id="S01-Shadow-and-Sunlight-Explorer"
+  data-ldl-module-id="ldl-s01-shadow-and-sunlight-explorer"
+  data-ldl-build-id="LDL-SCI-S01-2026-001"
+  data-ldl-fingerprint="ldl-yfc-s01-shadow-and-sunlight-explorer-v1"
+>
+  <main class="app" data-tool-home-nav-root>
+    <a id="tool-home-link" href="../../index.html" target="_top" aria-label="前往工具總覽">工具總覽</a>
+    <button class="top-button exit-fullscreen" id="exitFullscreen" type="button" aria-label="退出全螢幕">退出全螢幕</button>
+    <button class="top-button enter-fullscreen" id="enterFullscreen" type="button" aria-label="進入全螢幕">全螢幕</button>
+
+    <header class="hero">
+      <div>
+        <h1>太陽與影子互動模型</h1>
+        <p class="subtitle">拖動天空中的太陽或拉動時間軸，觀察日出、正午、日落時影子的方向和長短如何改變。</p>
+      </div>
+      <div class="readout-pill" aria-live="polite">
+        <span>時間</span>
+        <span id="clockReadout">中午 12:00</span>
+      </div>
+    </header>
+
+    <section class="layout" aria-label="太陽與影子互動模型">
+      <section id="skyPanel" class="sky-panel" aria-label="拖動太陽以改變時間">
+        <svg class="sun-path" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M 10 85 Q 50 -55 90 85" fill="none" stroke="rgba(255,255,255,0.52)" stroke-width="0.55" stroke-dasharray="2 2"></path>
+        </svg>
+
+        <div class="cloud-layer" aria-hidden="true">
+          <svg class="cloud one" viewBox="0 0 100 32">
+            <path d="M5 22 C5 15 11 12 17 12 C20 6 31 6 35 12 C42 12 48 16 48 22 Z" fill="currentColor"></path>
+            <path d="M43 24 C43 17 49 14 55 14 C58 8 70 8 74 14 C82 14 89 18 89 24 Z" fill="currentColor"></path>
+          </svg>
+          <svg class="cloud two" viewBox="0 0 120 34">
+            <path d="M8 24 C8 16 16 12 24 12 C29 5 43 5 48 12 C58 12 65 17 65 24 Z" fill="currentColor"></path>
+            <path d="M56 25 C56 18 64 14 72 14 C76 8 88 8 94 14 C103 14 112 19 112 25 Z" fill="currentColor"></path>
+          </svg>
+        </div>
+
+        <div id="sunNode" class="sun" aria-hidden="true">
+          <div id="sunTime" class="sun-core">12:00</div>
+        </div>
+
+        <div id="groundNode" class="ground">
+          <div class="ruler-grid" aria-hidden="true">
+            <svg viewBox="0 0 100 20" preserveAspectRatio="none">
+              <line x1="10" y1="0" x2="90" y2="0" stroke="currentColor" stroke-width="0.25" stroke-dasharray="0.5 0.5"></line>
+              <line x1="50" y1="0" x2="50" y2="4" stroke="currentColor" stroke-width="0.7"></line>
+              <line x1="10" y1="0" x2="10" y2="3.2" stroke="currentColor" stroke-width="0.35"></line>
+              <line x1="20" y1="0" x2="20" y2="3.2" stroke="currentColor" stroke-width="0.35"></line>
+              <line x1="30" y1="0" x2="30" y2="3.2" stroke="currentColor" stroke-width="0.35"></line>
+              <line x1="40" y1="0" x2="40" y2="3.2" stroke="currentColor" stroke-width="0.35"></line>
+              <line x1="60" y1="0" x2="60" y2="3.2" stroke="currentColor" stroke-width="0.35"></line>
+              <line x1="70" y1="0" x2="70" y2="3.2" stroke="currentColor" stroke-width="0.35"></line>
+              <line x1="80" y1="0" x2="80" y2="3.2" stroke="currentColor" stroke-width="0.35"></line>
+              <line x1="90" y1="0" x2="90" y2="3.2" stroke="currentColor" stroke-width="0.35"></line>
+            </svg>
+          </div>
+          <div class="ground-labels" aria-hidden="true">
+            <span>東方 East</span>
+            <span>西方 West</span>
+          </div>
+        </div>
+
+        <div id="shadowStage" class="shadow-stage" aria-hidden="true"></div>
+        <div id="objectStage" class="object-stage" aria-hidden="true"></div>
+        <div class="pin" aria-hidden="true"></div>
+      </section>
+
+      <section class="control-panel" aria-label="互動控制">
+        <div class="button-row">
+          <button id="playPauseBtn" class="btn primary" type="button">播放</button>
+          <button id="resetBtn" class="btn" type="button">回到中午</button>
+        </div>
+
+        <div class="time-control">
+          <div class="time-control-header">
+            <span>拉動天空中的太陽，或使用下方時間軸</span>
+            <span id="timeRangeLabel">12:00</span>
+          </div>
+          <input id="timeRange" type="range" min="6" max="18" step="0.05" value="12" aria-label="時間拉桿">
+          <div class="ticks" aria-hidden="true">
+            <span>06:00 日出</span>
+            <span>09:00</span>
+            <span>12:00 中午</span>
+            <span>15:00</span>
+            <span>18:00 日落</span>
+          </div>
+          <div class="preset-row">
+            <button class="preset-btn" type="button" data-time="6">日出</button>
+            <button class="preset-btn" type="button" data-time="9">早上</button>
+            <button class="preset-btn" type="button" data-time="12">正午</button>
+            <button class="preset-btn" type="button" data-time="15">下午</button>
+            <button class="preset-btn" type="button" data-time="18">日落</button>
+          </div>
+        </div>
+
+        <div class="object-switcher" aria-label="選擇觀察物件">
+          <button class="btn object-btn" type="button" data-object="tree" aria-pressed="true">小樹</button>
+          <button class="btn object-btn" type="button" data-object="stick" aria-pressed="false">木棍</button>
+          <button class="btn object-btn" type="button" data-object="explorer" aria-pressed="false">探險家</button>
+        </div>
+      </section>
+
+      <section class="info-grid" aria-label="觀察資料">
+        <div class="info-card">
+          <span class="info-label">太陽高度</span>
+          <span id="altitudeReadout" class="info-value">90°</span>
+        </div>
+        <div class="info-card">
+          <span class="info-label">太陽方向</span>
+          <span id="sunDirectionReadout" class="info-value">天頂正上方</span>
+        </div>
+        <div class="info-card">
+          <span class="info-label">影子方向</span>
+          <span id="shadowDirectionReadout" class="info-value">地面正下方</span>
+        </div>
+        <div class="info-card">
+          <span class="info-label">影子長度</span>
+          <span id="shadowLengthReadout" class="info-value">最短</span>
+        </div>
+      </section>
+
+      <section class="explain">
+        <h2>觀察重點</h2>
+        <ul>
+          <li>早上太陽在東方，影子會向西方伸展，而且影子較長。</li>
+          <li>接近中午時，太陽位置較高，影子會變短。</li>
+          <li>下午太陽移向西方，影子會轉向東方並再次變長。</li>
+        </ul>
+      </section>
+    </section>
+  </main>
+  <script src="../../assets/tool-home-nav.js"></script>
+  <script>
+    (() => {
+      const record = {
+        productName: "太陽與影子互動模型",
+        productNameEn: "Shadow and Sunlight Explorer",
+        productCode: "LDL-SCI-S01-2026-001",
+        toolId: "S01-Shadow-and-Sunlight-Explorer",
+        moduleId: "ldl-s01-shadow-and-sunlight-explorer",
+        company: "Yung Fu Chuen",
+        author: "Yung Fu Chuen",
+        releaseYear: 2026,
+        version: "1.0.0",
+        buildId: "LDL-SCI-S01-2026-001",
+        fingerprint: "ldl-yfc-s01-shadow-and-sunlight-explorer-v1",
+        markerSignature: "LDL-SCI-S01-YFC-2026"
+      };
+
+      const sourceScript = document.createElement("script");
+      sourceScript.id = "ldl-source-reference";
+      sourceScript.type = "application/json";
+      sourceScript.textContent = JSON.stringify(record, null, 2);
+      document.body.appendChild(sourceScript);
+
+      const hidden = document.createElement("div");
+      hidden.id = "ldl-hidden-source-reference";
+      hidden.className = "ldl-offscreen-source-reference";
+      hidden.setAttribute("aria-hidden", "true");
+      Object.entries({
+        "data-ldl-product-name": record.productName,
+        "data-ldl-product-name-en": record.productNameEn,
+        "data-ldl-product-code": record.productCode,
+        "data-ldl-tool-id": record.toolId,
+        "data-ldl-module-id": record.moduleId,
+        "data-ldl-company": record.company,
+        "data-ldl-author": record.author,
+        "data-ldl-release-year": String(record.releaseYear),
+        "data-ldl-version": record.version,
+        "data-ldl-build-id": record.buildId,
+        "data-ldl-fingerprint": record.fingerprint,
+        "data-ldl-marker-signature": record.markerSignature
+      }).forEach(([name, value]) => hidden.setAttribute(name, value));
+      hidden.textContent = Object.values(record).join(" | ");
+      document.body.appendChild(hidden);
+
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.id = "ldl-hidden-svg-source-reference";
+      svg.setAttribute("class", "ldl-offscreen-source-reference");
+      svg.setAttribute("width", "0");
+      svg.setAttribute("height", "0");
+      svg.setAttribute("aria-hidden", "true");
+      const metadata = document.createElementNS("http://www.w3.org/2000/svg", "metadata");
+      metadata.textContent = JSON.stringify(record);
+      svg.appendChild(metadata);
+      document.body.appendChild(svg);
+
+      Object.defineProperty(window, "__LDL_SOURCE_REFERENCE__", {
+        value: record,
+        writable: false,
+        configurable: true,
+        enumerable: false
+      });
+      console.info(`© ${record.releaseYear} Yung Fu Chuen - Created by ${record.author} - LDL Source Reference v${record.version}`);
+    })();
+
+    (() => {
+      const SKY_KEYFRAMES = [
+        { h: 6.0, bottom: [239, 68, 68], top: [67, 56, 202] },
+        { h: 7.2, bottom: [251, 146, 60], top: [124, 58, 237] },
+        { h: 9.0, bottom: [186, 230, 253], top: [56, 189, 248] },
+        { h: 12.0, bottom: [224, 242, 254], top: [2, 132, 199] },
+        { h: 15.0, bottom: [254, 215, 170], top: [56, 189, 248] },
+        { h: 16.8, bottom: [244, 114, 182], top: [139, 92, 246] },
+        { h: 18.0, bottom: [220, 38, 38], top: [30, 27, 75] }
+      ];
+
+      const templates = {
+        tree: `
+          <svg viewBox="0 0 120 180" xmlns="http://www.w3.org/2000/svg">
+            <path d="M52 130 C52 120 68 120 68 130 L64 175 C64 178 56 178 56 175 Z" fill="#78350f"></path>
+            <path d="M56 142 L45 132" stroke="#78350f" stroke-width="4" stroke-linecap="round"></path>
+            <path d="M64 148 L75 138" stroke="#78350f" stroke-width="4" stroke-linecap="round"></path>
+            <circle cx="60" cy="70" r="45" fill="#15803d"></circle>
+            <circle cx="45" cy="85" r="30" fill="#16a34a"></circle>
+            <circle cx="75" cy="85" r="30" fill="#16a34a"></circle>
+            <circle cx="60" cy="55" r="35" fill="#22c55e"></circle>
+            <circle cx="50" cy="50" r="10" fill="#4ade80" opacity="0.5"></circle>
+            <circle cx="35" cy="80" r="8" fill="#4ade80" opacity="0.5"></circle>
+            <circle cx="38" cy="72" r="5.5" fill="#ef4444"></circle>
+            <circle cx="82" cy="78" r="5.5" fill="#ef4444"></circle>
+            <circle cx="56" cy="98" r="5.5" fill="#ef4444"></circle>
+            <circle cx="68" cy="46" r="5.5" fill="#ef4444"></circle>
+          </svg>`,
+        stick: `
+          <svg viewBox="0 0 100 180" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="50" cy="170" rx="32" ry="9" fill="#1e293b"></ellipse>
+            <ellipse cx="50" cy="168" rx="26" ry="6.5" fill="#334155"></ellipse>
+            <rect x="47" y="32" width="6" height="136" rx="2" fill="#94a3b8"></rect>
+            <rect x="47" y="42" width="6" height="16" fill="#ef4444"></rect>
+            <rect x="47" y="74" width="6" height="16" fill="#ef4444"></rect>
+            <rect x="47" y="106" width="6" height="16" fill="#ef4444"></rect>
+            <rect x="47" y="138" width="6" height="16" fill="#ef4444"></rect>
+            <line x1="38" y1="42" x2="44" y2="42" stroke="#475569" stroke-width="2.5"></line>
+            <line x1="38" y1="74" x2="44" y2="74" stroke="#475569" stroke-width="2.5"></line>
+            <line x1="38" y1="106" x2="44" y2="106" stroke="#475569" stroke-width="2.5"></line>
+            <line x1="38" y1="138" x2="44" y2="138" stroke="#475569" stroke-width="2.5"></line>
+            <text x="24" y="46" font-family="monospace" font-size="9.5" fill="#475569" font-weight="bold">15</text>
+            <text x="24" y="78" font-family="monospace" font-size="9.5" fill="#475569" font-weight="bold">10</text>
+            <text x="26" y="110" font-family="monospace" font-size="9.5" fill="#475569" font-weight="bold">5</text>
+            <text x="26" y="142" font-family="monospace" font-size="9.5" fill="#475569" font-weight="bold">0</text>
+            <text x="18" y="15" font-family="sans-serif" font-size="8.5" fill="#0284c7" font-weight="700">高度：15cm</text>
+            <path d="M53 32 L78 40 L53 48 Z" fill="#3b82f6"></path>
+            <circle cx="50" cy="30" r="4.5" fill="#fbbf24"></circle>
+          </svg>`,
+        explorer: `
+          <svg viewBox="0 0 120 180" xmlns="http://www.w3.org/2000/svg">
+            <rect x="46" y="145" width="8" height="25" fill="#fed7aa"></rect>
+            <rect x="66" y="145" width="8" height="25" fill="#fed7aa"></rect>
+            <rect x="41" y="166" width="14" height="8" rx="3.5" fill="#78350f"></rect>
+            <rect x="65" y="166" width="14" height="8" rx="3.5" fill="#78350f"></rect>
+            <path d="M40 102 L80 102 L76 146 L44 146 Z" fill="#0284c7"></path>
+            <rect x="44" y="132" width="32" height="15" fill="#166534"></rect>
+            <rect x="46" y="104" width="6.5" height="28" rx="2" fill="#ea580c"></rect>
+            <rect x="68" y="104" width="6.5" height="28" rx="2" fill="#ea580c"></rect>
+            <path d="M40 102 L24 82 C21 78 27 74 30 78 L44 97 Z" fill="#0284c7"></path>
+            <path d="M80 102 L96 82 C99 78 93 74 90 78 L76 97 Z" fill="#0284c7"></path>
+            <circle cx="22" cy="80" r="5.5" fill="#fed7aa"></circle>
+            <circle cx="98" cy="80" r="5.5" fill="#fed7aa"></circle>
+            <rect x="54" y="90" width="12" height="14" fill="#fed7aa"></rect>
+            <circle cx="60" cy="74" r="20.5" fill="#fed7aa"></circle>
+            <path d="M35 59 C35 36 85 36 85 59 Z" fill="#eab308"></path>
+            <ellipse cx="60" cy="59" rx="36" ry="6.5" fill="#ca8a04"></ellipse>
+            <rect x="44" y="51" width="32" height="4.5" fill="#dc2626"></rect>
+            <circle cx="51" cy="70" r="2.5" fill="#1e293b"></circle>
+            <circle cx="69" cy="70" r="2.5" fill="#1e293b"></circle>
+            <circle cx="47" cy="75" r="2" fill="#f43f5e" opacity="0.6"></circle>
+            <circle cx="73" cy="75" r="2" fill="#f43f5e" opacity="0.6"></circle>
+            <path d="M56 79 Q60 83 64 79" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round" fill="none"></path>
+          </svg>`
+      };
+
+      const dom = {
+        skyPanel: document.getElementById("skyPanel"),
+        sunNode: document.getElementById("sunNode"),
+        sunTime: document.getElementById("sunTime"),
+        groundNode: document.getElementById("groundNode"),
+        objectStage: document.getElementById("objectStage"),
+        shadowStage: document.getElementById("shadowStage"),
+        clockReadout: document.getElementById("clockReadout"),
+        timeRangeLabel: document.getElementById("timeRangeLabel"),
+        timeRange: document.getElementById("timeRange"),
+        playPauseBtn: document.getElementById("playPauseBtn"),
+        resetBtn: document.getElementById("resetBtn"),
+        altitudeReadout: document.getElementById("altitudeReadout"),
+        sunDirectionReadout: document.getElementById("sunDirectionReadout"),
+        shadowDirectionReadout: document.getElementById("shadowDirectionReadout"),
+        shadowLengthReadout: document.getElementById("shadowLengthReadout"),
+        enterFullscreen: document.getElementById("enterFullscreen"),
+        exitFullscreen: document.getElementById("exitFullscreen")
+      };
+
+      let timeValue = 12;
+      let activeObject = "tree";
+      let isPlaying = false;
+      let isDragging = false;
+      let useTransition = true;
+      let timerId = null;
+
+      function clamp(value, min, max) {
+        return Math.min(max, Math.max(min, value));
+      }
+
+      function lerp(a, b, ratio) {
+        return Math.round(a + (b - a) * ratio);
+      }
+
+      function getSkyColors(t) {
+        let k1 = SKY_KEYFRAMES[0];
+        let k2 = SKY_KEYFRAMES[SKY_KEYFRAMES.length - 1];
+        for (let i = 0; i < SKY_KEYFRAMES.length - 1; i += 1) {
+          if (t >= SKY_KEYFRAMES[i].h && t <= SKY_KEYFRAMES[i + 1].h) {
+            k1 = SKY_KEYFRAMES[i];
+            k2 = SKY_KEYFRAMES[i + 1];
+            break;
+          }
+        }
+        const ratio = k2.h === k1.h ? 0 : (t - k1.h) / (k2.h - k1.h);
+        const toRgb = (a, b) => `rgb(${lerp(a[0], b[0], ratio)}, ${lerp(a[1], b[1], ratio)}, ${lerp(a[2], b[2], ratio)})`;
+        return { bottom: toRgb(k1.bottom, k2.bottom), top: toRgb(k1.top, k2.top) };
+      }
+
+      function formatClock(val, withPeriod = true) {
+        const hours = Math.floor(val);
+        const minutes = Math.round((val - hours) * 60);
+        const normalizedHours = minutes === 60 ? hours + 1 : hours;
+        const normalizedMinutes = minutes === 60 ? 0 : minutes;
+        const time = `${String(normalizedHours).padStart(2, "0")}:${String(normalizedMinutes).padStart(2, "0")}`;
+        if (!withPeriod) return time;
+        if (normalizedHours < 11) return `早上 ${time}`;
+        if (normalizedHours <= 13) return `中午 ${time}`;
+        return `下午 ${time}`;
+      }
+
+      function getDirectionText(kind, t) {
+        if (kind === "sun") {
+          if (t < 11.2) return "偏東方";
+          if (t <= 12.8) return "天頂正上方";
+          return "偏西方";
+        }
+        if (t < 11.2) return "偏西方";
+        if (t <= 12.8) return "地面正下方";
+        return "偏東方";
+      }
+
+      function getShadowLengthText(angle) {
+        if (angle >= 80) return "最短";
+        if (angle >= 50) return "中等偏短";
+        if (angle >= 25) return "較長";
+        return "最長";
+      }
+
+      function setObject(objectName) {
+        activeObject = objectName;
+        dom.objectStage.innerHTML = templates[activeObject];
+        dom.shadowStage.innerHTML = templates[activeObject];
+        document.querySelectorAll(".object-btn").forEach((button) => {
+          button.setAttribute("aria-pressed", String(button.dataset.object === activeObject));
+        });
+      }
+
+      function render() {
+        const colors = getSkyColors(timeValue);
+        const p = (timeValue - 6) / 12;
+        const sunX = 10 + 80 * p;
+        const sunY = 85 - 280 * p * (1 - p);
+        const theta = p * Math.PI;
+        const cosVal = Math.cos(theta);
+        const sinVal = Math.sin(theta);
+        const skewX = -cosVal * 68;
+        const scaleX = 0.6 + 2.5 * Math.abs(cosVal);
+        const scaleY = 0.35;
+        const sunsetFactor = Math.abs(timeValue - 12) / 6;
+        const angle = Math.round(sinVal * 90);
+
+        dom.skyPanel.style.background = `linear-gradient(to top, ${colors.bottom}, ${colors.top})`;
+        dom.groundNode.style.filter = `brightness(${1 - sunsetFactor * 0.22}) saturate(${1 + sunsetFactor * 0.15})`;
+        dom.sunNode.style.left = `${sunX}%`;
+        dom.sunNode.style.top = `${sunY}%`;
+        dom.sunNode.classList.toggle("no-transition", !useTransition);
+        dom.shadowStage.classList.toggle("no-transition", !useTransition);
+        dom.shadowStage.style.transform = `translateX(-50%) scaleY(${-scaleY}) skewX(${skewX}deg) scaleX(${scaleX})`;
+
+        dom.sunTime.textContent = formatClock(timeValue, false);
+        dom.clockReadout.textContent = formatClock(timeValue, true);
+        dom.timeRangeLabel.textContent = formatClock(timeValue, false);
+        dom.timeRange.value = String(timeValue);
+        dom.altitudeReadout.textContent = `${angle}°`;
+        dom.sunDirectionReadout.textContent = getDirectionText("sun", timeValue);
+        dom.shadowDirectionReadout.textContent = getDirectionText("shadow", timeValue);
+        dom.shadowLengthReadout.textContent = getShadowLengthText(angle);
+
+        dom.playPauseBtn.textContent = isPlaying ? "暫停" : "播放";
+        dom.playPauseBtn.classList.toggle("is-playing", isPlaying);
+      }
+
+      function setTime(value, transition) {
+        timeValue = clamp(Math.round(value * 20) / 20, 6, 18);
+        useTransition = Boolean(transition);
+        render();
+      }
+
+      function stopPlayback() {
+        isPlaying = false;
+        if (timerId !== null) {
+          clearInterval(timerId);
+          timerId = null;
+        }
+        render();
+      }
+
+      function startPlayback() {
+        isPlaying = true;
+        useTransition = false;
+        timerId = window.setInterval(() => {
+          const next = timeValue + 0.08 > 18.01 ? 6 : timeValue + 0.08;
+          setTime(next, false);
+        }, 80);
+        render();
+      }
+
+      function updateTimeFromPointer(event) {
+        const rect = dom.skyPanel.getBoundingClientRect();
+        const percent = clamp((event.clientX - rect.left) / rect.width, 0.1, 0.9);
+        setTime(6 + ((percent - 0.1) / 0.8) * 12, false);
+      }
+
+      dom.skyPanel.addEventListener("pointerdown", (event) => {
+        dom.skyPanel.setPointerCapture(event.pointerId);
+        isDragging = true;
+        stopPlayback();
+        updateTimeFromPointer(event);
+      });
+
+      dom.skyPanel.addEventListener("pointermove", (event) => {
+        if (isDragging) updateTimeFromPointer(event);
+      });
+
+      ["pointerup", "pointercancel", "lostpointercapture"].forEach((eventName) => {
+        dom.skyPanel.addEventListener(eventName, () => {
+          isDragging = false;
+        });
+      });
+
+      dom.timeRange.addEventListener("input", (event) => {
+        stopPlayback();
+        setTime(Number(event.currentTarget.value), false);
+      });
+
+      dom.playPauseBtn.addEventListener("click", () => {
+        if (isPlaying) stopPlayback();
+        else startPlayback();
+      });
+
+      dom.resetBtn.addEventListener("click", () => {
+        stopPlayback();
+        setTime(12, true);
+      });
+
+      document.querySelectorAll(".preset-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+          stopPlayback();
+          setTime(Number(button.dataset.time), true);
+        });
+      });
+
+      document.querySelectorAll(".object-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+          useTransition = true;
+          setObject(button.dataset.object);
+          render();
+        });
+      });
+
+      dom.enterFullscreen.addEventListener("click", async () => {
+        try {
+          if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
+            await document.documentElement.requestFullscreen();
+          }
+        } catch (error) {
+          console.warn("Unable to enter fullscreen.", error);
+        }
+      });
+
+      dom.exitFullscreen.addEventListener("click", async () => {
+        try {
+          if (document.fullscreenElement && document.exitFullscreen) {
+            await document.exitFullscreen();
+          }
+        } catch (error) {
+          console.warn("Unable to exit fullscreen.", error);
+        }
+      });
+
+      window.addEventListener("pagehide", stopPlayback);
+      setObject(activeObject);
+      render();
+    })();
+  </script>
+</body>
+</html>

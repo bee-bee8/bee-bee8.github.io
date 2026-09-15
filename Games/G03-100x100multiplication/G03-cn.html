@@ -1,0 +1,2888 @@
+<!doctype html>
+<html lang="zh-Hant" data-ldl-tool-id="G03-100x100multiplication" data-ldl-fingerprint="ldl-yfc-g03-100x100multiplication-v1">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="ldl-tool-id" content="G03-100x100multiplication" />
+    <title>乘法競技場</title>
+    <!-- Tailwind CSS v3 via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons via CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts Baloo 2, Inter & JetBrains Mono -->
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
+              arena: ["Baloo 2", "Inter", "system-ui", "sans-serif"],
+              mono: ["JetBrains Mono", "monospace"],
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      /* Smooth transitions */
+      .animate-fade-in {
+        animation: fadeIn 0.3s ease-out forwards;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      /* Custom slider tracking styles */
+      input[type="range"]::-webkit-slider-thumb {
+        cursor: pointer;
+        transition: transform 0.1s;
+      }
+      input[type="range"]::-webkit-slider-thumb:hover {
+        transform: scale(1.15);
+      }
+      /* Custom scrollbar for visual matrices */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+
+      /* Desktop teaching-screen readability refinements */
+      :root {
+        --teaching-max-width: 1400px;
+      }
+      body, button, input, select, textarea {
+        font-size: 16px;
+      }
+      .screen-view .text-\[8px\],
+      .screen-view .text-\[9px\],
+      .screen-view .text-\[10px\],
+      .screen-view .text-\[11px\],
+      .screen-view .text-xs,
+      .screen-view .text-sm,
+      footer .text-\[10px\] {
+        font-size: 16px !important;
+        line-height: 1.45 !important;
+      }
+      @media (min-width: 768px) {
+        .screen-view button,
+        .screen-view label,
+        .desktop-nowrap,
+        .formula-role-card,
+        .formula-explain-row {
+          white-space: nowrap;
+        }
+      }
+      .formula-role-card {
+        min-height: 108px;
+      }
+      .formula-role-label {
+        font-size: 16px;
+        line-height: 1.2;
+        letter-spacing: 0.02em;
+      }
+      .formula-explain-row {
+        display: grid;
+        grid-template-columns: 180px 1fr 160px;
+        gap: 12px;
+        align-items: center;
+        padding: 12px 14px;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .formula-explain-row:last-child {
+        border-bottom: 0;
+      }
+      .dot-row-line {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .dot-row-line.compact {
+        padding: 6px 0;
+      }
+      .dot-row-line:last-child {
+        border-bottom: 0;
+      }
+      .csv-privacy-note {
+        font-size: 14px !important;
+        line-height: 1.6 !important;
+      }
+      @media (max-width: 767px) {
+        .formula-explain-row {
+          grid-template-columns: 1fr;
+          white-space: normal;
+        }
+      }
+      .arena-shell {
+        position: relative;
+        isolation: isolate;
+      }
+      .arena-shell::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+        background:
+          linear-gradient(180deg, rgba(8, 20, 58, 0.12), rgba(8, 20, 58, 0.34)),
+          url("G03-100x100multiplication-backdrop.png") center / cover no-repeat;
+      }
+      .arena-shell::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background:
+          radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.26), transparent 34rem),
+          linear-gradient(180deg, rgba(3, 7, 18, 0.04), rgba(3, 7, 18, 0.18));
+        pointer-events: none;
+      }
+      .arena-panel {
+        background: rgba(255, 255, 255, 0.94);
+        border: 1px solid rgba(37, 99, 235, 0.14);
+        box-shadow: 0 26px 70px rgba(15, 23, 42, 0.12);
+      }
+      .arena-card {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(239, 246, 255, 0.86));
+        border: 1px solid rgba(37, 99, 235, 0.16);
+      }
+      .arena-button {
+        min-height: 48px;
+        touch-action: manipulation;
+      }
+      .arena-input {
+        min-height: 48px;
+        border-radius: 16px;
+        border: 2px solid #bfdbfe;
+        background: #ffffff;
+        color: #0f172a;
+        font-weight: 900;
+        text-align: center;
+        outline: none;
+      }
+      .arena-input:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.16);
+      }
+      .setup-inline-number {
+        min-width: 0;
+        min-height: 48px;
+        border-radius: 12px;
+        border: 1px solid #dbeafe;
+        background: #ffffff;
+        color: #475569;
+        font-weight: 700;
+        text-align: center;
+        outline: none;
+        transition: all 0.15s ease;
+      }
+      .setup-inline-number:focus {
+        border-color: #3b82f6;
+        background: #eff6ff;
+        color: #1e3a8a;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.16);
+      }
+      .setup-inline-number.is-selected {
+        border-color: #2563eb;
+        background: #2563eb;
+        color: #ffffff;
+        font-weight: 800;
+      }
+      .setup-inline-number::placeholder {
+        color: #94a3b8;
+        opacity: 0.6;
+      }
+      .arena-range-input {
+        min-height: 56px;
+        border-radius: 18px;
+        border: 2px solid #bfdbfe;
+        background: #ffffff;
+        color: #0f172a;
+        font-size: 24px;
+        font-weight: 900;
+        text-align: center;
+        outline: none;
+      }
+      .arena-range-input:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.16);
+      }
+      .arena-stage {
+        background:
+          linear-gradient(135deg, rgba(6, 14, 44, 0.84), rgba(20, 56, 150, 0.58)),
+          url("G03-100x100multiplication-backdrop.png") center / cover no-repeat;
+      }
+      .arena-stage .arena-stage-card {
+        background: rgba(255, 255, 255, 0.96);
+        border: 2px solid rgba(255, 255, 255, 0.8);
+      }
+      .play-header-controls {
+        display: none !important;
+      }
+      .app-header {
+        display: none !important;
+      }
+      body.is-playing .app-header {
+        display: flex !important;
+        align-items: stretch;
+        gap: 12px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        margin-bottom: 0;
+      }
+      body.is-playing .play-brand-panel,
+      body.is-playing .play-header-controls,
+      body.is-playing #btn-global-mute {
+        min-height: 52px;
+        height: 52px;
+        background: rgba(255, 255, 255, 0.92);
+        border: 1px solid rgba(191, 219, 254, 0.88);
+        border-radius: 18px;
+        box-shadow: 0 14px 34px rgba(15, 23, 42, 0.18);
+        backdrop-filter: blur(10px);
+      }
+      body.is-playing .play-brand-panel {
+        padding: 10px 14px;
+      }
+      body.is-playing .play-header-controls {
+        display: flex !important;
+        padding: 10px 16px;
+      }
+      body.is-playing #btn-global-mute {
+        width: 52px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+      }
+      body.is-playing main {
+        padding-top: 10px;
+        align-items: center;
+      }
+      .app-content-stack {
+        width: 100%;
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: column;
+      }
+      body.is-playing .app-content-stack {
+        min-height: auto;
+        justify-content: flex-start;
+      }
+      body.is-playing .app-content-stack main {
+        flex: 0 0 auto;
+      }
+      body.is-playing #screen-playing {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+      }
+      body.arena-shell {
+        padding-top: max(70px, calc(env(safe-area-inset-top) + 70px));
+        scroll-padding-top: max(70px, calc(env(safe-area-inset-top) + 70px));
+      }
+      #tool-home-link {
+        position: fixed;
+        z-index: 2147483647;
+        top: max(14px, env(safe-area-inset-top));
+        left: max(14px, env(safe-area-inset-left));
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 132px;
+        min-height: 54px;
+        padding: 0 14px;
+        border: 2px solid rgba(255, 255, 255, 0.82);
+        border-radius: 999px;
+        color: #ffffff;
+        background: linear-gradient(135deg, #0f766e, #134e4a);
+        box-shadow: 0 12px 24px rgba(14, 31, 58, 0.24), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+        font-size: 18px !important;
+        font-weight: 900;
+        line-height: 1.1;
+        letter-spacing: 0;
+        text-decoration: none;
+        white-space: nowrap;
+        -webkit-tap-highlight-color: transparent;
+        transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+      }
+      #tool-home-link:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 16px 28px rgba(14, 31, 58, 0.28), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+      }
+      #tool-home-link:focus-visible {
+        outline: 4px solid rgba(20, 184, 166, 0.38);
+        outline-offset: 3px;
+      }
+      #tool-home-link:active {
+        transform: scale(0.97);
+      }
+      .ldl-fullscreen-controls {
+        position: fixed;
+        z-index: 2147483647;
+        top: max(14px, env(safe-area-inset-top));
+        right: max(14px, env(safe-area-inset-right));
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
+        pointer-events: none;
+      }
+      .top-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 132px;
+        min-height: 54px;
+        padding: 0 14px;
+        border: 2px solid rgba(255, 255, 255, 0.82);
+        border-radius: 999px;
+        color: #ffffff;
+        font-size: 18px;
+        font-weight: 900;
+        line-height: 1.1;
+        letter-spacing: 0;
+        white-space: nowrap;
+        cursor: pointer;
+        pointer-events: auto;
+        box-shadow: 0 12px 24px rgba(14, 31, 58, 0.24), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+        transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+      }
+      .top-button:hover,
+      .top-button:focus-visible {
+        outline: none;
+        transform: translateY(-2px);
+        box-shadow: 0 16px 28px rgba(14, 31, 58, 0.28), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+      }
+      .top-button:active {
+        transform: translateY(1px) scale(0.98);
+      }
+      .exit-fullscreen {
+        background: linear-gradient(135deg, #3949ab, #1e2d66);
+      }
+      .enter-fullscreen {
+        background: linear-gradient(135deg, #1d78d6, #124c91);
+      }
+      .top-button[data-fullscreen-active="true"].enter-fullscreen,
+      .top-button[data-fullscreen-active="false"].exit-fullscreen {
+        filter: grayscale(0.35);
+      }
+      .ldl-fullscreen-controls .top-button,
+      #enterFullscreen,
+      #exitFullscreen {
+        position: static;
+        width: auto;
+        min-width: 0;
+        min-height: 38px;
+        padding: 0 12px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 800;
+      }
+      html:fullscreen,
+      html:fullscreen body {
+        width: 100%;
+        min-height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+      }
+      html:fullscreen body {
+        align-items: stretch;
+        justify-content: flex-start;
+        padding-top: max(70px, calc(env(safe-area-inset-top) + 70px));
+        scroll-padding-top: max(70px, calc(env(safe-area-inset-top) + 70px));
+      }
+      @media (max-width: 767px) {
+        body.is-playing .app-header {
+          flex-wrap: wrap;
+        }
+        body.is-playing .play-header-controls {
+          order: 3;
+          width: 100%;
+        }
+      }
+      @media (max-width: 560px) {
+        body.arena-shell {
+          padding-top: max(58px, calc(env(safe-area-inset-top) + 58px));
+          scroll-padding-top: max(58px, calc(env(safe-area-inset-top) + 58px));
+        }
+        #tool-home-link {
+          left: max(8px, env(safe-area-inset-left));
+          width: 104px;
+          min-height: 46px;
+          padding: 0 6px;
+          font-size: 18px !important;
+        }
+        .ldl-fullscreen-controls {
+          top: max(14px, env(safe-area-inset-top));
+          right: max(8px, env(safe-area-inset-right));
+          bottom: auto;
+          flex-direction: column;
+          gap: 8px;
+        }
+        .top-button {
+          width: 104px;
+          min-height: 46px;
+          padding: 0 6px;
+          font-size: 18px;
+        }
+        .ldl-fullscreen-controls .top-button,
+        #enterFullscreen,
+        #exitFullscreen {
+          width: auto;
+          min-width: 0;
+          min-height: 34px;
+          padding: 0 9px;
+          font-size: 13px;
+        }
+        body.is-playing #screen-playing {
+          min-height: auto;
+        }
+        html:fullscreen body {
+          padding-top: max(58px, calc(env(safe-area-inset-top) + 58px));
+          scroll-padding-top: max(58px, calc(env(safe-area-inset-top) + 58px));
+        }
+      }
+
+      /* LDL Source Reference v1.1 watermark */
+      :root {
+        --ldl-product-name: "乘法競技場";
+        --ldl-product-name-en: "Multiplication Arena";
+        --ldl-product-code: "LDL-MATH-G03-2026-001";
+        --ldl-tool-id: "G03-100x100multiplication";
+        --ldl-module-id: "ldl-g03-100x100multiplication";
+        --ldl-company: "Yung Fu Chuen";
+        --ldl-author: "Yung Fu Chuen";
+        --ldl-release-year: "2026";
+        --ldl-version: "1.1.0";
+        --ldl-build-id: "LDL-MATH-G03-2026-001";
+        --ldl-fingerprint: "ldl-yfc-g03-100x100multiplication-v1";
+      }
+
+      #ldl-visible-watermark.ldl-visible-watermark {
+        position: fixed;
+        z-index: 35;
+        left: max(10px, env(safe-area-inset-left));
+        right: auto;
+        top: max(70px, calc(env(safe-area-inset-top) + 66px));
+        bottom: auto;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 5px;
+        max-width: min(190px, calc(100vw - 20px));
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        color: rgba(23, 32, 51, 0.56);
+        background: transparent;
+        box-shadow: none;
+        font-size: 8px;
+        font-weight: 600;
+        line-height: 1.25;
+        letter-spacing: 0;
+        pointer-events: none;
+        user-select: none;
+        -webkit-user-select: none;
+        backdrop-filter: none;
+      }
+
+      /* copy-cost marker: style-beta LD */
+
+      #ldl-visible-watermark.ldl-visible-watermark img {
+        width: 16px;
+        height: 16px;
+        flex: 0 0 auto;
+        object-fit: contain;
+        opacity: 0.88;
+      }
+
+      #ldl-visible-watermark.ldl-visible-watermark span {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+
+      .ldl-offscreen-source-reference {
+        position: absolute !important;
+        width: 1px !important;
+        height: 1px !important;
+        margin: -1px !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+        clip: rect(0 0 0 0) !important;
+        clip-path: inset(50%) !important;
+        border: 0 !important;
+        white-space: nowrap !important;
+      }
+
+      @media (max-width: 520px) {
+        #ldl-visible-watermark.ldl-visible-watermark {
+          left: max(8px, env(safe-area-inset-left));
+          right: auto;
+          top: max(58px, calc(env(safe-area-inset-top) + 54px));
+          bottom: auto;
+          font-size: 7px;
+        }
+
+        #ldl-visible-watermark.ldl-visible-watermark img {
+          width: 14px;
+          height: 14px;
+        }
+      }
+
+    </style>
+  </head>
+  <body class="arena-shell min-h-screen font-sans text-base text-slate-700 p-4 md:p-6 flex flex-col justify-between" data-tool-home-nav-root data-ldl-tool-id="G03-100x100multiplication">
+    <div id="ldl-visible-watermark" class="ldl-visible-watermark" aria-hidden="true">
+      <span>© 2026 · Yung Fu Chuen</span>
+    </div>
+    <div
+      id="ldl-hidden-source-reference"
+      class="ldl-offscreen-source-reference"
+      aria-hidden="true"
+      data-ldl-product-name="乘法競技場"
+      data-ldl-product-name-en="Multiplication Arena"
+      data-ldl-product-code="LDL-MATH-G03-2026-001"
+      data-ldl-tool-id="G03-100x100multiplication"
+      data-ldl-module-id="ldl-g03-100x100multiplication"
+      data-ldl-company="Yung Fu Chuen"
+      data-ldl-author="Yung Fu Chuen"
+      data-ldl-release-year="2026"
+      data-ldl-version="1.1.0"
+      data-ldl-build-id="LDL-MATH-G03-2026-001"
+      data-ldl-fingerprint="ldl-yfc-g03-100x100multiplication-v1"
+      data-ldl-marker-signature="LDL-SOURCE-REFERENCE-v1.1::Yung-Fu-Chuen::2026::g03-100x100multiplication"
+    >
+      LDL Source Reference | 乘法競技場 | Multiplication Arena | LDL-MATH-G03-2026-001 | G03-100x100multiplication | ldl-g03-100x100multiplication | Yung Fu Chuen | Yung Fu Chuen | 2026 | 1.1.0 | LDL-MATH-G03-2026-001 | ldl-yfc-g03-100x100multiplication-v1 | LDL-SOURCE-REFERENCE-v1.1::Yung-Fu-Chuen::2026::g03-100x100multiplication | Free classroom use only. Redistribution, resale, cloning, re-hosting, modification, or derivative use without written permission is prohibited.
+    </div>
+    
+    <div class="app-content-stack">
+    <!-- Universal Sticky Header -->
+    <header class="app-header w-full max-w-[1400px] mx-auto flex justify-between items-center py-4 mb-2 select-none">
+      <div class="play-brand-panel flex items-center gap-2 cursor-pointer" onclick="goToScreen('setup')">
+        <div class="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white">
+          <i data-lucide="swords" class="w-4 h-4"></i>
+        </div>
+        <span class="font-arena font-extrabold text-slate-900 tracking-tight text-base">
+          乘法競技場 <span class="text-xs text-blue-600 font-mono font-bold">1-100</span>
+        </span>
+      </div>
+
+      <div class="play-header-controls flex-1 items-center justify-between gap-3 bg-white/70 px-4 py-2 border border-blue-100 rounded-2xl shadow-sm">
+        <button onclick="quitGameEarly()" class="flex items-center gap-1.5 text-sm font-semibold text-slate-600 hover:text-rose-500 transition-colors py-1.5 px-2.5 rounded-lg hover:bg-white/70 cursor-pointer">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i>
+          結束並看報告
+        </button>
+        <div class="flex items-center gap-3 sm:gap-4">
+          <span class="text-sm font-bold text-slate-700 whitespace-nowrap">
+            回合 <span id="play-q-idx" class="font-mono text-blue-700 font-black">1</span><span id="play-q-total-container" class="text-slate-400 font-normal"> / 10</span>
+          </span>
+          <div id="play-timer-container" class="hidden flex items-center gap-1 bg-amber-50 px-3 py-1 rounded-full border border-amber-100 whitespace-nowrap">
+            <i data-lucide="clock" class="w-3.5 h-3.5 text-amber-600" id="play-timer-icon"></i>
+            <span id="play-timer-display" class="text-xs font-mono font-bold text-amber-700">60s</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button
+          onclick="toggleMute()"
+          id="btn-global-mute"
+          class="p-2.5 rounded-xl bg-white text-slate-500 hover:text-blue-700 hover:bg-blue-50 transition-all border border-blue-100"
+          title="音效開關"
+        >
+          <i data-lucide="volume-2" class="w-4 h-4 js-mute-icon"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Screens Routing Container -->
+    <main class="flex-1 flex items-start justify-center py-4 w-full">
+      
+      <!-- 1. Setup Screen -->
+      <div id="screen-setup" class="screen-view w-full max-w-[1400px] arena-panel rounded-3xl p-6 md:p-8 animate-fade-in">
+        <div class="flex items-center justify-between gap-3 mb-6">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-sm shadow-blue-600/20">
+              <i data-lucide="swords" class="w-4 h-4"></i>
+            </div>
+            <span class="font-arena font-extrabold text-slate-900 tracking-tight text-base">
+              乘法競技場 <span class="text-xs text-blue-600 font-mono font-bold">1-100</span>
+            </span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button
+              id="btn-clear-mistakes"
+              onclick="clearMistakesBank()"
+              class="hidden text-sm font-bold text-rose-600 hover:text-rose-700 px-3 py-2 rounded-xl bg-rose-50 hover:bg-rose-100/80 transition-all cursor-pointer"
+            >
+              清除錯題記錄
+            </button>
+            <button
+              onclick="toggleMute()"
+              class="p-2.5 rounded-xl bg-blue-50 text-slate-500 hover:text-blue-700 hover:bg-blue-100 transition-all border border-blue-100"
+              title="音效開關"
+            >
+              <i data-lucide="volume-2" class="w-4 h-4 js-mute-icon"></i>
+            </button>
+          </div>
+        </div>
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 text-blue-700 font-bold text-sm mb-3 border border-blue-100">
+            <i data-lucide="target" class="w-4 h-4"></i>
+            1 至 100 以內的乘法闖關
+          </div>
+          <h1 class="font-arena text-4xl md:text-6xl font-extrabold tracking-tight text-slate-900">
+            乘法競技場
+          </h1>
+          <p class="mt-3 text-slate-600 text-base md:text-lg font-medium">
+            選擇難度、題數與倒數時間，答題後即時看見答案和圖像拆解。
+          </p>
+        </div>
+
+        <div class="space-y-6">
+          <!-- Presets -->
+          <div>
+            <span class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2.5">
+              快速選擇題目範圍
+            </span>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5">
+              <button onclick="applyPreset('9x9')" class="arena-button py-3 px-3 rounded-2xl border border-blue-100 bg-white text-sm font-bold text-slate-700 hover:border-blue-400 hover:bg-blue-50 transition-all text-center cursor-pointer">
+                九九乘法 (1-9)
+              </button>
+              <button onclick="applyPreset('11-19')" class="arena-button py-3 px-3 rounded-2xl border border-blue-100 bg-white text-sm font-bold text-slate-700 hover:border-blue-400 hover:bg-blue-50 transition-all text-center cursor-pointer">
+                印度乘法 (11-19)
+              </button>
+              <button onclick="applyPreset('2digit')" class="arena-button py-3 px-3 rounded-2xl border border-blue-100 bg-white text-sm font-bold text-slate-700 hover:border-blue-400 hover:bg-blue-50 transition-all text-center cursor-pointer">
+                雙位數 (10-99)
+              </button>
+              <button onclick="applyPreset('full100')" class="arena-button py-3 px-3 rounded-2xl border border-blue-100 bg-white text-sm font-bold text-slate-700 hover:border-blue-400 hover:bg-blue-50 transition-all text-center cursor-pointer">
+                終極挑戰 (1-100)
+              </button>
+            </div>
+          </div>
+
+          <!-- Formula role guide -->
+          <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr_auto_1fr] gap-3 items-stretch p-4 arena-card rounded-2xl shadow-sm">
+            <div class="rounded-2xl bg-blue-50 border border-blue-100 p-4 text-center formula-role-card flex flex-col justify-center">
+              <div class="formula-role-label font-bold text-blue-700">乘數</div>
+              <div class="mt-2 text-4xl font-black font-mono text-blue-700">12</div>
+                          </div>
+            <div class="hidden md:flex items-center justify-center text-3xl font-black text-slate-300">×</div>
+            <div class="rounded-2xl bg-amber-50 border border-amber-100 p-4 text-center formula-role-card flex flex-col justify-center">
+              <div class="formula-role-label font-bold text-amber-700">被乘數</div>
+              <div class="mt-2 text-4xl font-black font-mono text-amber-700">15</div>
+                          </div>
+            <div class="hidden md:flex items-center justify-center text-3xl font-black text-slate-300">＝</div>
+            <div class="rounded-2xl bg-pink-50 border border-pink-100 p-4 text-center formula-role-card flex flex-col justify-center">
+              <div class="formula-role-label font-bold text-pink-700">你的答案</div>
+              <div class="mt-2 text-4xl font-black font-mono text-slate-900">?</div>
+                          </div>
+          </div>
+
+          <!-- Numeric range parameters -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-5 bg-blue-50/70 rounded-2xl border border-blue-100">
+            <!-- Factor A Range Inputs -->
+            <div class="space-y-4">
+              <div class="flex justify-between items-center">
+                <span class="text-sm font-bold text-slate-700 flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  乘數範圍
+                </span>
+                <span id="range-a-display" class="text-xs font-mono font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">
+                  1 ～ 9
+                </span>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <label class="block">
+                  <span class="flex justify-between text-xs text-slate-400 mb-1">
+                    <span>最小 (Min)</span>
+                    <span id="label-a-min">1</span>
+                  </span>
+                  <input type="number" id="input-a-min" min="1" max="100" step="1" inputmode="numeric" value="1" onchange="handleRangeChange('a', 'min', this.value)" class="arena-range-input w-full">
+                </label>
+                <label class="block">
+                  <span class="flex justify-between text-xs text-slate-400 mb-1">
+                    <span>最大 (Max)</span>
+                    <span id="label-a-max">9</span>
+                  </span>
+                  <input type="number" id="input-a-max" min="1" max="100" step="1" inputmode="numeric" value="9" onchange="handleRangeChange('a', 'max', this.value)" class="arena-range-input w-full">
+                </label>
+              </div>
+            </div>
+
+            <!-- Factor B Range Inputs -->
+            <div class="space-y-4">
+              <div class="flex justify-between items-center">
+                <span class="text-sm font-bold text-slate-700 flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                  被乘數範圍
+                </span>
+                <span id="range-b-display" class="text-xs font-mono font-medium text-blue-600 bg-blue-50 px-2 py-0.5 rounded">
+                  1 ～ 9
+                </span>
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <label class="block">
+                  <span class="flex justify-between text-xs text-slate-400 mb-1">
+                    <span>最小 (Min)</span>
+                    <span id="label-b-min">1</span>
+                  </span>
+                  <input type="number" id="input-b-min" min="1" max="100" step="1" inputmode="numeric" value="1" onchange="handleRangeChange('b', 'min', this.value)" class="arena-range-input w-full">
+                </label>
+                <label class="block">
+                  <span class="flex justify-between text-xs text-slate-400 mb-1">
+                    <span>最大 (Max)</span>
+                    <span id="label-b-max">9</span>
+                  </span>
+                  <input type="number" id="input-b-max" min="1" max="100" step="1" inputmode="numeric" value="9" onchange="handleRangeChange('b', 'max', this.value)" class="arena-range-input w-full">
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Question Options and answer mode -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <!-- Game Mode Choice -->
+            <div class="space-y-2">
+              <span class="block text-xs font-semibold uppercase tracking-wider text-slate-400">
+                回答模式
+              </span>
+              <div class="grid grid-cols-2 gap-2">
+                <button id="btn-mode-choice" onclick="setAnswerMode('CHOICE')" class="arena-button flex flex-col items-center justify-center py-3 px-4 rounded-2xl border text-center transition-all bg-blue-50/70 border-blue-500 text-blue-900 font-bold cursor-pointer">
+                  <span class="text-sm">單選題 (四選一)</span>
+                  <span class="text-[10px] text-slate-400 font-normal mt-0.5">適合新手與快速挑戰</span>
+                </button>
+                <button id="btn-mode-keypad" onclick="setAnswerMode('KEYPAD')" class="arena-button flex flex-col items-center justify-center py-3 px-4 rounded-2xl border border-blue-100 bg-white text-slate-600 hover:bg-blue-50 text-center transition-all cursor-pointer">
+                  <span class="text-sm">填充題 (鍵盤輸入)</span>
+                  <span class="text-[10px] text-slate-400 font-normal mt-0.5">適合精確的心算訓練</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Question Quantity -->
+            <div class="space-y-2">
+              <span class="block text-xs font-semibold uppercase tracking-wider text-slate-400">
+                題目數量
+              </span>
+              <div class="grid grid-cols-4 gap-2" id="q-count-group">
+                <button onclick="setQuestionsCount(10)" class="arena-button py-2.5 px-1 rounded-xl border border-blue-500 bg-blue-600 text-white font-bold transition-all cursor-pointer">10 題</button>
+                <button onclick="setQuestionsCount(15)" class="arena-button py-2.5 px-1 rounded-xl border border-blue-100 bg-white text-slate-600 hover:bg-blue-50 transition-all cursor-pointer">15 題</button>
+                <input id="input-question-count" type="number" min="1" max="200" placeholder="自定" onfocus="handleQuestionCountCustomFocus()" oninput="handleQuestionCountInput(this.value)" class="setup-inline-number" aria-label="自訂題目數量">
+                <button onclick="setQuestionsCount(0)" class="arena-button py-2.5 px-1 rounded-xl border border-blue-100 bg-white text-slate-600 hover:bg-blue-50 transition-all cursor-pointer">無盡</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Timer Limits -->
+          <div class="space-y-2">
+            <span class="block text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1">
+              <i data-lucide="clock" class="w-3.5 h-3.5 text-slate-400"></i>
+              倒數計時
+            </span>
+            <div class="grid grid-cols-3 gap-2" id="timer-limit-group">
+              <button onclick="setTimeLimitSetting(180)" class="arena-button py-2.5 px-2 rounded-xl border border-blue-500 bg-blue-50/70 text-blue-900 font-bold transition-all cursor-pointer">3 分鐘</button>
+              <input id="input-time-limit" type="number" min="1" max="60" placeholder="自定分鐘" onfocus="handleTimeLimitCustomFocus()" oninput="handleTimeLimitInput(this.value)" class="setup-inline-number" aria-label="自訂倒數分鐘">
+              <button onclick="setTimeLimitSetting(0)" class="arena-button py-2.5 px-2 rounded-xl border border-blue-100 bg-white text-slate-600 hover:bg-blue-50 transition-all cursor-pointer">不限時</button>
+            </div>
+          </div>
+
+          <!-- Buttons Container -->
+          <div class="pt-4 flex flex-col sm:flex-row gap-3">
+            <button onclick="startGame()" class="arena-button flex-1 py-4 px-6 rounded-2xl bg-gradient-to-r from-blue-600 to-pink-500 text-white font-extrabold text-lg hover:-translate-y-0.5 hover:shadow-lg hover:shadow-blue-500/20 active:translate-y-0 transition-all flex items-center justify-center gap-2 cursor-pointer">
+              <i data-lucide="gamepad-2" class="w-5 h-5"></i>
+              進入乘法競技場！
+            </button>
+
+            <button id="btn-practice-mistakes" onclick="practiceMistakes()" class="hidden py-4 px-5 rounded-2xl border-2 border-amber-200 bg-amber-50/40 text-amber-800 font-bold text-sm hover:bg-amber-50 transition-all flex items-center justify-center gap-2 cursor-pointer">
+              複習錯題 (<span id="mistakes-count-badge">0</span>)
+            </button>
+
+            <button onclick="goToScreen('table')" class="py-4 px-5 rounded-2xl border border-slate-200 bg-white text-slate-700 font-bold text-sm hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center justify-center gap-2 cursor-pointer">
+              <i data-lucide="book-open" class="w-4 h-4 text-emerald-600"></i>
+              百百乘法表
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Playing Arena Board -->
+      <div id="screen-playing" class="screen-view hidden w-full max-w-[1400px] space-y-4 animate-fade-in">
+        
+        <!-- Progress Tracker bar -->
+        <div id="play-progress-outer" class="w-full h-2 bg-white/80 border border-blue-100 rounded-full overflow-hidden">
+          <div id="play-progress-inner" class="h-full bg-gradient-to-r from-blue-600 via-amber-400 to-pink-500 transition-all duration-300 w-0"></div>
+        </div>
+
+        <!-- Active Equation Board -->
+        <div class="arena-stage border border-blue-900/20 rounded-3xl shadow-xl shadow-blue-900/20 p-6 md:p-8 relative overflow-hidden text-white">
+          
+          <!-- Score summary badge & streak -->
+          <div class="absolute top-4 right-4 flex items-center gap-2">
+            <span id="play-combo-streak" class="hidden inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100 text-amber-800 font-extrabold text-xs animate-pulse">
+              連擊 × 3
+            </span>
+            <span class="text-xs font-bold text-blue-800 bg-white px-2.5 py-1 rounded-full border border-blue-100">
+              答對 <span id="score-correct-count" class="font-mono font-bold">0</span> / 答錯 <span id="score-wrong-count" class="font-mono font-bold">0</span>
+            </span>
+          </div>
+
+          <!-- Giant formula equation display -->
+          <div class="pt-8 pb-6 text-center">
+            <div class="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr_auto_1.1fr] gap-4 md:gap-6 items-stretch select-none">
+              <div class="arena-stage-card rounded-3xl p-5 flex flex-col justify-center min-h-[132px]">
+                <span id="equation-val-a" class="text-5xl md:text-7xl font-black text-slate-800 font-mono tracking-tight"></span>
+              </div>
+              <div class="hidden md:flex items-center justify-center text-5xl font-black text-amber-300">×</div>
+              <div class="arena-stage-card rounded-3xl p-5 flex flex-col justify-center min-h-[132px]">
+                <span id="equation-val-b" class="text-5xl md:text-7xl font-black text-slate-800 font-mono tracking-tight"></span>
+              </div>
+              <div class="hidden md:flex items-center justify-center text-5xl font-black text-amber-300">＝</div>
+              <div class="arena-stage-card rounded-3xl p-5 flex flex-col justify-center min-h-[132px] ring-4 ring-pink-300/40">
+                <div class="font-bold text-pink-700">你的答案</div>
+                <span id="equation-input-placeholder" class="mt-2 text-4xl md:text-6xl font-black text-emerald-600 font-mono"></span>
+              </div>
+            </div>
+            <p class="mt-4 text-blue-100 font-semibold desktop-nowrap">選出或輸入答案，答完即看視覺詳解。</p>
+          </div>
+
+          <!-- Interactive Input block (Buttons vs Keypad) -->
+          <div class="mt-4 border-t border-white/20 pt-6">
+            <!-- MCQ Option grids -->
+            <div id="play-input-choice" class="grid grid-cols-2 gap-3">
+              <button onclick="selectMcqChoice(0)" class="option-choice-btn arena-button py-4 px-6 rounded-2xl border-2 border-blue-100 bg-white hover:border-blue-500 hover:bg-blue-50 active:scale-95 transition-all text-center cursor-pointer">
+                <span class="font-mono text-3xl font-black text-slate-900 option-txt-0">0</span>
+              </button>
+              <button onclick="selectMcqChoice(1)" class="option-choice-btn arena-button py-4 px-6 rounded-2xl border-2 border-blue-100 bg-white hover:border-blue-500 hover:bg-blue-50 active:scale-95 transition-all text-center cursor-pointer">
+                <span class="font-mono text-3xl font-black text-slate-900 option-txt-1">0</span>
+              </button>
+              <button onclick="selectMcqChoice(2)" class="option-choice-btn arena-button py-4 px-6 rounded-2xl border-2 border-blue-100 bg-white hover:border-blue-500 hover:bg-blue-50 active:scale-95 transition-all text-center cursor-pointer">
+                <span class="font-mono text-3xl font-black text-slate-900 option-txt-2">0</span>
+              </button>
+              <button onclick="selectMcqChoice(3)" class="option-choice-btn arena-button py-4 px-6 rounded-2xl border-2 border-blue-100 bg-white hover:border-blue-500 hover:bg-blue-50 active:scale-95 transition-all text-center cursor-pointer">
+                <span class="font-mono text-3xl font-black text-slate-900 option-txt-3">0</span>
+              </button>
+            </div>
+
+            <!-- Custom Numeric Keypad -->
+            <div id="play-input-keypad" class="hidden max-w-sm mx-auto space-y-3">
+              <div class="grid grid-cols-3 gap-2">
+                <button onclick="pressKeypad('1')" class="py-3 bg-slate-50 border border-slate-100 text-lg hover:bg-slate-100 font-bold font-mono text-slate-700 rounded-xl active:scale-95 transition-all">1</button>
+                <button onclick="pressKeypad('2')" class="py-3 bg-slate-50 border border-slate-100 text-lg hover:bg-slate-100 font-bold font-mono text-slate-700 rounded-xl active:scale-95 transition-all">2</button>
+                <button onclick="pressKeypad('3')" class="py-3 bg-slate-50 border border-slate-100 text-lg hover:bg-slate-100 font-bold font-mono text-slate-700 rounded-xl active:scale-95 transition-all">3</button>
+                <button onclick="pressKeypad('4')" class="py-3 bg-slate-50 border border-slate-100 text-lg hover:bg-slate-100 font-bold font-mono text-slate-700 rounded-xl active:scale-95 transition-all">4</button>
+                <button onclick="pressKeypad('5')" class="py-3 bg-slate-50 border border-slate-100 text-lg hover:bg-slate-100 font-bold font-mono text-slate-700 rounded-xl active:scale-95 transition-all">5</button>
+                <button onclick="pressKeypad('6')" class="py-3 bg-slate-50 border border-slate-100 text-lg hover:bg-slate-100 font-bold font-mono text-slate-700 rounded-xl active:scale-95 transition-all">6</button>
+                <button onclick="pressKeypad('7')" class="py-3 bg-slate-50 border border-slate-100 text-lg hover:bg-slate-100 font-bold font-mono text-slate-700 rounded-xl active:scale-95 transition-all">7</button>
+                <button onclick="pressKeypad('8')" class="py-3 bg-slate-50 border border-slate-100 text-lg hover:bg-slate-100 font-bold font-mono text-slate-700 rounded-xl active:scale-95 transition-all">8</button>
+                <button onclick="pressKeypad('9')" class="py-3 bg-slate-50 border border-slate-100 text-lg hover:bg-slate-100 font-bold font-mono text-slate-700 rounded-xl active:scale-95 transition-all">9</button>
+                <button onclick="pressKeypad('DELETE')" class="py-3 bg-red-50 border border-red-100 hover:bg-red-100 text-xs font-bold text-red-600 rounded-xl active:scale-95 transition-all">退格</button>
+                <button onclick="pressKeypad('0')" class="py-3 bg-slate-50 border border-slate-100 text-lg hover:bg-slate-100 font-bold font-mono text-slate-700 rounded-xl active:scale-95 transition-all">0</button>
+                <button onclick="pressKeypad('ENTER')" class="col-span-1 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 hover:shadow-md hover:shadow-emerald-500/10 text-white font-bold text-xs rounded-xl active:scale-95 transition-all flex items-center justify-center gap-1 cursor-pointer">確定</button>
+              </div>
+              <p class="text-[10px] text-slate-400 text-center font-medium">
+                可直接使用實體鍵盤數字鍵輸入，並按「Enter」送出答案！
+              </p>
+            </div>
+
+            <!-- Answer Result evaluation banner -->
+            <div id="play-evaluation-banner" class="hidden space-y-4">
+              <div id="eval-banner-bg" class="p-4 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4 border">
+                <div class="flex items-center gap-3 text-center md:text-left">
+                  <!-- Dynamic icon correct/wrong container -->
+                  <div id="eval-icon-holder" class="shrink-0"></div>
+                  <div>
+                    <h4 id="eval-title" class="font-bold text-base"></h4>
+                    <p id="eval-desc" class="text-xs font-mono mt-0.5"></p>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2 w-full md:w-auto">
+                  <button id="btn-toggle-explain" onclick="toggleActiveExplanation()" class="flex-1 md:flex-none py-2.5 px-3.5 rounded-xl border border-slate-200 bg-white hover:border-slate-300 text-slate-700 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+                    <i data-lucide="lightbulb" class="w-3.5 h-3.5 text-amber-500"></i>
+                    <span>看視覺詳解</span>
+                  </button>
+                  <button onclick="nextQuestion()" class="flex-1 md:flex-none py-2.5 px-5 rounded-xl bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+                    <span id="btn-next-txt">下一題</span>
+                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Collapsible math visual explanation structure -->
+              <div id="play-explanation-box" class="hidden overflow-hidden transition-all duration-300">
+                <!-- Will be dynamically injected by renderExplanation method -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Summary Report Screen -->
+      <div id="screen-summary" class="screen-view hidden w-full max-w-[1400px] space-y-6 animate-fade-in">
+        
+        <!-- Score Card core info -->
+        <div class="arena-panel rounded-3xl p-6 md:p-8">
+          <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-amber-50 rounded-2xl flex items-center justify-center mx-auto mb-3 border border-amber-100">
+              <i data-lucide="trophy" class="w-9 h-9 text-amber-500"></i>
+            </div>
+            <h2 class="font-arena text-3xl md:text-5xl font-extrabold text-slate-900">
+              競技場戰績
+            </h2>
+            <p id="sum-range-display" class="mt-2 text-base text-slate-600 font-bold"></p>
+          </div>
+
+          <!-- Rating Appraisal Banner -->
+          <div id="sum-achievement-banner" class="p-4 rounded-2xl border text-center md:text-left mb-6">
+            <h3 id="sum-achievement-title" class="font-extrabold text-lg flex items-center justify-center md:justify-start gap-1.5 leading-tight"></h3>
+            <p id="sum-achievement-desc" class="mt-2 text-base leading-relaxed font-semibold"></p>
+          </div>
+
+          <!-- Stats Grid -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <!-- Accuracy -->
+            <div class="bg-blue-50/70 p-4 border border-blue-100 rounded-2xl text-center">
+              <span class="text-sm font-bold text-blue-700 block mb-1">答對率</span>
+              <span id="stat-accuracy" class="text-2xl md:text-3xl font-black text-slate-900 font-mono">0%</span>
+              <span id="stat-accuracy-fraction" class="text-sm text-slate-500 font-bold block mt-1">(0/0)</span>
+            </div>
+
+            <!-- Average Speed -->
+            <div class="bg-amber-50/70 p-4 border border-amber-100 rounded-2xl text-center">
+              <span class="text-sm font-bold text-amber-700 block mb-1">平均耗時</span>
+              <span id="stat-speed" class="text-2xl md:text-3xl font-black text-slate-900 font-mono">0s</span>
+              <span class="text-sm text-slate-500 font-bold block mt-1">每題平均時間</span>
+            </div>
+
+            <!-- Peak ComboBox streak -->
+            <div class="bg-pink-50/70 p-4 border border-pink-100 rounded-2xl text-center">
+              <span class="text-sm font-bold text-pink-700 block mb-1">最高連擊</span>
+              <span id="stat-combo" class="text-2xl md:text-3xl font-black text-slate-900 font-mono">0</span>
+              <span class="text-sm text-slate-500 font-bold block mt-1">連續答對</span>
+            </div>
+
+            <!-- Hardest multiplication answered -->
+            <div class="bg-slate-50 p-4 border border-slate-100 rounded-2xl text-center">
+              <span class="text-sm font-bold text-slate-700 block mb-1">最燒腦</span>
+              <div id="stat-slowest-container" class="flex flex-col items-center">
+                <span id="stat-slowest-equation" class="text-lg font-black text-rose-600 font-mono leading-tight">-</span>
+                <span id="stat-slowest-time" class="text-sm text-slate-500 font-bold mt-1 font-mono">0s</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Per-question answer record -->
+          <div class="p-4 bg-slate-50 border border-slate-100 rounded-2xl mb-6">
+            <div class="flex items-center gap-2 text-slate-700 font-extrabold text-base mb-3">
+              <i data-lucide="bar-chart-3" class="w-5 h-5 text-blue-600"></i>
+              每題答題紀錄
+            </div>
+            
+            <!-- Dynamic answer result bars -->
+            <div id="sum-speed-chart" class="w-full h-24 flex items-end justify-between gap-1 overflow-x-auto py-1">
+              <!-- Inline bars injected with JS -->
+            </div>
+            <p class="text-sm text-slate-500 mt-2 text-center font-semibold">
+              * 綠色代表答對，紅色代表答錯；數字是題目次序。
+            </p>
+          </div>
+
+          <!-- Bottom Summary Controls -->
+          <div class="flex flex-col sm:flex-row gap-3">
+            <button onclick="startGame()" class="flex-grow py-3 px-5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold text-sm hover:-translate-y-0.5 hover:shadow-lg transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+              <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+              以同設定重啟挑戰
+            </button>
+
+            <button id="btn-practice-current-mistakes" onclick="practiceMistakesCurrentSession()" class="hidden py-3 px-5 rounded-2xl border-2 border-amber-200 bg-amber-50/30 text-amber-800 font-bold text-sm hover:bg-amber-50 transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+              <i data-lucide="zap" class="w-4 h-4"></i>
+              複習本次錯題 (<span id="current-mistakes-badge-cnt">0</span>)
+            </button>
+
+            <button onclick="downloadDetailedReport()" class="py-3 px-5 rounded-2xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 font-bold text-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+              <i data-lucide="file-spreadsheet" class="w-4 h-4 text-emerald-600"></i>
+              下載詳細報告
+            </button>
+
+            <button onclick="downloadMistakeReport()" class="py-3 px-5 rounded-2xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 font-bold text-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+              <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-600"></i>
+              下載錯題報告
+            </button>
+
+            <button onclick="goToScreen('setup')" class="py-3 px-5 rounded-2xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 font-bold text-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+              <i data-lucide="home" class="w-4 h-4"></i>
+              主頁
+            </button>
+          </div>
+          <p class="csv-privacy-note mt-3 rounded-2xl bg-slate-50 border border-slate-100 px-4 py-3 text-slate-500">
+            私隱提示：本局學習紀錄只暫存在此頁面的記憶體，不會上傳到伺服器；下載後的檔案由使用者自行保管，重新整理或關閉頁面後本局紀錄會消失。
+          </p>
+        </div>
+
+        <!-- Answers details expand list -->
+        <div class="bg-white border border-slate-100 rounded-3xl shadow-xl shadow-slate-100/50 p-6 md:p-8">
+          <h3 class="text-lg font-extrabold text-slate-800 mb-4 flex items-center gap-1.5">
+            <i data-lucide="check-square" class="w-4 h-4 text-emerald-500"></i>
+            答題詳解與分解步驟總覽
+          </h3>
+
+          <div id="sum-detailed-answers-list" class="space-y-2 max-h-[420px] overflow-y-auto pr-1">
+            <!-- Render list items dynamically -->
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 4. 100x100 Multiplication Table Browser -->
+      <div id="screen-table" class="screen-view hidden w-full max-w-[1400px] bg-white border border-slate-100 rounded-3xl shadow-xl shadow-slate-100/50 p-6 md:p-8 space-y-6 animate-fade-in">
+        
+        <!-- Table Title Header Header -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-5">
+          <div class="flex items-center gap-3">
+            <button onclick="goToScreen('setup')" class="p-2.5 rounded-xl border border-slate-200 text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 hover:border-emerald-200 transition-all cursor-pointer">
+              <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            </button>
+            <div>
+              <h2 class="text-xl md:text-2xl font-extrabold text-slate-800 flex items-center gap-2">
+                百百乘法瀏覽器 <span class="text-xs bg-emerald-500 text-white px-2 py-0.5 rounded-full font-bold">100 × 100</span>
+              </h2>
+              <p class="text-xs text-slate-400 mt-0.5 font-medium">
+                點擊網格即可高亮十字交叉對位點，即時輔助觀察因數分解！
+              </p>
+            </div>
+          </div>
+
+          <!-- Selection mode navigation tabs -->
+          <div class="flex bg-slate-100/60 p-1 rounded-xl self-stretch sm:self-auto">
+            <button id="table-tab-grid" onclick="switchTableTab('grid')" class="flex-1 sm:flex-none py-1.5 px-3.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 bg-white text-slate-800 shadow-sm cursor-pointer">
+              <i data-lucide="grid" class="w-3.5 h-3.5 text-emerald-500"></i>
+              10x10 網格視窗
+            </button>
+            <button id="table-tab-list" onclick="switchTableTab('list')" class="flex-1 sm:flex-none py-1.5 px-3.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 text-slate-500 hover:text-slate-700 cursor-pointer">
+              <i data-lucide="list" class="w-3.5 h-3.5 text-blue-500"></i>
+              單一乘數表
+            </button>
+          </div>
+        </div>
+
+        <!-- Coordinates calculators input header -->
+        <div class="bg-slate-50/70 rounded-2xl border border-slate-100/80 p-4 grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+          <div class="col-span-1 md:col-span-2 flex items-center gap-3">
+            <!-- A Slider -->
+            <div class="flex-1 space-y-1">
+              <label class="flex justify-between text-[11px] font-bold text-slate-500">
+                <span>乘數</span>
+                <span id="slider-val-a" class="font-mono text-emerald-600 bg-emerald-50 px-1.5 py-0.25 rounded font-bold">12</span>
+              </label>
+              <input type="range" id="table-slider-a" min="1" max="100" value="12" oninput="handleTableSliderChange('a', this.value)" class="w-full accent-emerald-500 h-1.5 bg-slate-200 rounded-lg cursor-pointer">
+            </div>
+
+            <span class="text-slate-300 font-bold px-1 self-end mb-1">×</span>
+
+            <!-- B Slider -->
+            <div class="flex-1 space-y-1">
+              <label class="flex justify-between text-[11px] font-bold text-slate-500">
+                <span>被乘數</span>
+                <span id="slider-val-b" class="font-mono text-blue-600 bg-blue-50 px-1.5 py-0.25 rounded font-bold">15</span>
+              </label>
+              <input type="range" id="table-slider-b" min="1" max="100" value="15" oninput="handleTableSliderChange('b', this.value)" class="w-full accent-blue-500 h-1.5 bg-slate-200 rounded-lg cursor-pointer">
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="focusSelectedCoordinates()" class="flex-1 py-2.5 px-4 bg-slate-800 hover:bg-slate-900 border border-slate-900 rounded-xl text-white text-xs font-bold transition-all flex items-center justify-center gap-1 cursor-pointer">
+              <i data-lucide="zoom-in" class="w-3.5 h-3.5"></i>
+              定位此格
+            </button>
+            
+            <div class="bg-emerald-50 px-4 py-2 border border-emerald-100 rounded-xl text-center min-w-[70px]">
+              <span class="text-[9px] text-emerald-500 font-bold block leading-none">計算積</span>
+              <span id="table-current-product" class="font-mono text-base font-black text-emerald-800 leading-tight">180</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab Content 1: 10x10 paginated window matrix -->
+        <div id="table-grid-view" class="space-y-4">
+          <div class="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3">
+            <span class="text-xs font-bold text-slate-500 flex items-center gap-1.5 bg-slate-50 border border-slate-100 rounded-xl px-3 py-2">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              目前顯示視窗：
+              <span id="label-table-col-range" class="text-emerald-700 font-mono font-black">11~20</span> <span>(列)</span>
+              <span class="text-slate-200">|</span>
+              <span id="label-table-row-range" class="text-blue-700 font-mono font-black">11~20</span> <span>(行)</span>
+            </span>
+
+            <!-- Pagination selectors -->
+            <div class="flex items-center gap-2 self-end sm:self-auto">
+              <div class="flex bg-slate-100 rounded-xl p-0.5">
+                <button onclick="shiftTableOffset('row', -10)" class="p-1 px-2 text-xs font-bold text-slate-600 hover:bg-white rounded-lg transition-all flex items-center gap-0.5 cursor-pointer">上列</button>
+                <button onclick="shiftTableOffset('row', 10)" class="p-1 px-2 text-xs font-bold text-slate-600 hover:bg-white rounded-lg transition-all flex items-center gap-0.5 cursor-pointer">下列</button>
+              </div>
+              <div class="flex bg-slate-100 rounded-xl p-0.5">
+                <button onclick="shiftTableOffset('col', -10)" class="p-1 px-2 text-xs font-bold text-slate-600 hover:bg-white rounded-lg transition-all flex items-center gap-0.5 cursor-pointer">左行</button>
+                <button onclick="shiftTableOffset('col', 10)" class="p-1 px-2 text-xs font-bold text-slate-600 hover:bg-white rounded-lg transition-all flex items-center gap-0.5 cursor-pointer">右行</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- HTML Matrix Element -->
+          <div class="overflow-x-auto border border-slate-100 rounded-2xl bg-slate-50/50 p-4">
+            <div class="min-w-[420px] max-w-full mx-auto">
+              <table id="target-grid-table" class="w-full text-center text-xs font-mono border-collapse select-none">
+                <!-- Injected dynamically -->
+              </table>
+            </div>
+          </div>
+          <p class="text-[10px] text-slate-400 mt-2 text-center font-medium">
+            💡 技巧：點擊任意網格數字，即可更新上方 A 與 B 相乘配對，並呈現對位高亮！
+          </p>
+        </div>
+
+        <!-- Tab Content 2: Single column tables rows -->
+        <div id="table-list-view" class="hidden space-y-4">
+          <div class="flex items-center justify-between bg-slate-50/50 p-4 border border-slate-100 rounded-2xl">
+            <div class="flex items-center gap-3">
+              <span class="text-sm font-bold text-slate-600">聚焦特定乘數：</span>
+              <div class="inline-flex items-center gap-1.5 bg-white border border-slate-200 rounded-xl px-2 py-1">
+                <button onclick="changeSelectedMultiplier(-1)" class="p-1 hover:bg-slate-100 rounded font-bold text-slate-500 font-mono text-center w-6 cursor-pointer">-</button>
+                <input type="number" id="input-selected-multiplier" min="1" max="100" value="12" oninput="onMultiplierInputChange(this.value)" class="w-12 text-center text-sm font-black font-mono text-emerald-600 focus:outline-none">
+                <button onclick="changeSelectedMultiplier(1)" class="p-1 hover:bg-slate-100 rounded font-bold text-slate-500 font-mono text-center w-6 cursor-pointer">+</button>
+              </div>
+            </div>
+            <p id="label-list-view-desc" class="text-xs text-slate-400 font-medium"></p>
+          </div>
+
+          <!-- Grid items rows to 100 -->
+          <div id="multiplier-list-results" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 max-h-[460px] overflow-y-auto pr-1">
+            <!-- Injected dynamically -->
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+    </div>
+
+    <!-- Applet Footer -->
+    <footer class="w-full max-w-[1400px] mx-auto py-5 border-t border-blue-100/60 mt-4 text-center">
+      <p class="text-sm text-slate-500 font-semibold">
+        本機練習紀錄只在這一頁暫存，下載報告後由使用者自行保管。
+      </p>
+    </footer>
+    <template id="ldl-copy-cost-markers" hidden>
+      <!-- copy-cost marker: body-gamma YFC -->
+      <!-- copy-cost marker: body-delta LD -->
+    </template>
+
+    <!-- Vanilla Javascript Logic Core -->
+    <script>
+      // 1. Core State
+      let gameMode = "setup"; // setup, playing, summary, table
+      let settings = {
+        aMin: 1,
+        aMax: 9,
+        bMin: 1,
+        bMax: 9,
+        questionCount: 10, // 0 = endless
+        questionMode: "CHOICE", // CHOICE / KEYPAD
+        timeLimit: 180 // seconds; 0 = unlimited
+      };
+
+      let activeQuestions = [];
+      let currentIndex = 0;
+      let userAnswer = "";
+      let selectedOptionIdx = null;
+      let hasAnswered = false;
+
+      // Stats
+      let streak = 0;
+      let correctCount = 0;
+      let wrongCount = 0;
+      let isMutedGlobal = false;
+      let mistakesBank = []; // local storage
+      let currentSessionAnswers = []; // store history of currently played questions
+      let expandedSummaryIds = new Set(); // indices expand visual detailed map
+
+      // Timers
+      let timeLeft = 0;
+      let timerIntervalId = null;
+      let questionStartTime = 0;
+
+      // Multiplication Table view status
+      let tableActiveTab = "grid";
+      let tableRowOffset = 1;
+      let tableColOffset = 1;
+      let tableSelectedFactor = 12;
+      let tableSliderA = 12;
+      let tableSliderB = 15;
+
+      // 2. Audio Effects and Background Music
+      let globalAudioCtx = null;
+      let backgroundMusicAudio = null;
+
+      function getBackgroundMusicAudio() {
+        if (!backgroundMusicAudio) {
+          backgroundMusicAudio = new Audio("G03.mp3");
+          backgroundMusicAudio.loop = true;
+          backgroundMusicAudio.preload = "auto";
+          backgroundMusicAudio.volume = 0.24;
+        }
+        return backgroundMusicAudio;
+      }
+
+      function syncBackgroundMusicMuteState() {
+        if (!backgroundMusicAudio) return;
+        backgroundMusicAudio.muted = isMutedGlobal;
+        if (isMutedGlobal) {
+          backgroundMusicAudio.pause();
+        }
+      }
+
+      function ensureBackgroundMusicPlaying() {
+        if (isMutedGlobal) {
+          syncBackgroundMusicMuteState();
+          return;
+        }
+        const music = getBackgroundMusicAudio();
+        music.muted = false;
+        if (music.paused) {
+          music.play().catch(() => {});
+        }
+      }
+
+      function getAudioContext() {
+        if (globalAudioCtx) {
+          if (globalAudioCtx.state === "suspended") {
+            try {
+              globalAudioCtx.resume();
+            } catch (e) {}
+          }
+          return globalAudioCtx;
+        }
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return null;
+        try {
+          globalAudioCtx = new AudioContextClass();
+        } catch (e) {
+          console.warn("Failed to create AudioContext:", e);
+        }
+        return globalAudioCtx;
+      }
+
+      function playSound(type) {
+        if (isMutedGlobal) return;
+        ensureBackgroundMusicPlaying();
+        const ctx = getAudioContext();
+        if (!ctx) return;
+        const now = ctx.currentTime;
+
+        try {
+          if (type === "tap") {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(600, now);
+            osc.frequency.exponentialRampToValueAtTime(150, now + 0.08);
+            gain.gain.setValueAtTime(0.08, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+            osc.start(now);
+            osc.stop(now + 0.08);
+          } else if (type === "correct") {
+            // Arpeggio
+            [523.25, 659.25, 783.99].forEach((freq, idx) => {
+              const osc = ctx.createOscillator();
+              const gain = ctx.createGain();
+              osc.connect(gain);
+              gain.connect(ctx.destination);
+              osc.type = "triangle";
+              osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+              gain.gain.setValueAtTime(0.12, now + idx * 0.08);
+              gain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.08 + 0.15);
+              osc.start(now + idx * 0.08);
+              osc.stop(now + idx * 0.08 + 0.15);
+            });
+          } else if (type === "incorrect") {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            const filter = ctx.createBiquadFilter();
+            
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(ctx.destination);
+
+            osc.type = "sawtooth";
+            osc.frequency.setValueAtTime(180, now);
+            osc.frequency.linearRampToValueAtTime(110, now + 0.3);
+
+            filter.type = "lowpass";
+            filter.frequency.setValueAtTime(400, now);
+
+            gain.gain.setValueAtTime(0.15, now);
+            gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+
+            osc.start(now);
+            osc.stop(now + 0.35);
+          } else if (type === "win") {
+            const notes = [261.63, 329.63, 392.00, 523.25, 659.25, 783.99, 1046.50];
+            notes.forEach((freq, idx) => {
+              const osc = ctx.createOscillator();
+              const gain = ctx.createGain();
+              osc.connect(gain);
+              gain.connect(ctx.destination);
+              osc.type = "sine";
+              osc.frequency.setValueAtTime(freq, now + idx * 0.08);
+              gain.gain.setValueAtTime(0.1, now + idx * 0.08);
+              gain.gain.exponentialRampToValueAtTime(0.005, now + idx * 0.08 + 0.3);
+              osc.start(now + idx * 0.08);
+              osc.stop(now + idx * 0.08 + 0.3);
+            });
+          } else if (type === "tick") {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(1200, now);
+            gain.gain.setValueAtTime(0.05, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+            osc.start(now);
+            osc.stop(now + 0.05);
+          }
+        } catch (err) {
+          console.warn("Audio Context init block:", err);
+        }
+      }
+
+      // 3. System Initialization
+      window.addEventListener("DOMContentLoaded", () => {
+        // Load non-learning local preference only. Learning records and mistakes stay in current page memory.
+        try {
+          const savedMuted = localStorage.getItem("multi_muted_v2");
+          if (savedMuted !== null) {
+            isMutedGlobal = savedMuted === "true";
+            updateMuteControlsDom();
+          }
+        } catch (e) {
+          console.error("Local storage error:", e);
+        }
+
+        // Apply Setup UI initial updates
+        updateSetupSlidersDom();
+        updateMistakesBadgeDom();
+        
+        // Initial setup for Table matrix
+        renderMultiplicationGridMatrix();
+        renderSingleMultiplierRows();
+
+        // Keyboard listener for typing keypad replies
+        window.addEventListener("keydown", handlePhysicalKeyboardInput);
+        initializeTopControls();
+
+        // Icons initialize
+        lucide.createIcons();
+      });
+
+      function initializeTopControls() {
+        const homeLink = document.getElementById("tool-home-link");
+        const enterFullscreenButton = document.getElementById("enterFullscreen");
+        const exitFullscreenButton = document.getElementById("exitFullscreen");
+        const fullscreenRoot = document.documentElement;
+
+        if (homeLink) {
+          homeLink.textContent = "工具總覽";
+          homeLink.href = "../../index.html";
+          homeLink.target = "_top";
+          homeLink.setAttribute("aria-label", "前往工具總覽");
+        }
+
+        if (!enterFullscreenButton || !exitFullscreenButton) return;
+
+        exitFullscreenButton.textContent = "退出";
+        exitFullscreenButton.setAttribute("aria-label", "按 ESC 或此按鈕退出全螢幕");
+        exitFullscreenButton.title = "退出";
+
+        async function enterFullscreen() {
+          playSound("tap");
+          try {
+            if (!document.fullscreenElement && fullscreenRoot.requestFullscreen) {
+              await fullscreenRoot.requestFullscreen();
+            }
+          } catch (error) {}
+          updateFullscreenControls();
+        }
+
+        async function exitFullscreen() {
+          playSound("tap");
+          try {
+            if (document.fullscreenElement && document.exitFullscreen) {
+              await document.exitFullscreen();
+            }
+          } catch (error) {}
+          updateFullscreenControls();
+        }
+
+        function updateFullscreenControls() {
+          const isFullscreen = Boolean(document.fullscreenElement);
+          enterFullscreenButton.setAttribute("data-fullscreen-active", String(isFullscreen));
+          exitFullscreenButton.setAttribute("data-fullscreen-active", String(isFullscreen));
+        }
+
+        enterFullscreenButton.addEventListener("click", enterFullscreen);
+        exitFullscreenButton.addEventListener("click", exitFullscreen);
+        document.addEventListener("fullscreenchange", updateFullscreenControls);
+        document.addEventListener("keydown", event => {
+          if (event.key === "Escape") {
+            window.setTimeout(updateFullscreenControls, 0);
+          }
+        });
+        updateFullscreenControls();
+      }
+
+      function toggleMute() {
+        isMutedGlobal = !isMutedGlobal;
+        updateMuteControlsDom();
+        try {
+          localStorage.setItem("multi_muted_v2", String(isMutedGlobal));
+        } catch (e) {}
+        syncBackgroundMusicMuteState();
+        if (!isMutedGlobal) ensureBackgroundMusicPlaying();
+        playSound("tap");
+      }
+
+      function updateMuteControlsDom() {
+        const icons = document.querySelectorAll(".js-mute-icon, .play-mute-icon-class, #btn-global-mute [data-lucide]");
+        icons.forEach(icon => {
+          if (isMutedGlobal) {
+            icon.setAttribute("data-lucide", "volume-x");
+          } else {
+            icon.setAttribute("data-lucide", "volume-2");
+          }
+        });
+        syncBackgroundMusicMuteState();
+        lucide.createIcons();
+      }
+
+      function updateMistakesBadgeDom() {
+        const badge = document.getElementById("mistakes-count-badge");
+        const practiceBtn = document.getElementById("btn-practice-mistakes");
+        const clearBtn = document.getElementById("btn-clear-mistakes");
+
+        if (mistakesBank && mistakesBank.length > 0) {
+          badge.textContent = mistakesBank.length;
+          practiceBtn.classList.remove("hidden");
+          clearBtn.classList.remove("hidden");
+        } else {
+          practiceBtn.classList.add("hidden");
+          clearBtn.classList.add("hidden");
+        }
+      }
+
+      function clearMistakesBank() {
+        playSound("tap");
+        if (confirm("確定要清除所有做錯的題目紀錄嗎？")) {
+          mistakesBank = [];
+          updateMistakesBadgeDom();
+        }
+      }
+
+      // 4. Numeric Range Mechanics
+      function handleRangeChange(factor, boundary, value) {
+        const parsed = clampNumber(value, 1, 100, 1);
+        
+        if (factor === "a") {
+          if (boundary === "min") {
+            settings.aMin = parsed;
+            if (settings.aMin > settings.aMax) {
+              settings.aMax = settings.aMin;
+              document.getElementById("input-a-max").value = settings.aMin;
+            }
+          } else {
+            settings.aMax = parsed;
+            if (settings.aMax < settings.aMin) {
+              settings.aMin = settings.aMax;
+              document.getElementById("input-a-min").value = settings.aMax;
+            }
+          }
+        } else {
+          if (boundary === "min") {
+            settings.bMin = parsed;
+            if (settings.bMin > settings.bMax) {
+              settings.bMax = settings.bMin;
+              document.getElementById("input-b-max").value = settings.bMin;
+            }
+          } else {
+            settings.bMax = parsed;
+            if (settings.bMax < settings.bMin) {
+              settings.bMin = settings.bMax;
+              document.getElementById("input-b-min").value = settings.bMax;
+            }
+          }
+        }
+        updateSetupSlidersDom();
+      }
+
+      function updateSetupSlidersDom() {
+        // Labels
+        document.getElementById("label-a-min").textContent = settings.aMin;
+        document.getElementById("label-a-max").textContent = settings.aMax;
+        document.getElementById("label-b-min").textContent = settings.bMin;
+        document.getElementById("label-b-max").textContent = settings.bMax;
+
+        // Header Range Displays
+        document.getElementById("range-a-display").textContent = `${settings.aMin} ～ ${settings.aMax}`;
+        document.getElementById("range-b-display").textContent = `${settings.bMin} ～ ${settings.bMax}`;
+
+        // Ensure Range sync input values
+        document.getElementById("input-a-min").value = settings.aMin;
+        document.getElementById("input-a-max").value = settings.aMax;
+        document.getElementById("input-b-min").value = settings.bMin;
+        document.getElementById("input-b-max").value = settings.bMax;
+      }
+
+      function applyPreset(presetType) {
+        playSound("tap");
+        if (presetType === "9x9") {
+          settings.aMin = 1; settings.aMax = 9;
+          settings.bMin = 1; settings.bMax = 9;
+        } else if (presetType === "11-19") {
+          settings.aMin = 11; settings.aMax = 19;
+          settings.bMin = 11; settings.bMax = 19;
+        } else if (presetType === "2digit") {
+          settings.aMin = 10; settings.aMax = 99;
+          settings.bMin = 2; settings.bMax = 9;
+        } else if (presetType === "full100") {
+          settings.aMin = 1; settings.aMax = 100;
+          settings.bMin = 1; settings.bMax = 100;
+        }
+        updateSetupSlidersDom();
+      }
+
+      function setAnswerMode(mode) {
+        playSound("tap");
+        settings.questionMode = mode;
+        
+        const btnChoice = document.getElementById("btn-mode-choice");
+        const btnKeypad = document.getElementById("btn-mode-keypad");
+
+        if (mode === "CHOICE") {
+          btnChoice.className = "arena-button flex flex-col items-center justify-center py-3 px-4 rounded-2xl border text-center transition-all bg-blue-50/70 border-blue-500 text-blue-900 font-bold cursor-pointer";
+          btnKeypad.className = "arena-button flex flex-col items-center justify-center py-3 px-4 rounded-2xl border border-blue-100 bg-white text-slate-600 hover:bg-blue-50 text-center transition-all cursor-pointer";
+        } else {
+          btnKeypad.className = "arena-button flex flex-col items-center justify-center py-3 px-4 rounded-2xl border text-center transition-all bg-blue-50/70 border-blue-500 text-blue-900 font-bold cursor-pointer";
+          btnChoice.className = "arena-button flex flex-col items-center justify-center py-3 px-4 rounded-2xl border border-blue-100 bg-white text-slate-600 hover:bg-blue-50 text-center transition-all cursor-pointer";
+        }
+      }
+
+      function setQuestionsCount(count) {
+        playSound("tap");
+        settings.questionCount = Number(count) === 0 ? 0 : clampNumber(count, 1, 200, 10);
+        const countInput = document.getElementById("input-question-count");
+        if (countInput) countInput.value = "";
+        updateQuestionCountButtons();
+      }
+
+      function handleQuestionCountCustomFocus() {
+        playSound("tap");
+        updateQuestionCountButtons(true);
+      }
+
+      function updateQuestionCountButtons(forceCustom = false) {
+        const btns = document.querySelectorAll("#q-count-group button");
+        const countInput = document.getElementById("input-question-count");
+        btns.forEach((btn, index) => {
+          const num = [10, 15, 0][index];
+          const isSelected = num === settings.questionCount;
+          if (isSelected) {
+            btn.className = "arena-button py-2.5 px-1 rounded-xl border border-blue-500 bg-blue-600 text-white font-bold transition-all cursor-pointer";
+          } else {
+            btn.className = "arena-button py-2.5 px-1 rounded-xl border border-blue-100 bg-white text-slate-600 hover:bg-blue-50 transition-all cursor-pointer";
+          }
+        });
+        if (countInput) {
+          const isCustomSelected = forceCustom || ![10, 15, 0].includes(settings.questionCount);
+          countInput.className = `setup-inline-number${isCustomSelected ? " is-selected" : ""}`;
+        }
+      }
+
+      function setTimeLimitSetting(seconds) {
+        playSound("tap");
+        settings.timeLimit = clampNumber(seconds, 0, 3600, 180);
+        const timeInput = document.getElementById("input-time-limit");
+        if (timeInput) timeInput.value = "";
+        updateTimerLimitButtons();
+      }
+
+      function handleTimeLimitCustomFocus() {
+        playSound("tap");
+        updateTimerLimitButtons(true);
+      }
+
+      function updateTimerLimitButtons(forceCustom = false) {
+        const btns = document.querySelectorAll("#timer-limit-group button");
+        const timeInput = document.getElementById("input-time-limit");
+        btns.forEach((btn, index) => {
+          const limit = [180, 0][index];
+          const isSelected = limit === settings.timeLimit;
+          if (isSelected) {
+            btn.className = "arena-button py-2.5 px-2 rounded-xl border border-blue-500 bg-blue-50/70 text-blue-900 font-bold transition-all cursor-pointer";
+          } else {
+            btn.className = "arena-button py-2.5 px-2 rounded-xl border border-blue-100 bg-white text-slate-600 hover:bg-blue-50 transition-all cursor-pointer";
+          }
+        });
+        if (timeInput) {
+          const isCustomSelected = forceCustom || ![180, 0].includes(settings.timeLimit);
+          timeInput.className = `setup-inline-number${isCustomSelected ? " is-selected" : ""}`;
+        }
+      }
+
+      function clampNumber(value, min, max, fallback) {
+        const parsed = parseInt(value, 10);
+        if (Number.isNaN(parsed)) return fallback;
+        return Math.min(max, Math.max(min, parsed));
+      }
+
+      function handleQuestionCountInput(value) {
+        if (String(value).trim() === "") {
+          updateQuestionCountButtons(true);
+          return;
+        }
+        settings.questionCount = clampNumber(value, 1, 200, 10);
+        const countInput = document.getElementById("input-question-count");
+        if (countInput) countInput.value = settings.questionCount;
+        updateQuestionCountButtons();
+      }
+
+      function handleTimeLimitInput(value) {
+        if (String(value).trim() === "") {
+          updateTimerLimitButtons(true);
+          return;
+        }
+        const minutes = clampNumber(value, 1, 60, 3);
+        settings.timeLimit = minutes * 60;
+        const timeInput = document.getElementById("input-time-limit");
+        if (timeInput) timeInput.value = minutes;
+        updateTimerLimitButtons();
+      }
+
+      // 5. Game Navigation & Flow
+      function goToScreen(screenName) {
+        document.querySelectorAll(".screen-view").forEach(screen => {
+          screen.classList.add("hidden");
+        });
+        document.getElementById(`screen-${screenName}`).classList.remove("hidden");
+        document.body.classList.toggle("is-playing", screenName === "playing");
+        gameMode = screenName;
+      }
+
+      function generateChoices(a, b) {
+        const correct = a * b;
+        const choiceSet = new Set([correct]);
+
+        // Error factors
+        choiceSet.add(a + b);
+        choiceSet.add(Math.max(1, a - 1) * b);
+        choiceSet.add((a + 1) * b);
+        choiceSet.add(a * Math.max(1, b - 1));
+        choiceSet.add(a * (b + 1));
+        choiceSet.add(correct + 10);
+        choiceSet.add(correct - 10);
+
+        let tries = 0;
+        while (choiceSet.size < 4 && tries < 100) {
+          tries++;
+          const offset = Math.floor(Math.random() * 20) - 10;
+          const target = correct + offset;
+          if (target > 0) choiceSet.add(target);
+        }
+
+        return Array.from(choiceSet).slice(0, 4).sort(() => Math.random() - 0.5);
+      }
+
+      function generateQuestionById(id) {
+        const a = Math.floor(Math.random() * (settings.aMax - settings.aMin + 1)) + settings.aMin;
+        const b = Math.floor(Math.random() * (settings.bMax - settings.bMin + 1)) + settings.bMin;
+        return {
+          id,
+          a,
+          b,
+          correct: a * b,
+          options: generateChoices(a, b),
+          timeTaken: 0,
+          userRawSelection: null,
+          isCorrect: false
+        };
+      }
+
+      function addGeneratedQuestions(amount) {
+        const startId = activeQuestions.length;
+        for (let i = 0; i < amount; i++) {
+          activeQuestions.push(generateQuestionById(startId + i));
+        }
+      }
+
+      function startGame() {
+        playSound("tap");
+        
+        // Setup parameters
+        correctCount = 0;
+        wrongCount = 0;
+        streak = 0;
+        currentIndex = 0;
+        currentSessionAnswers = [];
+        expandedSummaryIds.clear();
+
+        // Standard pre-generation loop
+        const isEndless = settings.questionCount === 0;
+        const qCount = isEndless ? 20 : clampNumber(settings.questionCount, 1, 200, 10);
+        if (!isEndless) settings.questionCount = qCount;
+        activeQuestions = [];
+
+        addGeneratedQuestions(qCount);
+
+        // Timer
+        if (settings.timeLimit > 0) {
+          timeLeft = settings.timeLimit;
+          document.getElementById("play-timer-container").classList.remove("hidden");
+          document.getElementById("play-timer-display").textContent = `${timeLeft}s`;
+          
+          if (timerIntervalId) clearInterval(timerIntervalId);
+          timerIntervalId = setInterval(() => {
+            timeLeft--;
+            document.getElementById("play-timer-display").textContent = `${timeLeft}s`;
+            
+            if (timeLeft <= 5) {
+              playSound("tick");
+              // animate alarm visual ticks
+              const timerIcon = document.getElementById("play-timer-icon");
+              timerIcon.classList.add("animate-bounce", "text-rose-600");
+              document.getElementById("play-timer-display").classList.add("text-rose-600");
+            }
+
+            if (timeLeft <= 0) {
+              clearInterval(timerIntervalId);
+              completeGameTimeout();
+            }
+          }, 1000);
+        } else {
+          document.getElementById("play-timer-container").classList.add("hidden");
+        }
+
+        goToScreen("playing");
+        initQuestionSessionRow();
+      }
+
+      // Dynamic session for Mistakes practicing
+      function practiceMistakes() {
+        if (!mistakesBank || mistakesBank.length === 0) return;
+        playSound("tap");
+
+        correctCount = 0;
+        wrongCount = 0;
+        streak = 0;
+        currentIndex = 0;
+        currentSessionAnswers = [];
+
+        // Generate questions from incorrect stack
+        activeQuestions = mistakesBank.map((m, idx) => {
+          return {
+            id: idx,
+            a: m.a,
+            b: m.b,
+            correct: m.a * m.b,
+            options: generateChoices(m.a, m.b),
+            timeTaken: 0,
+            userRawSelection: null,
+            isCorrect: false
+          };
+        });
+
+        // Override settings temporarly
+        settings.questionCount = activeQuestions.length;
+        settings.timeLimit = 0; // standard practice has no timer limit
+
+        document.getElementById("play-timer-container").classList.add("hidden");
+        goToScreen("playing");
+        initQuestionSessionRow();
+      }
+
+      function practiceMistakesCurrentSession() {
+        // Find errors in the current review stack and reset active session with them
+        const reviewMistakes = currentSessionAnswers
+          .filter(q => !q.isCorrect)
+          .map(q => ({ a: q.a, b: q.b }));
+
+        if (reviewMistakes.length === 0) return;
+        playSound("tap");
+
+        correctCount = 0;
+        wrongCount = 0;
+        streak = 0;
+        currentIndex = 0;
+        currentSessionAnswers = [];
+
+        activeQuestions = reviewMistakes.map((m, idx) => {
+          return {
+            id: idx,
+            a: m.a,
+            b: m.b,
+            correct: m.a * m.b,
+            options: generateChoices(m.a, m.b),
+            timeTaken: 0,
+            userRawSelection: null,
+            isCorrect: false
+          };
+        });
+
+        settings.questionCount = activeQuestions.length;
+        settings.timeLimit = 0;
+
+        document.getElementById("play-timer-container").classList.add("hidden");
+        goToScreen("playing");
+        initQuestionSessionRow();
+      }
+
+      function completeGameTimeout() {
+        // If timer expires, fill remaining uncompleted indexes as incorrect
+        if (settings.questionCount === 0) {
+          const currentActive = activeQuestions[currentIndex];
+          if (currentActive && !hasAnswered) {
+            currentActive.userRawSelection = -1;
+            currentActive.isCorrect = false;
+            currentActive.timeTaken = 0;
+            currentSessionAnswers.push(currentActive);
+          }
+          finishSessionTransition();
+          return;
+        }
+
+        for (let i = currentIndex; i < activeQuestions.length; i++) {
+          if (!activeQuestions[i].userRawSelection) {
+            activeQuestions[i].userRawSelection = -1;
+            activeQuestions[i].isCorrect = false;
+            activeQuestions[i].timeTaken = 0;
+            currentSessionAnswers.push(activeQuestions[i]);
+          }
+        }
+        finishSessionTransition();
+      }
+
+      function quitGameEarly() {
+        playSound("tap");
+        if (timerIntervalId) clearInterval(timerIntervalId);
+
+        if (currentSessionAnswers.length > 0) {
+          // Fill remainder as ignored
+          finishSessionTransition();
+        } else {
+          goToScreen("setup");
+        }
+      }
+
+      // 6. Active Question Rendering
+      function initQuestionSessionRow() {
+        userAnswer = "";
+        selectedOptionIdx = null;
+        hasAnswered = false;
+        questionStartTime = Date.now();
+
+        const currentActive = activeQuestions[currentIndex];
+        
+        // Titles and IDX numbers
+        const isEndless = settings.questionCount === 0;
+        const totalQuestions = activeQuestions.length || settings.questionCount;
+        document.getElementById("play-q-idx").textContent = currentIndex + 1;
+        if (isEndless) {
+          document.getElementById("play-q-total-container").textContent = " / 無盡";
+          document.getElementById("play-progress-outer").classList.add("hidden");
+        } else {
+          document.getElementById("play-q-total-container").textContent = ` / ${totalQuestions}`;
+          const pct = (currentIndex / totalQuestions) * 100;
+          document.getElementById("play-progress-inner").style.width = `${pct}%`;
+          document.getElementById("play-progress-outer").classList.remove("hidden");
+        }
+
+        // Show combo streak
+        const comboBadge = document.getElementById("play-combo-streak");
+        if (streak >= 3) {
+          comboBadge.textContent = `連擊 × ${streak}`;
+          comboBadge.classList.remove("hidden");
+        } else {
+          comboBadge.classList.add("hidden");
+        }
+
+        // Math Equation Variables
+        document.getElementById("equation-val-a").textContent = currentActive.a;
+        document.getElementById("equation-val-b").textContent = currentActive.b;
+        const equationPlaceholder = document.getElementById("equation-input-placeholder");
+        equationPlaceholder.className = "mt-2 text-4xl md:text-6xl font-black text-emerald-600 font-mono";
+        equationPlaceholder.innerHTML = `<span class="text-slate-300 font-sans animate-pulse">？</span>`;
+
+        // Scores
+        document.getElementById("score-correct-count").textContent = correctCount;
+        document.getElementById("score-wrong-count").textContent = wrongCount;
+
+        // Reset visibility containers
+        document.getElementById("play-evaluation-banner").classList.add("hidden");
+        document.getElementById("play-explanation-box").classList.add("hidden");
+
+        const btnToggleExplain = document.getElementById("btn-toggle-explain");
+        btnToggleExplain.classList.remove("bg-amber-100", "border-amber-200", "text-amber-800");
+        btnToggleExplain.querySelector("span").textContent = "看視覺詳解";
+
+        if (settings.questionMode === "CHOICE") {
+          document.getElementById("play-input-choice").classList.remove("hidden");
+          document.getElementById("play-input-keypad").classList.add("hidden");
+          
+          // Populate choices details
+          currentActive.options.forEach((opt, idx) => {
+            const btn = document.querySelector(`.option-txt-${idx}`).parentElement;
+            btn.className = "option-choice-btn arena-button py-4 px-6 rounded-2xl border-2 border-blue-100 bg-white hover:border-blue-500 hover:bg-blue-50 active:scale-95 transition-all text-center cursor-pointer";
+            document.querySelector(`.option-txt-${idx}`).textContent = opt;
+          });
+        } else {
+          document.getElementById("play-input-choice").classList.add("hidden");
+          document.getElementById("play-input-keypad").classList.remove("hidden");
+        }
+      }
+
+      function handlePhysicalKeyboardInput(e) {
+        if (gameMode !== "playing" || hasAnswered) return;
+
+        if (settings.questionMode === "CHOICE") {
+          // Binds key 1,2,3,4 to options
+          if (e.key >= "1" && e.key <= "4") {
+            const idx = parseInt(e.key) - 1;
+            selectMcqChoice(idx);
+          }
+        } else {
+          // Numpad fills
+          if (e.key >= "0" && e.key <= "9") {
+            e.preventDefault();
+            pressKeypad(e.key);
+          } else if (e.key === "Backspace") {
+            e.preventDefault();
+            pressKeypad("DELETE");
+          } else if (e.key === "Enter") {
+            e.preventDefault();
+            pressKeypad("ENTER");
+          }
+        }
+      }
+
+      function selectMcqChoice(idx) {
+        if (hasAnswered) return;
+        selectedOptionIdx = idx;
+        const currentActive = activeQuestions[currentIndex];
+        const chosenVal = currentActive.options[idx];
+        evaluateActiveAnswer(chosenVal);
+      }
+
+      function pressKeypad(val) {
+        if (hasAnswered) return;
+        playSound("tap");
+
+        if (val === "DELETE") {
+          userAnswer = userAnswer.slice(0, -1);
+          updateKeypadStringDisplay();
+        } else if (val === "ENTER") {
+          if (userAnswer.trim() !== "") {
+            evaluateActiveAnswer(parseInt(userAnswer));
+          }
+        } else {
+          userAnswer += val;
+          updateKeypadStringDisplay();
+        }
+      }
+
+      function updateKeypadStringDisplay() {
+        const placeholder = document.getElementById("equation-input-placeholder");
+        if (userAnswer !== "") {
+          placeholder.textContent = userAnswer;
+          placeholder.classList.remove("animate-pulse", "text-slate-300");
+          placeholder.classList.add("text-emerald-600");
+        } else {
+          placeholder.innerHTML = `<span class="text-slate-300 font-sans animate-pulse">？</span>`;
+        }
+      }
+
+      function evaluateActiveAnswer(userValue) {
+        hasAnswered = true;
+        const currentActive = activeQuestions[currentIndex];
+        const duration = Date.now() - questionStartTime;
+        currentActive.timeTaken = duration;
+        currentActive.userRawSelection = userValue;
+
+        const isCorrect = userValue === currentActive.correct;
+        currentActive.isCorrect = isCorrect;
+
+        // Sound play
+        if (isCorrect) {
+          playSound("correct");
+          streak++;
+          correctCount++;
+        } else {
+          playSound("incorrect");
+          streak = 0;
+          wrongCount++;
+        }
+
+        // Live visual modifications to inputs
+        if (settings.questionMode === "CHOICE") {
+          currentActive.options.forEach((opt, index) => {
+            const btn = document.querySelector(`.option-txt-${index}`).parentElement;
+            if (opt === currentActive.correct) {
+              btn.classList.add("border-emerald-500", "bg-emerald-50", "ring-4", "ring-emerald-200");
+            } else if (index === selectedOptionIdx) {
+              btn.classList.add("border-rose-500", "bg-rose-50", "ring-4", "ring-rose-100");
+            }
+          });
+        } else {
+          const placeholder = document.getElementById("equation-input-placeholder");
+          placeholder.textContent = userValue;
+          if (isCorrect) {
+            placeholder.className = "mt-2 text-4xl md:text-6xl font-black text-emerald-600 font-mono";
+          } else {
+            placeholder.className = "mt-2 text-4xl md:text-6xl font-black text-rose-600 font-mono";
+          }
+        }
+
+        // Sync answer into final arrays
+        currentSessionAnswers.push({ ...currentActive });
+
+        // Compile results assessment layout banner
+        const resultBanner = document.getElementById("play-evaluation-banner");
+        const bannerBg = document.getElementById("eval-banner-bg");
+        const iconHolder = document.getElementById("eval-icon-holder");
+        const titleText = document.getElementById("eval-title");
+        const descText = document.getElementById("eval-desc");
+
+        // Set Next button label
+        const nextBtnTxt = document.getElementById("btn-next-txt");
+        const totalQuestions = activeQuestions.length;
+        if (settings.questionCount !== 0 && currentIndex + 1 >= totalQuestions) {
+          nextBtnTxt.textContent = "查看成績報告";
+        } else {
+          nextBtnTxt.textContent = "下一題";
+        }
+
+        if (isCorrect) {
+          bannerBg.className = "p-4 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4 border bg-emerald-50 border-emerald-100 text-emerald-800 animate-fade-in";
+          iconHolder.innerHTML = `<i data-lucide="check-circle-2" class="w-8 h-8 text-emerald-600 shrink-0"></i>`;
+          titleText.textContent = "答對了，守住擂台！";
+          descText.textContent = `${currentActive.a} × ${currentActive.b} ＝ ${currentActive.correct}`;
+        } else {
+          bannerBg.className = "p-4 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4 border bg-rose-50 border-rose-100 text-rose-800 animate-fade-in";
+          iconHolder.innerHTML = `<i data-lucide="x-circle" class="w-8 h-8 text-rose-600 shrink-0"></i>`;
+          titleText.textContent = "差一點，看看拆解再攻下一題。";
+          descText.innerHTML = `正確答案為：<strong>${currentActive.correct}</strong>，你答：<strong>${userValue === -1 ? "未作答" : userValue}</strong>`;
+        }
+
+        // Show banner container & hide controllers
+        resultBanner.classList.remove("hidden");
+        document.getElementById("play-input-choice").classList.add("hidden");
+        document.getElementById("play-input-keypad").classList.add("hidden");
+
+        // Generate Collapsible Explanation panel content beforehand
+        generateCollapsedHelpModel(currentActive.a, currentActive.b);
+
+        lucide.createIcons();
+      }
+
+      function nextQuestion() {
+        playSound("tap");
+        
+        if (settings.questionCount === 0) {
+          if (currentIndex + 1 >= activeQuestions.length) {
+            addGeneratedQuestions(20);
+          }
+          currentIndex++;
+          initQuestionSessionRow();
+        } else if (currentIndex + 1 >= activeQuestions.length) {
+          if (timerIntervalId) clearInterval(timerIntervalId);
+          finishSessionTransition();
+        } else {
+          currentIndex++;
+          initQuestionSessionRow();
+        }
+      }
+
+      // 7. Visual Multiplication breakdown (Points Grid & distributive Area arrays)
+      function generateCollapsedHelpModel(a, b) {
+        const box = document.getElementById("play-explanation-box");
+        let htmlContent = "";
+
+        if (a <= 10 && b <= 10) {
+          // Point-array model: restore the original visual dot-grid style, with subtle row dividers only.
+          let dotRows = "";
+          for (let row = 1; row <= b; row++) {
+            let rowDots = "";
+            for (let col = 1; col <= a; col++) {
+              rowDots += `<div class="w-3.5 h-3.5 rounded-full bg-blue-500/85 shadow-sm hover:scale-110 transition-transform"></div>`;
+            }
+            dotRows += `<div class="dot-row-line"><div class="flex justify-center gap-2">${rowDots}</div></div>`;
+          }
+
+          htmlContent = `
+            <div class="bg-white border border-blue-100 rounded-2xl p-5 mt-4 space-y-4 text-center text-slate-800">
+              <div class="text-center font-extrabold text-blue-800 text-lg">
+                點陣圖：${a} × ${b}
+              </div>
+              <div class="inline-block max-w-full mx-auto rounded-2xl bg-white border border-slate-200 overflow-x-auto px-6 py-3">
+                ${dotRows}
+              </div>
+              <div class="text-center text-base text-slate-700 font-bold desktop-nowrap">
+                每一行有 ${a} 點，共 ${b} 行，所以 ${a} × ${b} = <span class="text-blue-700 font-black">${a * b}</span>。
+              </div>
+            </div>
+          `;
+        } else {
+          // Double unit breakdown distributive box
+          const aTens = Math.floor(a / 10) * 10;
+          const aOnes = a % 10;
+          const bTens = Math.floor(b / 10) * 10;
+          const bOnes = b % 10;
+
+          htmlContent = `
+            <div class="bg-white border border-blue-100 rounded-2xl p-5 mt-4 space-y-4 text-slate-800">
+              <div class="text-center font-extrabold text-blue-800 text-lg flex items-center justify-center gap-2">
+                <i data-lucide="lightbulb" class="w-5 h-5 text-amber-500"></i>
+                雙位數面積拆解法 (分配律模型)
+              </div>
+              <p class="text-base text-slate-600 text-center leading-relaxed font-semibold">
+                把複雜的 ${a} × ${b} 拆解成整十與個位數相乘，再相加求和！
+              </p>
+
+              <div class="max-w-3xl mx-auto bg-white rounded-xl border border-blue-100 p-4 shadow-sm overflow-x-auto">
+                <div class="text-center text-base font-mono text-slate-700 mb-4 bg-blue-50 py-2 px-3 rounded-xl">
+                  <strong>(${aTens} + ${aOnes}) × (${bTens} + ${bOnes})</strong>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 text-center text-sm font-bold min-w-[320px]">
+                  <div class="bg-slate-100/50 rounded p-1.5 flex items-center justify-center font-bold text-slate-400">×</div>
+                  <div class="bg-blue-50/80 text-blue-800 rounded p-2 font-bold">${bTens} <span class="text-xs text-blue-500 block">(十位)</span></div>
+                  <div class="bg-amber-50/80 text-amber-800 rounded p-2 font-bold">${bOnes} <span class="text-xs text-amber-600 block">(個位)</span></div>
+
+                  <div class="bg-blue-50/80 text-blue-800 rounded p-2 flex flex-col justify-center font-bold">
+                    <span>${aTens}</span>
+                    <span class="text-xs text-blue-500">(十位)</span>
+                  </div>
+                  <div class="bg-slate-50 border border-dashed border-slate-200 rounded p-2 flex flex-col justify-center items-center">
+                    <span class="font-mono text-xs text-slate-500">${aTens} × ${bTens}</span>
+                    <span class="font-black text-slate-800 text-lg mt-0.5">${aTens * bTens}</span>
+                  </div>
+                  <div class="bg-slate-50 border border-dashed border-slate-200 rounded p-2 flex flex-col justify-center items-center">
+                    <span class="font-mono text-xs text-slate-500">${aTens} × ${bOnes}</span>
+                    <span class="font-black text-slate-800 text-lg mt-0.5">${aTens * bOnes}</span>
+                  </div>
+
+                  <div class="bg-amber-50/80 text-amber-800 rounded p-2 flex flex-col justify-center font-bold">
+                    <span>${aOnes}</span>
+                    <span class="text-xs text-amber-600">(個位)</span>
+                  </div>
+                  <div class="bg-slate-50 border border-dashed border-slate-200 rounded p-2 flex flex-col justify-center items-center">
+                    <span class="font-mono text-xs text-slate-500">${aOnes} × ${bTens}</span>
+                    <span class="font-black text-slate-800 text-lg mt-0.5">${aOnes * bTens}</span>
+                  </div>
+                  <div class="bg-slate-50 border border-dashed border-slate-200 rounded p-2 flex flex-col justify-center items-center">
+                    <span class="font-mono text-xs text-slate-500">${aOnes} × ${bOnes}</span>
+                    <span class="font-black text-slate-800 text-lg mt-0.5">${aOnes * bOnes}</span>
+                  </div>
+                </div>
+
+                <div class="mt-4 border-t border-blue-100 pt-3 flex flex-col items-center gap-1 text-base">
+                  <div class="font-extrabold text-slate-700">四個小積全部相加：</div>
+                  <div class="font-mono text-slate-600 text-center desktop-nowrap">
+                    ${aTens * bTens} + ${aTens * bOnes} + ${aOnes * bTens} + ${aOnes * bOnes}
+                  </div>
+                  <div class="font-black text-blue-700 text-2xl mt-1">
+                    = ${a * b}
+                  </div>
+                </div>
+
+                <div class="mt-5 rounded-2xl border border-slate-200 overflow-hidden text-left bg-white">
+                  <div class="formula-explain-row bg-slate-50 font-bold text-slate-600">
+                    <span>拆解部分</span><span>計算式</span><span class="text-right md:text-left">小積</span>
+                  </div>
+                  <div class="formula-explain-row">
+                    <span class="font-bold text-emerald-700">① 整十 × 整十</span><span class="font-mono">${aTens} × ${bTens}</span><span class="font-mono font-black">${aTens * bTens}</span>
+                  </div>
+                  <div class="formula-explain-row">
+                    <span class="font-bold text-emerald-700">② 整十 × 個位</span><span class="font-mono">${aTens} × ${bOnes}</span><span class="font-mono font-black">${aTens * bOnes}</span>
+                  </div>
+                  <div class="formula-explain-row">
+                    <span class="font-bold text-blue-700">③ 個位 × 整十</span><span class="font-mono">${aOnes} × ${bTens}</span><span class="font-mono font-black">${aOnes * bTens}</span>
+                  </div>
+                  <div class="formula-explain-row">
+                    <span class="font-bold text-blue-700">④ 個位 × 個位</span><span class="font-mono">${aOnes} × ${bOnes}</span><span class="font-mono font-black">${aOnes * bOnes}</span>
+                  </div>
+                  <div class="formula-explain-row bg-blue-50 font-bold text-blue-800">
+                    <span>⑤ 全部相加</span><span class="font-mono">${aTens * bTens} + ${aTens * bOnes} + ${aOnes * bTens} + ${aOnes * bOnes}</span><span class="font-mono font-black">${a * b}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+
+        box.innerHTML = htmlContent;
+      }
+
+      function toggleActiveExplanation() {
+        playSound("tap");
+        const box = document.getElementById("play-explanation-box");
+        const isCollapsed = box.classList.contains("hidden");
+        const btnToggleExplain = document.getElementById("btn-toggle-explain");
+
+        if (isCollapsed) {
+          box.classList.remove("hidden");
+          btnToggleExplain.classList.add("bg-amber-100", "border-amber-200", "text-amber-800");
+          btnToggleExplain.querySelector("span").textContent = "收起詳解";
+        } else {
+          box.classList.add("hidden");
+          btnToggleExplain.classList.remove("bg-amber-100", "border-amber-200", "text-amber-800");
+          btnToggleExplain.querySelector("span").textContent = "看視覺詳解";
+        }
+      }
+
+      // 8. Session Finish & Summary compilation
+      function finishSessionTransition() {
+        playSound("win");
+
+        // Merge mistakes current session results into current page memory only
+        const wrgAnswers = currentSessionAnswers.filter(q => !q.isCorrect);
+        
+        if (wrgAnswers.length > 0) {
+          const originalList = [...mistakesBank];
+          wrgAnswers.forEach(wa => {
+            const hasDuplicate = originalList.some(item => item.a === wa.a && item.b === wa.b);
+            if (!hasDuplicate) {
+              originalList.push({ a: wa.a, b: wa.b });
+            }
+          });
+          mistakesBank = originalList;
+        } else {
+          // If perfect session, remove elements from mistakes bank
+          const perfectKeys = new Set(currentSessionAnswers.map(q => `${q.a}x${q.b}`));
+          mistakesBank = mistakesBank.filter(m => !perfectKeys.has(`${m.a}x${m.b}`));
+        }
+
+        updateMistakesBadgeDom();
+
+        // Populate Summary metrics
+        const total = currentSessionAnswers.length;
+        const correct = currentSessionAnswers.filter(q => q.isCorrect).length;
+        const accuracyRate = total > 0 ? Math.round((correct / total) * 100) : 0;
+        
+        let totalMs = 0;
+        currentSessionAnswers.forEach(q => totalMs += q.timeTaken || 0);
+        const averageSec = total > 0 ? (Math.round((totalMs / total) / 100) / 10) : 0;
+
+        // Combo calculations
+        let maxCombo = 0;
+        let cCombo = 0;
+        currentSessionAnswers.forEach(q => {
+          if (q.isCorrect) {
+            cCombo++;
+            if (cCombo > maxCombo) maxCombo = cCombo;
+          } else {
+            cCombo = 0;
+          }
+        });
+
+        // Bone multiplier details
+        const correctHistoryWithTime = currentSessionAnswers.filter(q => q.isCorrect && q.timeTaken > 0);
+        let hardestMulSymbol = "-";
+        let hardestMsSpeed = 0;
+
+        if (correctHistoryWithTime.length > 0) {
+          const slowest = correctHistoryWithTime.reduce((slow, q) => {
+            return q.timeTaken > slow.timeTaken ? q : slow;
+          }, correctHistoryWithTime[0]);
+          hardestMulSymbol = `${slowest.a} × ${slowest.b}`;
+          hardestMsSpeed = Math.round(slowest.timeTaken / 100) / 10;
+        }
+
+        // Apply HTML DOM updates
+        const countLabel = settings.questionCount === 0 ? `無盡題庫，本次已作答 ${total} 題` : `共 ${total} 題`;
+        document.getElementById("sum-range-display").textContent = `範圍: ${settings.aMin} ~ ${settings.aMax} × ${settings.bMin} ~ ${settings.bMax}｜${countLabel}`;
+        document.getElementById("stat-accuracy").textContent = `${accuracyRate}%`;
+        document.getElementById("stat-accuracy-fraction").textContent = `(${correct} / ${total})`;
+        document.getElementById("stat-speed").innerHTML = `<i data-lucide="clock" class="w-4 h-4 text-emerald-500 inline mr-0.5"></i> ${averageSec}s`;
+        document.getElementById("stat-combo").innerHTML = `<i data-lucide="zap" class="w-4 h-4 text-amber-500 fill-amber-300 inline mr-0.5"></i> ${maxCombo}`;
+        document.getElementById("stat-slowest-equation").textContent = hardestMulSymbol;
+        document.getElementById("stat-slowest-time").textContent = hardestMsSpeed > 0 ? `${hardestMsSpeed} 秒` : "0s";
+
+        // Appraisal Text Config
+        const appraisalTitle = document.getElementById("sum-achievement-title");
+        const appraisalDesc = document.getElementById("sum-achievement-desc");
+        const appraisalBanner = document.getElementById("sum-achievement-banner");
+
+        if (accuracyRate >= 90) {
+          appraisalTitle.innerHTML = `<i data-lucide="award" class="w-5 h-5 text-emerald-600"></i> 大師級心算`;
+          appraisalDesc.textContent = "答得又準又穩。可以試試更大的乘數範圍，或把倒數時間調短。";
+          appraisalBanner.className = "p-4 rounded-2xl border text-center md:text-left mb-6 text-emerald-700 bg-emerald-50 border-emerald-100 animate-fade-in";
+        } else if (accuracyRate >= 70) {
+          appraisalTitle.innerHTML = `<i data-lucide="award" class="w-5 h-5 text-blue-600"></i> 熟能生巧`;
+          appraisalDesc.textContent = "大部分題目都處理得好。看看下方錯題和圖像拆解，下一局會更穩。";
+          appraisalBanner.className = "p-4 rounded-2xl border text-center md:text-left mb-6 text-blue-700 bg-blue-50 border-blue-100 animate-fade-in";
+        } else {
+          appraisalTitle.innerHTML = `<i data-lucide="zap" class="w-5 h-5 text-amber-600"></i> 熱身完成`;
+          appraisalDesc.textContent = "雙位數乘法需要拆步驟。先打開題目解析，跟著十位和個位一步步相加。";
+          appraisalBanner.className = "p-4 rounded-2xl border text-center md:text-left mb-6 text-amber-700 bg-amber-50 border-amber-100 animate-fade-in";
+        }
+
+        // Render Active Speed histogram Chart
+        renderSummaryGraphSpeed(currentSessionAnswers);
+
+        // Practice current mistakes options visibility
+        const currentMistakesBadge = document.getElementById("current-mistakes-badge-cnt");
+        const btnPracticeCurrentMistakes = document.getElementById("btn-practice-current-mistakes");
+        const mistakesLen = currentSessionAnswers.filter(q => !q.isCorrect).length;
+
+        if (mistakesLen > 0) {
+          currentMistakesBadge.textContent = mistakesLen;
+          btnPracticeCurrentMistakes.classList.remove("hidden");
+        } else {
+          btnPracticeCurrentMistakes.classList.add("hidden");
+        }
+
+        // Dynamic detailed lists compilation
+        renderSummaryDetailList();
+
+        goToScreen("summary");
+        lucide.createIcons();
+      }
+
+      function renderSummaryGraphSpeed(answers) {
+        const container = document.getElementById("sum-speed-chart");
+        container.innerHTML = "";
+
+        answers.forEach((q, idx) => {
+          const seconds = Math.round(q.timeTaken / 100) / 10;
+          const peakSecMax = 15; // capped log scale
+          const heightPct = Math.min((seconds / peakSecMax) * 100, 100);
+          
+          const bar = document.createElement("div");
+          bar.className = "flex-grow flex flex-col items-center group relative min-w-[12px] h-full justify-end";
+          bar.innerHTML = `
+            <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 hidden group-hover:block bg-slate-800 text-white font-mono text-[9px] px-2 py-0.5 rounded shadow whitespace-nowrap z-10 font-bold leading-none">
+              ${q.a} × ${q.b} ＝ ${q.correct} (${seconds}秒)
+            </div>
+            <div class="w-full rounded-t transition-all duration-300 ${q.isCorrect ? 'bg-emerald-400 group-hover:bg-emerald-500' : 'bg-rose-400 group-hover:bg-rose-500'}" style="height: ${Math.max(heightPct, 6)}%"></div>
+            <span class="text-[8px] font-mono font-semibold text-slate-400 mt-1">${idx + 1}</span>
+          `;
+          container.appendChild(bar);
+        });
+      }
+
+      function renderSummaryDetailList() {
+        const container = document.getElementById("sum-detailed-answers-list");
+        container.innerHTML = "";
+
+        currentSessionAnswers.forEach((q, idx) => {
+          const itemDiv = document.createElement("div");
+          const sec = Math.round(q.timeTaken / 100) / 10;
+          const isExpanded = expandedSummaryIds.has(idx);
+
+          itemDiv.className = `border rounded-2xl overflow-hidden transition-all ${q.isCorrect ? 'border-blue-100 hover:bg-blue-50/40' : 'border-rose-200 bg-rose-50/30 hover:bg-rose-50/50'}`;
+          
+          let breakdownLayoutHtml = "";
+          if (isExpanded) {
+            breakdownLayoutHtml = `
+              <div class="p-4 border-t border-blue-100 bg-blue-50/30">
+                <div class="flex items-center gap-2 text-slate-700 font-extrabold text-base mb-3">
+                  <i data-lucide="lightbulb" class="w-5 h-5 text-amber-500 inline"></i>
+                  視覺拆解 (${q.a} × ${q.b})
+                </div>
+                ${buildSummaryItemAreaBreakdown(q.a, q.b)}
+              </div>
+            `;
+          }
+
+          itemDiv.innerHTML = `
+            <div onclick="toggleSummaryDetailsExpand(${idx})" class="p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 text-base cursor-pointer select-none">
+              <div class="flex items-center gap-2.5">
+                <span class="text-sm font-mono font-bold text-slate-400 w-6">${idx + 1}.</span>
+                <i data-lucide="${q.isCorrect ? 'check-circle' : 'alert-triangle'}" class="w-5 h-5 ${q.isCorrect ? 'text-emerald-500' : 'text-rose-500'}"></i>
+                <span class="font-mono text-lg font-black text-slate-800">${q.a} × ${q.b}</span>
+              </div>
+
+              <div class="flex flex-wrap items-center gap-3 font-mono text-sm">
+                <span class="text-slate-400 font-medium font-sans">
+                  耗時: <strong class="font-semibold">${sec}s</strong>
+                </span>
+                <span class="px-3 py-1 rounded-full font-bold text-sm ${q.isCorrect ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}">
+                  ${q.isCorrect ? q.correct : `你答: ${q.userRawSelection === -1 ? '無作答' : q.userRawSelection} (正解: ${q.correct})`}
+                </span>
+                <span class="text-sm text-blue-600 font-bold transition-colors">${isExpanded ? '收起' : '解析'}</span>
+              </div>
+            </div>
+            ${breakdownLayoutHtml}
+          `;
+
+          container.appendChild(itemDiv);
+        });
+
+        lucide.createIcons();
+      }
+
+      function toggleSummaryDetailsExpand(idx) {
+        playSound("tap");
+        if (expandedSummaryIds.has(idx)) {
+          expandedSummaryIds.delete(idx);
+        } else {
+          expandedSummaryIds.add(idx);
+        }
+        renderSummaryDetailList();
+      }
+
+      function buildSummaryItemAreaBreakdown(a, b) {
+        const aTens = Math.floor(a / 10) * 10;
+        const aOnes = a % 10;
+        const bTens = Math.floor(b / 10) * 10;
+        const bOnes = b % 10;
+
+        if (a <= 10 && b <= 10) {
+          let rows = "";
+          for (let row = 1; row <= b; row++) {
+            rows += `<div class="dot-row-line compact"><div class="flex justify-center gap-1.5">${`<div class="w-3 h-3 rounded-sm bg-blue-500/80 shadow-sm"></div>`.repeat(a)}</div></div>`;
+          }
+          return `
+            <div class="text-center">
+              <div class="inline-block max-w-full mx-auto rounded-lg bg-white border border-slate-200 overflow-x-auto px-4 py-2">
+                ${rows}
+              </div>
+            </div>
+            <p class="text-sm text-slate-600 font-bold text-center mt-2">每一橫行有 ${a} 點，共 ${b} 行；${a} × ${b} ＝ ${a * b}</p>
+          `;
+        }
+
+        return `
+          <div class="max-w-2xl mx-auto rounded-lg border border-blue-100 bg-white overflow-hidden text-left">
+            <div class="formula-explain-row bg-slate-50 font-bold text-slate-600">
+              <span>拆解部分</span><span>計算式</span><span>小積</span>
+            </div>
+            <div class="formula-explain-row">
+              <span class="font-bold text-emerald-700">① 整十 × 整十</span><span class="font-mono">${aTens} × ${bTens}</span><span class="font-mono font-black">${aTens * bTens}</span>
+            </div>
+            <div class="formula-explain-row">
+              <span class="font-bold text-emerald-700">② 整十 × 個位</span><span class="font-mono">${aTens} × ${bOnes}</span><span class="font-mono font-black">${aTens * bOnes}</span>
+            </div>
+            <div class="formula-explain-row">
+              <span class="font-bold text-blue-700">③ 個位 × 整十</span><span class="font-mono">${aOnes} × ${bTens}</span><span class="font-mono font-black">${aOnes * bTens}</span>
+            </div>
+            <div class="formula-explain-row">
+              <span class="font-bold text-blue-700">④ 個位 × 個位</span><span class="font-mono">${aOnes} × ${bOnes}</span><span class="font-mono font-black">${aOnes * bOnes}</span>
+            </div>
+            <div class="formula-explain-row bg-blue-50 font-bold text-blue-800">
+              <span>全部相加</span><span class="font-mono">${aTens * bTens} + ${aTens * bOnes} + ${aOnes * bTens} + ${aOnes * bOnes}</span><span class="font-mono font-black">${a * b}</span>
+            </div>
+          </div>
+        `;
+      }
+
+
+      // 9. Spreadsheet CSV Downloaders: front-end only, no server storage.
+      const TOOL_NAME_FOR_CSV = "乘法競技場";
+
+      function csvEscape(value) {
+        const str = value === null || value === undefined ? "" : String(value);
+        return `"${str.replace(/"/g, '""')}"`;
+      }
+
+      function toCsv(rows) {
+        return "\uFEFF" + rows.map(row => row.map(csvEscape).join(",")).join("\r\n");
+      }
+
+      function formatCsvDateTime(date = new Date()) {
+        const pad = n => String(n).padStart(2, "0");
+        return `${date.getFullYear()}${pad(date.getMonth() + 1)}${pad(date.getDate())}_${pad(date.getHours())}${pad(date.getMinutes())}${pad(date.getSeconds())}`;
+      }
+
+      function sanitizeFilePart(value) {
+        return String(value || "未命名")
+          .trim()
+          .replace(/[\\/:*?"<>|]/g, "_")
+          .replace(/\s+/g, "_") || "未命名";
+      }
+
+      function askCsvFilePrefix(recordType) {
+        const input = prompt(
+          `請輸入檔名前綴，例如：3A_05、小組A、班號_學號。\n\n私隱提示：本局${recordType}只暫存在此頁面的記憶體，不會上傳到伺服器；下載後的檔案由你自行保管，重新整理或關閉頁面後本局紀錄會消失。\n\n按「取消」則不下載。`,
+          ""
+        );
+        if (input === null) return null;
+        return sanitizeFilePart(input || "未命名");
+      }
+
+      function downloadCsvFile(rows, recordType) {
+        const prefix = askCsvFilePrefix(recordType);
+        if (prefix === null) return;
+        const rowsWithPrefix = rows.map((row, idx) => {
+          if (!Array.isArray(row) || row.length === 0) return row;
+          return idx === 0
+            ? [row[0], "檔名前綴", ...row.slice(1)]
+            : [row[0], prefix, ...row.slice(1)];
+        });
+        const csvContent = toCsv(rowsWithPrefix);
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", `${prefix}_${TOOL_NAME_FOR_CSV}_${recordType}_${formatCsvDateTime()}.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      }
+
+      function getRangeTextForCsv() {
+        return `乘數 ${settings.aMin}-${settings.aMax}；被乘數 ${settings.bMin}-${settings.bMax}`;
+      }
+
+      function getQuestionCountTextForCsv() {
+        return settings.questionCount === 0 ? `無盡題庫（本次已作答 ${currentSessionAnswers.length} 題）` : String(currentSessionAnswers.length);
+      }
+
+      function getModeTextForCsv() {
+        return settings.questionMode === "CHOICE" ? "單選題" : "填充題";
+      }
+
+      function downloadDetailedReport() {
+        playSound("tap");
+        const rows = [[
+          "工具名稱",
+          "紀錄類型",
+          "題號",
+          "題目或任務內容",
+          "乘數",
+          "被乘數",
+          "學生答案或操作內容",
+          "正確答案或期望結果",
+          "是否答對或完成",
+          "作答模式",
+          "題目範圍",
+          "題目總數",
+          "計時設定",
+          "作答時間(秒)",
+          "本局累積答對",
+          "本局累積答錯",
+          "本局累積分數",
+          "記錄時間"
+        ]];
+
+        let cumulativeCorrect = 0;
+        let cumulativeWrong = 0;
+        currentSessionAnswers.forEach((q, idx) => {
+          if (q.isCorrect) cumulativeCorrect += 1;
+          else cumulativeWrong += 1;
+          const sec = Math.round((q.timeTaken || 0) / 100) / 10;
+          rows.push([
+            TOOL_NAME_FOR_CSV,
+            "詳細紀錄",
+            idx + 1,
+            `${q.a} × ${q.b}`,
+            q.a,
+            q.b,
+            q.userRawSelection === -1 ? "未作答" : q.userRawSelection,
+            q.correct,
+            q.isCorrect ? "答對" : "答錯",
+            getModeTextForCsv(),
+            getRangeTextForCsv(),
+            getQuestionCountTextForCsv(),
+            settings.timeLimit > 0 ? `${settings.timeLimit / 60} 分鐘` : "無時間限制",
+            sec,
+            cumulativeCorrect,
+            cumulativeWrong,
+            cumulativeCorrect,
+            new Date().toLocaleString("zh-Hant-HK")
+          ]);
+        });
+
+        if (currentSessionAnswers.length === 0) {
+          rows.push([TOOL_NAME_FOR_CSV, "詳細紀錄", "", "本局暫無答題紀錄", "", "", "", "", "", getModeTextForCsv(), getRangeTextForCsv(), getQuestionCountTextForCsv(), "", "", 0, 0, 0, new Date().toLocaleString("zh-Hant-HK")]);
+        }
+
+        downloadCsvFile(rows, "詳細紀錄");
+      }
+
+      function downloadMistakeReport() {
+        playSound("tap");
+        const wrongAnswers = currentSessionAnswers.filter(q => !q.isCorrect);
+        if (wrongAnswers.length === 0) {
+          downloadCsvFile([
+            ["工具名稱", "紀錄類型", "訊息"],
+            [TOOL_NAME_FOR_CSV, "錯題統計", "本局沒有錯題或錯誤操作"]
+          ], "錯題統計");
+          return;
+        }
+
+        const stats = new Map();
+        wrongAnswers.forEach(q => {
+          const wrongAnswer = q.userRawSelection === -1 ? "未作答" : String(q.userRawSelection);
+          const key = `${q.a}×${q.b}||${wrongAnswer}`;
+          const sec = Math.round((q.timeTaken || 0) / 100) / 10;
+          if (!stats.has(key)) {
+            stats.set(key, {
+              task: `${q.a} × ${q.b}`,
+              wrongAnswer,
+              correct: q.correct,
+              count: 0,
+              lastSec: sec
+            });
+          }
+          const item = stats.get(key);
+          item.count += 1;
+          item.lastSec = sec;
+        });
+
+        const rows = [[
+          "工具名稱",
+          "紀錄類型",
+          "題目或任務內容",
+          "錯誤答案、錯誤選擇或錯誤操作",
+          "正確答案或期望結果",
+          "錯誤次數",
+          "最近一次作答時間(秒)",
+          "作答模式",
+          "題目範圍"
+        ]];
+        Array.from(stats.values()).forEach(item => {
+          rows.push([
+            TOOL_NAME_FOR_CSV,
+            "錯題統計",
+            item.task,
+            item.wrongAnswer,
+            item.correct,
+            item.count,
+            item.lastSec,
+            getModeTextForCsv(),
+            getRangeTextForCsv()
+          ]);
+        });
+
+        downloadCsvFile(rows, "錯題統計");
+      }
+
+      // 10. Multiplication Browser Tables Tab
+      function switchTableTab(tab) {
+        playSound("tap");
+        tableActiveTab = tab;
+
+        const tabGrid = document.getElementById("table-tab-grid");
+        const tabList = document.getElementById("table-tab-list");
+
+        const gridContainer = document.getElementById("table-grid-view");
+        const listContainer = document.getElementById("table-list-view");
+
+        if (tab === "grid") {
+          tabGrid.className = "flex-grow sm:flex-none py-1.5 px-3.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 bg-white text-slate-800 shadow-sm cursor-pointer";
+          tabList.className = "flex-grow sm:flex-none py-1.5 px-3.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 text-slate-500 hover:text-slate-700 cursor-pointer";
+          gridContainer.classList.remove("hidden");
+          listContainer.classList.add("hidden");
+        } else {
+          tabList.className = "flex-grow sm:flex-none py-1.5 px-3.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 bg-white text-slate-800 shadow-sm cursor-pointer";
+          tabGrid.className = "flex-grow sm:flex-none py-1.5 px-3.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 text-slate-500 hover:text-slate-700 cursor-pointer";
+          listContainer.classList.remove("hidden");
+          gridContainer.classList.add("hidden");
+        }
+      }
+
+      function handleTableSliderChange(factor, value) {
+        const parsed = parseInt(value) || 1;
+        if (factor === "a") {
+          tableSliderA = parsed;
+          document.getElementById("slider-val-a").textContent = parsed;
+        } else {
+          tableSliderB = parsed;
+          document.getElementById("slider-val-b").textContent = parsed;
+        }
+        document.getElementById("table-current-product").textContent = tableSliderA * tableSliderB;
+
+        // Auto reload single list multiplier
+        tableSelectedFactor = tableSliderA;
+        document.getElementById("input-selected-multiplier").value = tableSliderA;
+        renderSingleMultiplierRows();
+
+        // Highlighting items
+        renderMultiplicationGridMatrix();
+      }
+
+      function focusSelectedCoordinates() {
+        playSound("tap");
+        // Center offsets around current selections
+        const newRowOff = Math.max(1, Math.floor((tableSliderA - 1) / 10) * 10 + 1);
+        const newColOff = Math.max(1, Math.floor((tableSliderB - 1) / 10) * 10 + 1);
+        
+        tableRowOffset = Math.min(newRowOff, 91);
+        tableColOffset = Math.min(newColOff, 91);
+
+        renderMultiplicationGridMatrix();
+      }
+
+      function shiftTableOffset(axis, amount) {
+        playSound("tap");
+        if (axis === "row") {
+          tableRowOffset = Math.min(91, Math.max(1, tableRowOffset + amount));
+        } else {
+          tableColOffset = Math.min(91, Math.max(1, tableColOffset + amount));
+        }
+        renderMultiplicationGridMatrix();
+      }
+
+      function renderMultiplicationGridMatrix() {
+        const labelRow = document.getElementById("label-table-col-range");
+        const labelCol = document.getElementById("label-table-row-range");
+
+        labelRow.textContent = `${tableRowOffset} ~ ${tableRowOffset + 9}`;
+        labelCol.textContent = `${tableColOffset} ~ ${tableColOffset + 9}`;
+
+        const table = document.getElementById("target-grid-table");
+        table.innerHTML = "";
+
+        // Build Table Header (Row matching multiplier coordinate B)
+        const thead = document.createElement("thead");
+        const headerRow = document.createElement("tr");
+        
+        const cornerCell = document.createElement("th");
+        cornerCell.className = "bg-slate-100/80 border border-slate-200/60 p-2 font-bold text-slate-400 text-[10px] w-12 rounded-tl-xl font-sans";
+        cornerCell.textContent = "×";
+        headerRow.appendChild(cornerCell);
+
+        for (let c = 0; c < 10; c++) {
+          const colNum = tableColOffset + c;
+          const isFocused = colNum === tableSliderB;
+          const th = document.createElement("th");
+          th.className = `border border-slate-200/60 p-2 font-bold text-[11px] transition-all ${isFocused ? 'bg-blue-100 text-blue-950 font-black' : 'bg-blue-50/60 text-blue-800'}`;
+          if (c === 9) th.classList.add("rounded-tr-xl");
+          th.textContent = colNum;
+          headerRow.appendChild(th);
+        }
+        thead.appendChild(headerRow);
+        table.appendChild(thead);
+
+        // Build Table rows
+        const tbody = document.createElement("tbody");
+        for (let r = 0; r < 10; r++) {
+          const rowNum = tableRowOffset + r;
+          const isRowFocused = rowNum === tableSliderA;
+          const tr = document.createElement("tr");
+
+          // Row descriptor left headers
+          const tdHeader = document.createElement("td");
+          tdHeader.className = `border border-slate-200/60 p-2 font-bold text-[11px] transition-all ${isRowFocused ? 'bg-emerald-100 text-emerald-950 font-black' : 'bg-emerald-50/60 text-emerald-800'}`;
+          if (r === 9) tdHeader.classList.add("rounded-bl-xl");
+          tdHeader.textContent = rowNum;
+          tr.appendChild(tdHeader);
+
+          // Columns interactive numerical cell indices
+          for (let c = 0; c < 10; c++) {
+            const colNum = tableColOffset + c;
+            const isColFocused = colNum === tableSliderB;
+            const isTargetCell = isRowFocused && isColFocused;
+            const prd = rowNum * colNum;
+
+            const tdCell = document.createElement("td");
+            tdCell.className = `border border-slate-200/60 p-2 transition-all cursor-pointer font-medium hover:bg-slate-200/50 hover:scale-105 active:scale-95 ${
+              isTargetCell 
+                ? "bg-slate-800 text-white font-black shadow shadow-slate-900/10 scale-110 relative z-10" 
+                : (isRowFocused || isColFocused) 
+                  ? "bg-emerald-50/20 text-slate-800" 
+                  : "bg-white text-slate-600"
+            }`;
+            if (r === 9 && c === 9) tdCell.classList.add("rounded-br-xl");
+            tdCell.textContent = prd;
+
+            // Update interactive selector immediately on click
+            tdCell.onclick = () => {
+              playSound("tap");
+              tableSliderA = rowNum;
+              tableSliderB = colNum;
+
+              // Update HTML inputs
+              document.getElementById("table-slider-a").value = rowNum;
+              document.getElementById("table-slider-b").value = colNum;
+              document.getElementById("slider-val-a").textContent = rowNum;
+              document.getElementById("slider-val-b").textContent = colNum;
+              document.getElementById("table-current-product").textContent = rowNum * colNum;
+
+              tableSelectedFactor = rowNum;
+              document.getElementById("input-selected-multiplier").value = rowNum;
+              renderSingleMultiplierRows();
+
+              renderMultiplicationGridMatrix();
+            };
+
+            tr.appendChild(tdCell);
+          }
+          tbody.appendChild(tr);
+        }
+        table.appendChild(tbody);
+      }
+
+      function changeSelectedMultiplier(amount) {
+        playSound("tap");
+        tableSelectedFactor = Math.min(100, Math.max(1, tableSelectedFactor + amount));
+        document.getElementById("input-selected-multiplier").value = tableSelectedFactor;
+        renderSingleMultiplierRows();
+      }
+
+      function onMultiplierInputChange(val) {
+        const parsed = Math.min(100, Math.max(1, parseInt(val) || 1));
+        tableSelectedFactor = parsed;
+        renderSingleMultiplierRows();
+      }
+
+      function renderSingleMultiplierRows() {
+        const descLabel = document.getElementById("label-list-view-desc");
+        descLabel.textContent = `列出乘數 ${tableSelectedFactor} 相乘由 1 起至 100 的乘積`;
+
+        const container = document.getElementById("multiplier-list-results");
+        container.innerHTML = "";
+
+        for (let i = 1; i <= 100; i++) {
+          const item = document.createElement("div");
+          item.className = "p-3 bg-white border border-slate-100 rounded-2xl hover:bg-slate-50 hover:border-slate-250 transition-all text-center flex flex-col justify-center select-none";
+          item.innerHTML = `
+            <span class="text-[10px] text-slate-400 font-mono font-bold">No. ${i}</span>
+            <span class="text-xs font-mono font-bold text-slate-500 mt-0.5">${tableSelectedFactor} × ${i}</span>
+            <span class="text-base font-mono font-black text-slate-800 mt-1">＝ ${tableSelectedFactor * i}</span>
+          `;
+          container.appendChild(item);
+        }
+      }
+
+    </script>
+    <script src="../../assets/tool-home-nav.js"></script>
+    <script>
+      function normalizeG03FullscreenExitLabel() {
+        const exitFullscreenButton = document.getElementById("exitFullscreen");
+        if (!exitFullscreenButton) return false;
+        exitFullscreenButton.textContent = "退出";
+        exitFullscreenButton.title = "退出";
+        return true;
+      }
+
+      normalizeG03FullscreenExitLabel();
+      document.addEventListener("DOMContentLoaded", normalizeG03FullscreenExitLabel);
+      window.setTimeout(normalizeG03FullscreenExitLabel, 0);
+      window.setTimeout(normalizeG03FullscreenExitLabel, 100);
+      window.setTimeout(normalizeG03FullscreenExitLabel, 500);
+    </script>
+  </body>
+</html>

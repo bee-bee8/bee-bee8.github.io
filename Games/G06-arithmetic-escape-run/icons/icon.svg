@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="四則衝刺像素遊戲圖示" shape-rendering="crispEdges">
+  <rect width="512" height="512" fill="#17214a"/>
+  <rect x="24" y="24" width="464" height="464" fill="#3468d4"/>
+  <rect x="40" y="40" width="432" height="432" fill="#a9eff2"/>
+  <rect x="40" y="40" width="432" height="32" fill="#72e6e0"/>
+  <rect x="72" y="328" width="368" height="96" fill="#5a3d48"/>
+  <rect x="96" y="312" width="320" height="96" fill="#c9975b"/>
+  <rect x="120" y="328" width="72" height="32" fill="#f0cf83"/>
+  <rect x="216" y="328" width="80" height="32" fill="#b97b4e"/>
+  <rect x="320" y="328" width="72" height="32" fill="#f0cf83"/>
+  <rect x="160" y="104" width="192" height="176" fill="#253c8f"/>
+  <rect x="176" y="88" width="160" height="176" fill="#ffb11f"/>
+  <rect x="192" y="104" width="128" height="144" fill="#fff5d0"/>
+  <rect x="232" y="120" width="48" height="112" fill="#17214a"/>
+  <rect x="200" y="152" width="112" height="48" fill="#17214a"/>
+  <rect x="248" y="136" width="16" height="80" fill="#fff17a"/>
+  <rect x="216" y="168" width="80" height="16" fill="#fff17a"/>
+  <rect x="72" y="104" width="64" height="32" fill="#36a852"/>
+  <rect x="88" y="88" width="32" height="64" fill="#8bd450"/>
+  <rect x="376" y="104" width="64" height="32" fill="#db3157"/>
+  <rect x="392" y="88" width="32" height="64" fill="#ff7a59"/>
+</svg>

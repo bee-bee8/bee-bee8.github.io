@@ -1,0 +1,2342 @@
+<!doctype html>
+<html lang="zh-Hant" data-ldl-tool-id="T01-three-digit-subtraction">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Yung Fu Chuen">
+  <meta name="company" content="Yung Fu Chuen">
+  <meta name="copyright" content="© 2026 Yung Fu Chuen. All rights reserved.">
+  <meta name="license" content="Free classroom use only. Redistribution, resale, cloning, re-hosting, modification, or derivative use without written permission is prohibited.">
+  <meta name="ldl-product-name" content="三位數以內的減法">
+  <meta name="ldl-product-name-en" content="Three-digit Subtraction">
+  <meta name="ldl-product-code" content="LDL-MATH-P2-SUB3-2026-001">
+  <meta name="ldl-tool-id" content="T01-three-digit-subtraction">
+  <meta name="ldl-module-id" content="ldl-three-digit-subtraction">
+  <meta name="ldl-release-year" content="2026">
+  <meta name="ldl-version" content="1.0.0">
+  <meta name="ldl-build-id" content="LDL-MATH-P2-SUB3-2026-001">
+  <meta name="ldl-fingerprint" content="ldl-yfc-three-digit-subtraction-v1">
+  <title>三位數以內的減法｜Yung Fu Chuen</title>
+  <!--
+    LDL Source Reference v1.1 Ownership Record
+    Product Name: 三位數以內的減法
+    Product Name EN: Three-digit Subtraction
+    Product Code: LDL-MATH-P2-SUB3-2026-001
+    Tool ID: three-digit-subtraction
+    Module ID: ldl-three-digit-subtraction
+    Company: Yung Fu Chuen
+    Author: Yung Fu Chuen
+    Release Year: 2026
+    Version: 1.0.0
+    Build ID: LDL-MATH-P2-SUB3-2026-001
+    Fingerprint: ldl-yfc-three-digit-subtraction-v1
+  -->
+  <style>
+    :root {
+      --ldl-product-name: "三位數以內的減法";
+      --ldl-product-name-en: "Three-digit Subtraction";
+      --ldl-product-code: "LDL-MATH-P2-SUB3-2026-001";
+      --ldl-tool-id: "T01-three-digit-subtraction";
+      --ldl-module-id: "ldl-three-digit-subtraction";
+      --ldl-company: "Yung Fu Chuen";
+      --ldl-author: "Yung Fu Chuen";
+      --ldl-release-year: "2026";
+      --ldl-version: "1.0.0";
+      --ldl-build-id: "LDL-MATH-P2-SUB3-2026-001";
+      --ldl-fingerprint: "ldl-yfc-three-digit-subtraction-v1";
+      --bg: #fff8e8;
+      --ink: #243044;
+      --muted: #7c8798;
+      --card: #ffffff;
+      --line: #dce3ef;
+      --yellow: #ffe58a;
+      --yellow-strong: #ffd84a;
+      --green: #42b883;
+      --green-soft: #dcf8ea;
+      --blue: #4c9fff;
+      --blue-soft: #e3f1ff;
+      --pink: #ff7db5;
+      --pink-soft: #ffe6f1;
+      --red: #e65353;
+      --red-soft: #ffe4e4;
+      --gray: #eef1f5;
+      --shadow: 0 14px 30px rgba(35, 48, 68, 0.12);
+      font-family: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 12%, rgba(255, 216, 74, 0.26), transparent 28%),
+        radial-gradient(circle at 88% 4%, rgba(76, 159, 255, 0.18), transparent 24%),
+        var(--bg);
+      font-size: 18px;
+      line-height: 1.45;
+      letter-spacing: 0;
+      padding-bottom: max(110px, calc(110px + env(safe-area-inset-bottom)));
+    }
+
+    button,
+    input {
+      font: inherit;
+      letter-spacing: 0;
+    }
+
+    button {
+      border: 0;
+      border-radius: 12px;
+      color: #192234;
+      background: var(--yellow);
+      box-shadow: 0 4px 0 rgba(191, 143, 0, 0.24);
+      cursor: pointer;
+      font-weight: 800;
+      min-height: 44px;
+      padding: 10px 16px;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    button:hover:not(:disabled) {
+      background: var(--yellow-strong);
+      transform: translateY(-1px);
+    }
+
+    button:active:not(:disabled) {
+      box-shadow: 0 2px 0 rgba(191, 143, 0, 0.24);
+      transform: translateY(2px);
+    }
+
+    button:disabled {
+      color: #9ca6b6;
+      background: #e6eaf0;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    input {
+      width: 100%;
+      min-height: 44px;
+      border: 2px solid var(--line);
+      border-radius: 12px;
+      padding: 8px 12px;
+      color: var(--ink);
+      background: #fff;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    input:focus {
+      border-color: var(--blue);
+      outline: 4px solid rgba(76, 159, 255, 0.18);
+    }
+
+    .page {
+      width: min(1440px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 18px 0 22px;
+    }
+
+    .card {
+      border: 2px solid rgba(36, 48, 68, 0.08);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: var(--shadow);
+    }
+
+    .problem-header {
+      padding: 18px;
+    }
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      font-size: clamp(30px, 4vw, 46px);
+      color: #21304a;
+    }
+
+    h2 {
+      font-size: 24px;
+    }
+
+    h3 {
+      font-size: 20px;
+    }
+
+    .equation-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+      border-radius: 999px;
+      padding: 8px 18px;
+      background: var(--green-soft);
+      color: #17633f;
+      font-size: 22px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(130px, 1fr));
+      gap: 12px;
+      align-items: end;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field label {
+      color: #4e5d72;
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .feedback-line {
+      min-height: 28px;
+      margin-top: 12px;
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .feedback-line.error {
+      color: var(--red);
+    }
+
+    .feedback-line.ok {
+      color: #14814d;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.08fr 1.22fr;
+      gap: 16px;
+      margin-top: 16px;
+      align-items: stretch;
+    }
+
+    .panel {
+      min-height: 520px;
+      padding: 18px;
+    }
+
+    .panel-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .small-note {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .bead-columns {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      align-items: end;
+    }
+
+    .bead-column {
+      display: grid;
+      gap: 10px;
+      min-height: 430px;
+      border: 3px solid transparent;
+      border-radius: 18px;
+      padding: 12px 8px;
+      background: #f7f9fc;
+      transition: opacity 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .bead-column.focus {
+      border-color: var(--yellow-strong);
+      background: #fff8ca;
+      transform: translateY(-3px);
+    }
+
+    .bead-column.dim {
+      opacity: 0.42;
+      filter: grayscale(0.62);
+    }
+
+    .bead-column.done {
+      opacity: 0.75;
+    }
+
+    .bead-label {
+      display: grid;
+      gap: 4px;
+      text-align: center;
+      font-weight: 900;
+    }
+
+    .bead-count {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .rod {
+      position: relative;
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 5px;
+      min-height: max(330px, calc(var(--bead-slot-count, 10) * 27px + 28px));
+      border-radius: 999px;
+      padding: 14px 6px;
+      background:
+        linear-gradient(90deg, transparent 46%, rgba(36, 48, 68, 0.18) 46%, rgba(36, 48, 68, 0.18) 54%, transparent 54%),
+        rgba(255, 255, 255, 0.82);
+      overflow: visible;
+    }
+
+    .bead {
+      position: relative;
+      z-index: 3;
+      width: min(38px, 8vw);
+      height: 22px;
+      border-radius: 999px;
+      border: 2px solid rgba(36, 48, 68, 0.14);
+      box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.08), 0 2px 5px rgba(36, 48, 68, 0.12);
+    }
+
+    .bead-slot {
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .bead.crossed::after {
+      content: "×";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      color: #ef233c;
+      font-size: 34px;
+      font-weight: 1000;
+      line-height: 1;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.9), 0 2px 5px rgba(239, 35, 60, 0.22);
+      transform: translate(-50%, -52%) scale(1);
+      opacity: 1;
+      pointer-events: none;
+    }
+
+    .bead.borrowed-in {
+      border-color: rgba(36, 48, 68, 0.32);
+      box-shadow: inset 0 -4px 0 rgba(0, 0, 0, 0.18), 0 3px 8px rgba(36, 48, 68, 0.2);
+    }
+
+    .bead.ones.borrowed-in {
+      background: #b91561;
+    }
+
+    .bead.tens.borrowed-in {
+      background: #1464b7;
+    }
+
+    .bead.hundreds.borrowed-in {
+      background: #1e804d;
+    }
+
+    .bead.borrowed-away {
+      background: #c7ced8;
+      border-color: rgba(87, 97, 112, 0.42);
+      box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.12), 0 2px 5px rgba(36, 48, 68, 0.14);
+      filter: grayscale(1);
+    }
+
+    .bead.borrowed-away::after {
+      content: "×";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      color: #4e5969;
+      font-size: 34px;
+      font-weight: 1000;
+      line-height: 1;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.9), 0 2px 5px rgba(78, 89, 105, 0.22);
+      transform: translate(-50%, -52%) scale(1);
+      opacity: 1;
+      pointer-events: none;
+    }
+
+    .bead.cross-animate::after {
+      animation: crossMarkIn 0.24s ease-out both;
+      animation-delay: var(--cross-delay, 0ms);
+    }
+
+    @keyframes crossMarkIn {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -52%) scale(0.35);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -52%) scale(1);
+      }
+    }
+
+    .bead.hundreds {
+      background: var(--green);
+    }
+
+    .bead.tens {
+      background: var(--blue);
+    }
+
+    .bead.ones {
+      background: var(--pink);
+    }
+
+    .bead.crossed {
+      background: #c7ced8;
+      border-color: rgba(87, 97, 112, 0.42);
+      box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.12), 0 2px 5px rgba(36, 48, 68, 0.14);
+    }
+
+    .bead.ones.borrowed-away,
+    .bead.tens.borrowed-away,
+    .bead.hundreds.borrowed-away {
+      background: #c7ced8;
+    }
+
+    .borrow-arrow-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      pointer-events: none;
+    }
+
+    .borrow-branch-line {
+      fill: none;
+      stroke: #d81b60;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-dasharray: 5 5;
+      filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.86));
+    }
+
+    .bead.borrow-source-active {
+      opacity: 0.36;
+      transform: scale(0.88);
+    }
+
+    .borrow-fan-bead {
+      position: absolute;
+      z-index: 6;
+      width: min(38px, 8vw);
+      height: 22px;
+      border: 2px solid rgba(36, 48, 68, 0.28);
+      border-radius: 999px;
+      box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.12), 0 4px 10px rgba(36, 48, 68, 0.22);
+      pointer-events: none;
+      opacity: 0;
+      transform: scale(0.34);
+      pointer-events: none;
+      transition: left 1500ms cubic-bezier(.4, 0, .2, 1), top 1500ms cubic-bezier(.4, 0, .2, 1), transform 800ms ease-out, opacity 800ms ease-out;
+      transition-delay: calc(var(--fan-order, 0) * 45ms);
+    }
+
+    .borrow-fan-bead.fan-active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .bead.borrow-split {
+      animation: borrowSplitIn 800ms ease-out both;
+    }
+
+    @keyframes borrowSplitIn {
+      from { opacity: 0; transform: scale(0.42); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .vertical-wrap {
+      overflow-x: auto;
+    }
+
+    .vertical-table {
+      width: 100%;
+      min-width: 420px;
+      border-collapse: separate;
+      border-spacing: 8px;
+      text-align: center;
+    }
+
+    .vertical-table th,
+    .vertical-table td {
+      border-radius: 14px;
+      padding: 10px 8px;
+      background: #f6f8fb;
+      font-weight: 900;
+    }
+
+    .vertical-table th {
+      color: #536176;
+      font-size: 22px;
+    }
+
+    .vertical-table .row-label {
+      width: 94px;
+      color: #5d697b;
+      background: transparent;
+      font-size: 15px;
+      text-align: right;
+    }
+
+    .vertical-table .digit-cell {
+      position: relative;
+      width: 86px;
+      min-width: 72px;
+      border: 3px solid transparent;
+      font-size: 30px;
+    }
+
+    .vertical-table .digit-cell.focus {
+      border-color: var(--yellow-strong);
+      background: #fff5b5;
+    }
+
+    .vertical-table .digit-cell.dim {
+      color: #96a0ae;
+      background: #edf0f4;
+    }
+
+    .vertical-table .answer-cell {
+      background: #fff;
+    }
+
+    .answer-digit {
+      max-width: 70px;
+      min-height: 48px;
+      padding: 6px;
+      font-size: 26px;
+    }
+
+    .borrow-row .row-label {
+      color: #0b6b77;
+      font-weight: 900;
+    }
+
+    .borrow-row .digit-cell {
+      color: #0b6b77;
+      background: #d9f7ff;
+      border-color: rgba(11, 107, 119, 0.2);
+      box-shadow: inset 0 -4px 0 rgba(11, 107, 119, 0.09);
+    }
+
+    .borrow-row .digit-cell.focus {
+      color: #243044;
+      background: #ffe58a;
+      border-color: var(--yellow-strong);
+      box-shadow: 0 0 0 4px rgba(255, 216, 74, 0.24);
+    }
+
+    .original-row .digit-cell {
+      color: #627086;
+      background: #f5f7fa;
+    }
+
+    .original-row .digit-cell.original-changed {
+      color: #4c596d;
+      background: #fff3f3;
+    }
+
+    .original-row .digit-cell.original-changed::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom right, transparent 47.5%, rgba(230, 83, 83, 0.82) 48%, rgba(230, 83, 83, 0.82) 52%, transparent 52.5%),
+        linear-gradient(to bottom left, transparent 47.5%, rgba(230, 83, 83, 0.82) 48%, rgba(230, 83, 83, 0.82) 52%, transparent 52.5%);
+      pointer-events: none;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .borrow-fan-bead,
+      .bead.borrow-split,
+      .bead.borrow-source-active {
+        animation: none;
+        transition: none;
+      }
+    }
+
+    .minus-sign {
+      color: var(--red);
+      font-size: 28px;
+    }
+
+    .step-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .step-card {
+      border: 2px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      background: #f8fafc;
+      transition: opacity 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .step-card.current {
+      border-color: var(--yellow-strong);
+      background: #fff6c2;
+    }
+
+    .step-card.completed {
+      border-color: rgba(66, 184, 131, 0.45);
+      background: #f2fff8;
+      opacity: 0.82;
+    }
+
+    .step-card.collapsed {
+      opacity: 0.46;
+    }
+
+    .step-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .tick {
+      display: inline-grid;
+      place-items: center;
+      min-width: 30px;
+      height: 30px;
+      border-radius: 999px;
+      color: #fff;
+      background: var(--green);
+      font-size: 20px;
+      font-weight: 900;
+    }
+
+    .phase-pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 5px 10px;
+      color: #5c4b00;
+      background: var(--yellow);
+      font-size: 14px;
+      font-weight: 900;
+      white-space: nowrap;
+    }
+
+    .step-body {
+      display: grid;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .choice-row,
+    .calc-row,
+    .nav-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .choice-button {
+      background: #fff;
+      border: 2px solid var(--line);
+      box-shadow: none;
+    }
+
+    .choice-button.selected {
+      border-color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .choice-button.correct {
+      border-color: var(--green);
+      background: var(--green-soft);
+    }
+
+    .choice-button.wrong {
+      border-color: var(--red);
+      background: var(--red-soft);
+    }
+
+    .borrow-box {
+      display: grid;
+      gap: 8px;
+      border-radius: 14px;
+      padding: 12px;
+      background: #fff;
+      border: 2px dashed rgba(76, 159, 255, 0.46);
+      color: #2d415f;
+      font-weight: 800;
+    }
+
+    .borrow-chain {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .borrow-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: var(--blue-soft);
+      color: #174d84;
+      font-weight: 900;
+    }
+
+    .arrow {
+      color: var(--red);
+      font-size: 24px;
+      font-weight: 900;
+    }
+
+    .calc-row input {
+      width: 86px;
+      font-size: 26px;
+    }
+
+    .message {
+      min-height: 26px;
+      color: var(--muted);
+      font-weight: 900;
+    }
+
+    .message.ok {
+      color: #14814d;
+    }
+
+    .message.error {
+      color: var(--red);
+    }
+
+    .bottom-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 16px;
+      padding: 16px;
+    }
+
+    .bottom-nav button {
+      min-width: 150px;
+    }
+
+    .load-error {
+      display: none;
+      margin: 14px auto 0;
+      width: min(920px, calc(100% - 28px));
+      border: 2px solid var(--red);
+      border-radius: 14px;
+      padding: 14px;
+      color: var(--red);
+      background: var(--red-soft);
+      font-weight: 900;
+    }
+
+    body.has-js-error .load-error {
+      display: block;
+    }
+
+    .ldl-visible-watermark {
+      position: fixed;
+      z-index: 2147483000;
+      left: max(14px, env(safe-area-inset-left));
+      right: auto;
+      top: max(70px, calc(env(safe-area-inset-top) + 66px));
+      bottom: auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 5px;
+      max-width: min(190px, calc(100vw - 20px));
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      color: rgba(23, 32, 51, 0.56);
+      background: transparent;
+      box-shadow: none;
+      font-size: 8px;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: 0;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+      backdrop-filter: none;
+    }
+
+    /* copy-cost marker: style-beta LD */
+
+    .ldl-visible-watermark img {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+      object-fit: contain;
+      opacity: 0.88;
+    }
+
+    .ldl-visible-watermark span {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    @media (max-width: 520px) {
+      .ldl-visible-watermark {
+        left: max(8px, env(safe-area-inset-left));
+        right: auto;
+        top: max(58px, calc(env(safe-area-inset-top) + 54px));
+        bottom: auto;
+        font-size: 7px;
+      }
+
+      .ldl-visible-watermark img {
+        width: 14px;
+        height: 14px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .ldl-visible-watermark {
+        left: max(8px, env(safe-area-inset-left));
+        right: auto;
+        top: max(58px, calc(env(safe-area-inset-top) + 54px));
+        bottom: auto;
+        font-size: 7px;
+      }
+
+      .ldl-visible-watermark img {
+        width: 14px;
+        height: 14px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .ldl-visible-watermark {
+        left: max(8px, env(safe-area-inset-left));
+        right: auto;
+        top: max(58px, calc(env(safe-area-inset-top) + 54px));
+        bottom: auto;
+        font-size: 7px;
+      }
+
+      .ldl-visible-watermark img {
+        width: 14px;
+        height: 14px;
+      }
+    }
+
+    .ldl-hidden-source-reference,
+    .ldl-offscreen-source-reference,
+    .ldl-hidden-svg-source-reference {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    @media (max-width: 1100px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .panel {
+        min-height: auto;
+      }
+
+      .bead-column {
+        min-height: 340px;
+      }
+
+      .rod {
+        min-height: 230px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        width: min(100% - 18px, 720px);
+      }
+
+      .title-row,
+      .bottom-nav {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .controls {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .controls .field:last-of-type,
+      .controls button {
+        grid-column: span 2;
+      }
+
+      .bead-columns {
+        grid-template-columns: 1fr;
+      }
+
+      .bead-column {
+        min-height: 210px;
+      }
+
+      .rod {
+        min-height: 120px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .bead {
+        width: 30px;
+        height: 20px;
+      }
+    }
+  </style>
+</head>
+<body data-ldl-reserve-top-space="true" data-ldl-product-name="三位數以內的減法" data-ldl-product-name-en="Three-digit Subtraction" data-ldl-product-code="LDL-MATH-P2-SUB3-2026-001" data-ldl-tool-id="T01-three-digit-subtraction" data-ldl-module-id="ldl-three-digit-subtraction" data-ldl-build-id="LDL-MATH-P2-SUB3-2026-001" data-ldl-fingerprint="ldl-yfc-three-digit-subtraction-v1">
+  <noscript>
+    <div class="load-error" style="display:block;">此工具需要啟用 JavaScript 才能使用。</div>
+  </noscript>
+
+  <div class="load-error" id="loadError">程式載入時出現錯誤，請重新整理或檢查 console。</div>
+
+  <main class="page" id="app">
+    <section class="card problem-header" id="problemHeader">
+      <div class="title-row">
+        <h1>減法借位小達人</h1>
+        <div class="equation-badge">100 - 11 = ?</div>
+      </div>
+      <div class="controls" aria-label="題目設定區">
+        <div class="field">
+          <label for="minuendInput">被減數</label>
+          <input id="minuendInput" type="number" min="0" max="999" value="100">
+        </div>
+        <div class="field">
+          <label for="subtrahendInput">減數</label>
+          <input id="subtrahendInput" type="number" min="0" max="999" value="11">
+        </div>
+        <button id="startButton" type="button">開始</button>
+        <div class="field">
+          <label for="horizontalAnswerInput">橫式答案</label>
+          <input id="horizontalAnswerInput" type="number" min="0" max="999" placeholder="?">
+        </div>
+        <button id="checkAnswerButton" type="button">答案檢查</button>
+      </div>
+      <div class="feedback-line" id="headerFeedback">請按「開始」或直接跟著步驟做。</div>
+    </section>
+
+    <section class="main-grid" aria-label="減法教學工具">
+      <section class="card panel" id="beadPanel">
+        <div class="panel-title">
+          <h2>算柱動畫</h2>
+          <span class="small-note">目前位值會變亮</span>
+        </div>
+        <div id="beadColumns" class="bead-columns">
+          <div class="bead-column dim">
+            <div class="bead-label">百位<span class="bead-count">1 顆</span></div>
+            <div class="rod"><span class="bead hundreds"></span></div>
+          </div>
+          <div class="bead-column dim">
+            <div class="bead-label">十位<span class="bead-count">0 顆</span></div>
+            <div class="rod"></div>
+          </div>
+          <div class="bead-column focus">
+            <div class="bead-label">個位<span class="bead-count">0 顆</span></div>
+            <div class="rod"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card panel" id="verticalPanel">
+        <div class="panel-title">
+          <h2>直式</h2>
+          <span class="small-note">百 十 個</span>
+        </div>
+        <div id="verticalSubtraction" class="vertical-wrap">
+          <table class="vertical-table">
+            <tr><th></th><th>百</th><th>十</th><th>個</th></tr>
+            <tr class="original-row"><td class="row-label">原數字</td><td class="digit-cell">1</td><td class="digit-cell">0</td><td class="digit-cell">0</td></tr>
+            <tr><td class="row-label minus-sign">-</td><td>0</td><td>1</td><td>1</td></tr>
+            <tr><td class="row-label">答案</td><td></td><td></td><td></td></tr>
+          </table>
+        </div>
+      </section>
+
+      <section class="card panel" id="stepPanel">
+        <div class="panel-title">
+          <h2>步驟判斷區</h2>
+          <span class="small-note">先判斷，再計算</span>
+        </div>
+        <div class="step-list">
+          <div class="step-card current">
+            <div class="step-head">
+              <h3>個位</h3>
+              <span class="phase-pill">判斷</span>
+            </div>
+            <div class="step-body">選擇「需要借位」或「不需要借位」。</div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="card bottom-nav" aria-label="步驟切換">
+      <button id="previousButton" type="button">上一步</button>
+      <button id="nextButton" type="button">下一步</button>
+    </section>
+  </main>
+
+    <template id="ldl-copy-cost-markers" hidden>
+    <!-- copy-cost marker: body-gamma YFC -->
+    <!-- copy-cost marker: body-delta LD -->
+  </template>
+<script>
+    "use strict";
+
+    // ==================================================
+    // LDL Source Reference v1.1
+    // ==================================================
+    const LDL_RELEASE_YEAR = 2026;
+    const LDL_VERSION = "1.1.0";
+    const LDL_PRODUCT_NAME = "三位數以內的減法";
+    const LDL_PRODUCT_NAME_EN = "Three-digit Subtraction";
+    const LDL_PRODUCT_CODE = "LDL-MATH-P2-SUB3-2026-001";
+    const LDL_TOOL_ID = "T01-three-digit-subtraction";
+    const LDL_MODULE_ID = "ldl-three-digit-subtraction";
+    const LDL_BUILD_ID = "LDL-MATH-P2-SUB3-2026-001";
+    const LDL_FINGERPRINT = "ldl-yfc-three-digit-subtraction-v1";
+    const LDL_COMPANY = "Yung Fu Chuen";
+    const LDL_AUTHOR = "Yung Fu Chuen";
+    const LDL_VISIBLE_WATERMARK_TEXT = `© ${LDL_RELEASE_YEAR} · Yung Fu Chuen`;
+    const LDL_CONSOLE_MESSAGE = `© ${LDL_RELEASE_YEAR} Yung Fu Chuen | Created by Yung Fu Chuen | LDL Source Reference v1.1`;
+    const LDL_MARKER_SIGNATURE = "LDL-SOURCE-REFERENCE-v1.1::Yung-Fu-Chuen::2026::three-digit-subtraction";
+
+    const LDL_COPYRIGHT = `© ${LDL_RELEASE_YEAR} Yung Fu Chuen. All rights reserved.`;
+    const LDL_LICENSE = "Free classroom use only. Redistribution, resale, cloning, re-hosting, modification, or derivative use without written permission is prohibited.";
+
+    function createLDLSourceRecord() {
+      return Object.freeze({
+        productName: LDL_PRODUCT_NAME,
+        productNameEn: LDL_PRODUCT_NAME_EN,
+        productCode: LDL_PRODUCT_CODE,
+        toolId: LDL_TOOL_ID,
+        moduleId: LDL_MODULE_ID,
+        company: LDL_COMPANY,
+        author: LDL_AUTHOR,
+        releaseYear: LDL_RELEASE_YEAR,
+        version: LDL_VERSION,
+        copyright: LDL_COPYRIGHT,
+        license: LDL_LICENSE,
+        buildId: LDL_BUILD_ID,
+        fingerprint: LDL_FINGERPRINT,
+        markerSignature: LDL_MARKER_SIGNATURE
+      });
+    }
+
+    function initLDLSourceReference() {
+      try {
+        const record = createLDLSourceRecord();
+        setLDLCssCustomProperties(record);
+        upsertLDLMetaTags(record);
+        upsertLDLBodyAttributes(record);
+        upsertLDLJsonRecord(record);
+        upsertLDLHiddenDomReference(record);
+        upsertLDLSvgMetadata(record);
+        upsertLDLVisibleWatermark();
+
+        Object.defineProperty(window, "__LDL_SOURCE_REFERENCE__", {
+          value: record,
+          writable: false,
+          configurable: true,
+          enumerable: false
+        });
+        console.info(LDL_CONSOLE_MESSAGE);
+      } catch (error) {
+        console.warn("LDL Source Reference failed to initialize.", error);
+      }
+    }
+
+    function setLDLCssCustomProperties(record) {
+      const root = document.documentElement;
+      root.style.setProperty("--ldl-product-name", JSON.stringify(record.productName));
+      root.style.setProperty("--ldl-product-name-en", JSON.stringify(record.productNameEn));
+      root.style.setProperty("--ldl-product-code", JSON.stringify(record.productCode));
+      root.style.setProperty("--ldl-tool-id", JSON.stringify(record.toolId));
+      root.style.setProperty("--ldl-module-id", JSON.stringify(record.moduleId));
+      root.style.setProperty("--ldl-company", JSON.stringify(record.company));
+      root.style.setProperty("--ldl-author", JSON.stringify(record.author));
+      root.style.setProperty("--ldl-release-year", String(record.releaseYear));
+      root.style.setProperty("--ldl-version", JSON.stringify(record.version));
+      root.style.setProperty("--ldl-build-id", JSON.stringify(record.buildId));
+      root.style.setProperty("--ldl-fingerprint", JSON.stringify(record.fingerprint));
+      root.style.setProperty("--ldl-marker-signature", JSON.stringify(record.markerSignature));
+    }
+
+    function upsertLDLMetaTags(record) {
+      const metaValues = {
+        author: record.author,
+        company: record.company,
+        copyright: record.copyright,
+        license: record.license,
+        "ldl-product-name": record.productName,
+        "ldl-product-name-en": record.productNameEn,
+        "ldl-product-code": record.productCode,
+        "ldl-tool-id": record.toolId,
+        "ldl-module-id": record.moduleId,
+        "ldl-release-year": String(record.releaseYear),
+        "ldl-version": record.version,
+        "ldl-build-id": record.buildId,
+        "ldl-fingerprint": record.fingerprint,
+        "ldl-marker-signature": record.markerSignature
+      };
+
+      Object.entries(metaValues).forEach(([name, content]) => {
+        let meta = document.head.querySelector(`meta[name="${name}"]`);
+        if (!meta) {
+          meta = document.createElement("meta");
+          meta.setAttribute("name", name);
+          document.head.appendChild(meta);
+        }
+        meta.setAttribute("content", content);
+      });
+    }
+
+    function upsertLDLBodyAttributes(record) {
+      document.body.dataset.ldlCompany = record.company;
+      document.body.dataset.ldlAuthor = record.author;
+      document.body.dataset.ldlProductCode = record.productCode;
+      document.body.dataset.ldlToolId = record.toolId;
+      document.body.dataset.ldlModuleId = record.moduleId;
+      document.body.dataset.ldlBuildId = record.buildId;
+      document.body.dataset.ldlFingerprint = record.fingerprint;
+      document.body.dataset.ldlMarkerSignature = record.markerSignature;
+    }
+    function upsertLDLJsonRecord(record) {
+      let script = document.getElementById("ldl-source-reference");
+      if (!script) {
+        script = document.createElement("script");
+        script.type = "application/json";
+        script.id = "ldl-source-reference";
+        document.body.appendChild(script);
+      }
+      script.textContent = JSON.stringify(record, null, 2);
+    }
+
+    function upsertLDLHiddenDomReference(record) {
+      const element = getOrCreateLDLElement("div", "ldl-hidden-source-reference", document.body);
+      element.className = "ldl-hidden-source-reference";
+      element.hidden = true;
+      element.dataset.productName = record.productName;
+      element.dataset.productNameEn = record.productNameEn;
+      element.dataset.productCode = record.productCode;
+      element.dataset.toolId = record.toolId;
+      element.dataset.moduleId = record.moduleId;
+      element.dataset.company = record.company;
+      element.dataset.author = record.author;
+      element.dataset.releaseYear = String(record.releaseYear);
+      element.dataset.version = record.version;
+      element.dataset.copyright = record.copyright;
+      element.dataset.license = record.license;
+      element.dataset.buildId = record.buildId;
+      element.dataset.fingerprint = record.fingerprint;
+      element.dataset.markerSignature = record.markerSignature;
+
+      const offscreen = getOrCreateLDLElement("div", "ldl-offscreen-source-reference", document.body);
+      offscreen.className = "ldl-offscreen-source-reference";
+      offscreen.textContent = JSON.stringify(record);
+    }
+
+    function upsertLDLSvgMetadata(record) {
+      let svg = document.getElementById("ldl-hidden-svg-source-reference");
+      if (!svg) {
+        svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.id = "ldl-hidden-svg-source-reference";
+        document.body.appendChild(svg);
+      }
+      svg.setAttribute("class", "ldl-hidden-svg-source-reference");
+      svg.setAttribute("width", "0");
+      svg.setAttribute("height", "0");
+      svg.setAttribute("aria-hidden", "true");
+      svg.setAttribute("focusable", "false");
+
+      let metadata = svg.querySelector("metadata");
+      if (!metadata) {
+        metadata = document.createElementNS("http://www.w3.org/2000/svg", "metadata");
+        svg.appendChild(metadata);
+      }
+      metadata.textContent = JSON.stringify(record);
+    }
+
+    function upsertLDLVisibleWatermark() {
+      const watermark = getOrCreateLDLElement("div", "ldl-visible-watermark", document.body);
+      watermark.className = "ldl-visible-watermark";
+      watermark.setAttribute("aria-hidden", "true");
+
+      let text = watermark.querySelector("span");
+      if (!text) {
+        text = document.createElement("span");
+        watermark.appendChild(text);
+      }
+      text.textContent = LDL_VISIBLE_WATERMARK_TEXT;
+    }
+
+    function getOrCreateLDLElement(tagName, id, parent) {
+      let element = document.getElementById(id);
+      if (!element) {
+        element = document.createElement(tagName);
+        element.id = id;
+        parent.appendChild(element);
+      }
+      return element;
+    }
+
+    const PLACE_NAMES = ["個位", "十位", "百位"];
+    const PLACE_SHORT = ["個", "十", "百"];
+    const PLACE_CLASSES = ["ones", "tens", "hundreds"];
+    const DISPLAY_PLACES = [2, 1, 0];
+
+    let appState;
+    let borrowAnimationToken = 0;
+
+    function toDigits(number) {
+      return [
+        number % 10,
+        Math.floor(number / 10) % 10,
+        Math.floor(number / 100) % 10
+      ];
+    }
+
+    function arraysEqual(a, b) {
+      return Array.isArray(a) &&
+        Array.isArray(b) &&
+        a.length === b.length &&
+        a.every((value, index) => value === b[index]);
+    }
+
+    function cloneData(value) {
+      return JSON.parse(JSON.stringify(value));
+    }
+
+    function computeSubtractionSteps(minuend, subtrahend) {
+      const minuendDigits = toDigits(minuend);
+      const subtrahendDigits = toDigits(subtrahend);
+      const workingDigits = minuendDigits.slice();
+      const steps = [];
+      const resultDigits = [0, 0, 0];
+
+      for (let place = 0; place < 3; place += 1) {
+        const workingDigitsBefore = workingDigits.slice();
+        const beforeBorrowValue = workingDigits[place];
+        const subtrahendValue = subtrahendDigits[place];
+        const needBorrow = beforeBorrowValue < subtrahendValue;
+        const borrowChain = [];
+
+        if (needBorrow) {
+          let donorPlace = place + 1;
+          while (donorPlace < 3 && workingDigits[donorPlace] === 0) {
+            donorPlace += 1;
+          }
+
+          if (donorPlace >= 3) {
+            throw new Error("Invalid subtraction model: borrow source not found.");
+          }
+
+          for (let from = donorPlace; from > place; from -= 1) {
+            const to = from - 1;
+            const fromBefore = workingDigits[from];
+            const toBefore = workingDigits[to];
+            workingDigits[from] -= 1;
+            workingDigits[to] += 10;
+            borrowChain.push({
+              from,
+              to,
+              fromPlaceName: PLACE_NAMES[from],
+              toPlaceName: PLACE_NAMES[to],
+              fromBefore,
+              fromAfter: workingDigits[from],
+              toBefore,
+              toAfter: workingDigits[to]
+            });
+          }
+        }
+
+        const afterBorrowValue = workingDigits[place];
+        const resultDigit = afterBorrowValue - subtrahendValue;
+        resultDigits[place] = resultDigit;
+
+        steps.push({
+          place,
+          placeName: PLACE_NAMES[place],
+          beforeBorrowValue,
+          subtrahendValue,
+          needBorrow,
+          borrowChain,
+          afterBorrowValue,
+          resultDigit,
+          workingDigitsBefore,
+          workingDigitsAfterBorrow: workingDigits.slice()
+        });
+      }
+
+      return {
+        minuendDigits,
+        subtrahendDigits,
+        steps,
+        resultDigits,
+        answer: minuend - subtrahend
+      };
+    }
+
+    function createInitialState(minuend, subtrahend) {
+      return {
+        minuend,
+        subtrahend,
+        model: computeSubtractionSteps(minuend, subtrahend),
+        currentPlace: 0,
+        phase: "judge",
+        selectedJudgement: {},
+        judgementResults: {},
+        inputAnswers: {},
+        revealedAnswers: {},
+        completedPlaces: {},
+        calculationResults: {},
+        animatedCrossPlaces: {},
+        pendingCrossPlaces: {},
+        borrowAnimationPending: false,
+        borrowAnimationRunning: false,
+        history: [],
+        headerMessage: "請從個位開始判斷。",
+        headerMessageType: "",
+        stepMessage: "",
+        stepMessageType: "",
+        horizontalAnswer: "",
+        answerCheckMessage: "",
+        answerCheckType: ""
+      };
+    }
+
+    function snapshotState() {
+      const copy = cloneData(appState);
+      copy.history = [];
+      return copy;
+    }
+
+    function pushHistory() {
+      appState.history.push(snapshotState());
+    }
+
+    function getCurrentStep() {
+      return appState.model.steps[appState.currentPlace];
+    }
+
+    function getVisibleWorkingDigits() {
+      if (appState.phase === "complete") {
+        return appState.model.steps[2].workingDigitsAfterBorrow.slice();
+      }
+
+      const step = getCurrentStep();
+      if (appState.phase === "borrowExplanation" || appState.phase === "calculate") {
+        return step.workingDigitsAfterBorrow.slice();
+      }
+
+      return step.workingDigitsBefore.slice();
+    }
+
+    function getActiveBorrowChain() {
+      return [];
+    }
+
+    function hasBorrowDisplayChange(visibleDigits, minuendDigits = appState.model.minuendDigits) {
+      return visibleDigits.some((value, place) => value !== minuendDigits[place]);
+    }
+
+    function getPhaseLabel() {
+      if (appState.phase === "judge") {
+        return "判斷";
+      }
+      if (appState.phase === "borrowExplanation") {
+        return "借位";
+      }
+      if (appState.phase === "calculate") {
+        return "計算";
+      }
+      return "完成";
+    }
+
+    function clampProblemValue(value) {
+      const number = Number.parseInt(value, 10);
+      if (Number.isNaN(number)) {
+        return 0;
+      }
+      return Math.min(999, Math.max(0, number));
+    }
+
+    function renderAll() {
+      borrowAnimationToken += 1;
+      renderProblemHeader();
+      renderBeadColumns();
+      renderVerticalSubtraction();
+      renderStepPanel();
+      renderFocusState();
+      flushPendingCrossAnimations();
+    }
+
+    function renderProblemHeader() {
+      const header = document.getElementById("problemHeader");
+      const feedbackClass = appState.headerMessageType ? " " + appState.headerMessageType : "";
+      const answerFeedback = appState.answerCheckMessage
+        ? `<div class="feedback-line ${appState.answerCheckType}">${appState.answerCheckMessage}</div>`
+        : "";
+
+      header.innerHTML = `
+        <div class="title-row">
+          <h1>減法借位小達人</h1>
+          <div class="equation-badge">${appState.minuend} - ${appState.subtrahend} = ?</div>
+        </div>
+        <div class="controls" aria-label="題目設定區">
+          <div class="field">
+            <label for="minuendInput">被減數</label>
+            <input id="minuendInput" type="number" min="0" max="999" value="${appState.minuend}">
+          </div>
+          <div class="field">
+            <label for="subtrahendInput">減數</label>
+            <input id="subtrahendInput" type="number" min="0" max="999" value="${appState.subtrahend}">
+          </div>
+          <button id="startButton" type="button">開始</button>
+          <div class="field">
+            <label for="horizontalAnswerInput">橫式答案</label>
+            <input id="horizontalAnswerInput" type="number" min="0" max="999" placeholder="?" value="${appState.horizontalAnswer}">
+          </div>
+          <button id="checkAnswerButton" type="button">答案檢查</button>
+        </div>
+        <div class="feedback-line${feedbackClass}" id="headerFeedback">${appState.headerMessage}</div>
+        ${answerFeedback}
+      `;
+
+      document.getElementById("startButton").addEventListener("click", handleStart);
+      document.getElementById("checkAnswerButton").addEventListener("click", handleAnswerCheck);
+      document.getElementById("horizontalAnswerInput").addEventListener("input", (event) => {
+        appState.horizontalAnswer = event.target.value;
+      });
+    }
+
+    function renderBeadColumns() {
+      const wrapper = document.getElementById("beadColumns");
+      const borrowStep = getCurrentStep();
+      const shouldPlayBorrowAnimation = borrowStep && borrowStep.needBorrow &&
+        (appState.phase === "borrowExplanation" || appState.borrowAnimationPending);
+      if (shouldPlayBorrowAnimation && !appState.borrowAnimationRunning) {
+        appState.borrowAnimationRunning = true;
+        const startingDigits = borrowStep.workingDigitsBefore.slice();
+        renderBorrowStage(startingDigits);
+        const token = borrowAnimationToken;
+        window.setTimeout(() => startBorrowAnimation(borrowStep.borrowChain, startingDigits, token), 0);
+        return;
+      }
+      const visibleDigits = getVisibleWorkingDigits();
+      const activeBorrowChain = getActiveBorrowChain();
+
+      wrapper.innerHTML = DISPLAY_PLACES.map((place) => {
+        const count = visibleDigits[place];
+        const incomingBorrows = activeBorrowChain.filter((item) => item.to === place);
+        const outgoingBorrows = activeBorrowChain.filter((item) => item.from === place);
+        const outgoingBorrowCount = outgoingBorrows.length;
+        const visualCount = count + outgoingBorrowCount;
+        const isFocus = appState.phase !== "complete" && appState.currentPlace === place;
+        const isDone = Boolean(appState.completedPlaces[place]);
+        const className = [
+          "bead-column",
+          isFocus ? "focus" : "",
+          !isFocus && !isDone ? "dim" : "",
+          !isFocus && isDone ? "done" : ""
+        ].filter(Boolean).join(" ");
+        const step = appState.model.steps[place];
+        const shouldShowSubtractionCrosses = appState.completedPlaces[place] ||
+          Object.prototype.hasOwnProperty.call(appState.revealedAnswers, place) ||
+          (appState.phase === "calculate" && appState.currentPlace === place);
+        const crossedCount = shouldShowSubtractionCrosses
+          ? Math.min(count, step.subtrahendValue)
+          : 0;
+        const firstCrossedIndex = visualCount - crossedCount;
+        const beads = visualCount > 0
+          ? Array.from({ length: visualCount }, (_, beadIndex) => {
+              const incomingBorrow = incomingBorrows.find((item) => beadIndex >= item.toBefore && beadIndex < item.toBefore + 10);
+              const isBorrowedIn = Boolean(incomingBorrow);
+              const borrowedAwayIndex = beadIndex - (visualCount - outgoingBorrowCount);
+              const outgoingBorrow = borrowedAwayIndex >= 0 ? outgoingBorrows[borrowedAwayIndex] : null;
+              const isBorrowedAway = Boolean(outgoingBorrow);
+              const isCrossed = !isBorrowedAway && beadIndex >= firstCrossedIndex;
+              const crossOrder = count - 1 - beadIndex;
+              const beadClasses = ["bead", PLACE_CLASSES[place]];
+              const beadAttributes = [];
+              if (isBorrowedIn) {
+                beadClasses.push("borrowed-in");
+                beadAttributes.push(`data-borrow-target="${activeBorrowChain.indexOf(incomingBorrow)}"`);
+              }
+              if (isBorrowedAway) {
+                beadClasses.push("borrowed-away");
+                beadAttributes.push(`data-borrow-source="${activeBorrowChain.indexOf(outgoingBorrow)}"`);
+              }
+              if (isCrossed) {
+                beadClasses.push("crossed");
+              }
+              const crossData = isCrossed
+                ? ` data-cross-order="${crossOrder}" style="--cross-delay: ${crossOrder * 100}ms;"`
+                : "";
+              return `<span class="${beadClasses.join(" ")}"${beadAttributes.length ? " " + beadAttributes.join(" ") : ""}${crossData}></span>`;
+            }).join("")
+          : "";
+
+        return `
+          <div class="${className}" data-place="${place}">
+            <div class="bead-label">
+              ${PLACE_NAMES[place]}
+              <span class="bead-count">${count} 顆</span>
+            </div>
+            <div class="rod">${beads}</div>
+          </div>
+        `;
+      }).join("");
+
+      renderBorrowArrows(activeBorrowChain);
+    }
+
+    function renderBorrowStage(digits, splitPlace = null, reservedSlots = {}) {
+      const wrapper = document.getElementById("beadColumns");
+      wrapper.innerHTML = DISPLAY_PLACES.map((place) => {
+        const count = digits[place];
+        const slotCount = Math.max(count, reservedSlots[place] || 0);
+        const isFocus = appState.phase !== "complete" && appState.currentPlace === place;
+        const isDone = Boolean(appState.completedPlaces[place]);
+        const className = ["bead-column", isFocus ? "focus" : "", !isFocus && !isDone ? "dim" : "", !isFocus && isDone ? "done" : ""].filter(Boolean).join(" ");
+        const beads = Array.from({ length: count }, (_, index) => `<span class="bead ${PLACE_CLASSES[place]}${splitPlace === place && index >= count - 10 ? " borrow-split" : ""}"></span>`).join("");
+        const slots = Array.from({ length: slotCount - count }, () => `<span class="bead bead-slot ${PLACE_CLASSES[place]}"></span>`).join("");
+        return `<div class="${className}" data-place="${place}"><div class="bead-label">${PLACE_NAMES[place]}<span class="bead-count">${count} 顆</span></div><div class="rod" style="--bead-slot-count: ${slotCount};">${beads}${slots}</div></div>`;
+      }).join("");
+    }
+
+    function startBorrowAnimation(chain, startingDigits, token) {
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const stagedDigits = startingDigits.slice();
+      const runStage = (index) => {
+        if (token !== borrowAnimationToken) {
+          return;
+        }
+        if (index >= chain.length) {
+          appState.borrowAnimationPending = false;
+          appState.borrowAnimationRunning = false;
+          return;
+        }
+        const item = chain[index];
+        if (reducedMotion) {
+          stagedDigits[item.from] -= 1;
+          stagedDigits[item.to] += 10;
+          renderBorrowStage(stagedDigits, item.to);
+          window.setTimeout(() => runStage(index + 1), 0);
+          return;
+        }
+
+        renderBorrowStage(stagedDigits, null, { [item.to]: item.toAfter });
+        const wrapper = document.getElementById("beadColumns");
+        const source = wrapper.querySelector(`[data-place="${item.from}"] .bead:last-child`);
+        const targetSlots = Array.from(wrapper.querySelectorAll(`[data-place="${item.to}"] .bead-slot`));
+        if (!source || targetSlots.length !== 10) {
+          renderBorrowStage(getCurrentStep().workingDigitsAfterBorrow.slice());
+          appState.borrowAnimationPending = false;
+          appState.borrowAnimationRunning = false;
+          return;
+        }
+
+        const wrapperRect = wrapper.getBoundingClientRect();
+        const sourceRect = source.getBoundingClientRect();
+        const startX = sourceRect.left + sourceRect.width / 2 - wrapperRect.left;
+        const startY = sourceRect.top + sourceRect.height / 2 - wrapperRect.top;
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute("class", "borrow-arrow-layer");
+        svg.setAttribute("viewBox", `0 0 ${wrapperRect.width} ${wrapperRect.height}`);
+        svg.setAttribute("aria-hidden", "true");
+        const fanBeads = targetSlots.map((slot, branchIndex) => {
+          const slotRect = slot.getBoundingClientRect();
+          const endX = slotRect.left + slotRect.width / 2 - wrapperRect.left;
+          const targetY = slotRect.top + slotRect.height / 2 - wrapperRect.top;
+          const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          const curveX = startX + (endX - startX) * 0.48;
+          path.setAttribute("class", "borrow-branch-line");
+          path.setAttribute("d", `M ${startX} ${startY} Q ${curveX} ${(startY + targetY) / 2 - 26} ${endX} ${targetY}`);
+          svg.appendChild(path);
+          const bead = document.createElement("span");
+          bead.className = `borrow-fan-bead ${PLACE_CLASSES[item.to]}`;
+          bead.style.setProperty("--fan-order", branchIndex);
+          bead.style.left = `${startX - sourceRect.width / 2}px`;
+          bead.style.top = `${startY - sourceRect.height / 2}px`;
+          return { bead, targetX: endX, targetY };
+        });
+        wrapper.append(svg, ...fanBeads.map(({ bead }) => bead));
+        source.classList.add("borrow-source-active");
+        window.requestAnimationFrame(() => {
+          fanBeads.forEach(({ bead, targetX, targetY }) => {
+            bead.style.left = `${targetX - sourceRect.width / 2}px`;
+            bead.style.top = `${targetY - sourceRect.height / 2}px`;
+            bead.classList.add("fan-active");
+          });
+        });
+
+        window.setTimeout(() => {
+          if (token !== borrowAnimationToken) {
+            return;
+          }
+          stagedDigits[item.from] -= 1;
+          stagedDigits[item.to] += 10;
+          renderBorrowStage(stagedDigits, item.to);
+          window.setTimeout(() => {
+            window.setTimeout(() => runStage(index + 1), 900);
+          }, 800);
+        }, 2300);
+      };
+      runStage(0);
+    }
+
+    function renderBorrowArrows(activeBorrowChain) {
+      const wrapper = document.getElementById("beadColumns");
+      if (!activeBorrowChain.length) {
+        return;
+      }
+
+      const wrapperRect = wrapper.getBoundingClientRect();
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("class", "borrow-arrow-layer");
+      svg.setAttribute("viewBox", `0 0 ${wrapperRect.width} ${wrapperRect.height}`);
+      svg.setAttribute("aria-hidden", "true");
+      svg.setAttribute("focusable", "false");
+
+      activeBorrowChain.forEach((_, borrowIndex) => {
+        const source = wrapper.querySelector(`[data-borrow-source="${borrowIndex}"]`);
+        const targets = Array.from(wrapper.querySelectorAll(`[data-borrow-target="${borrowIndex}"]`));
+        if (!source || !targets.length) {
+          return;
+        }
+
+        const sourceRect = source.getBoundingClientRect();
+        const sourceCenterX = sourceRect.left + sourceRect.width / 2 - wrapperRect.left;
+        const sourceCenterY = sourceRect.top + sourceRect.height / 2 - wrapperRect.top;
+        const startPoint = {
+          x: sourceRect.left + sourceRect.width * 0.55 - wrapperRect.left,
+          y: sourceRect.top + sourceRect.height / 2 - wrapperRect.top
+        };
+
+        const ring = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+        ring.setAttribute("class", "borrow-source-ring");
+        ring.setAttribute("cx", sourceCenterX);
+        ring.setAttribute("cy", sourceCenterY);
+        ring.setAttribute("rx", sourceRect.width * 0.78);
+        ring.setAttribute("ry", sourceRect.height * 1.42);
+        svg.appendChild(ring);
+
+        const sortedTargets = targets
+          .map((target) => {
+            const targetRect = target.getBoundingClientRect();
+            return {
+              element: target,
+              rect: targetRect,
+              centerY: targetRect.top + targetRect.height / 2
+            };
+          })
+          .sort((a, b) => a.centerY - b.centerY);
+
+        sortedTargets.forEach((targetInfo, index) => {
+          const targetRect = targetInfo.rect;
+          const targetPoint = {
+            x: targetRect.left - 6 - wrapperRect.left,
+            y: targetRect.top + targetRect.height / 2 - wrapperRect.top
+          };
+          const arrow = createBorrowArrowPath(startPoint, targetPoint, index, sortedTargets.length);
+          const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          path.setAttribute("class", "borrow-arrow-line");
+          path.setAttribute("d", arrow.pathD);
+          path.setAttribute("fill", "none");
+          path.setAttribute("stroke", "#D81B60");
+          path.setAttribute("stroke-width", "1.8");
+          path.setAttribute("stroke-linecap", "round");
+          path.setAttribute("stroke-linejoin", "round");
+          path.setAttribute("opacity", "0.9");
+          svg.appendChild(path);
+
+          const arrowHead = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+          arrowHead.setAttribute("class", "borrow-arrow-head");
+          arrowHead.setAttribute("points", getArrowHeadPoints(arrow.tip, arrow.controlPoint, 8));
+          arrowHead.setAttribute("fill", "#D81B60");
+          arrowHead.setAttribute("opacity", "0.9");
+          svg.appendChild(arrowHead);
+        });
+      });
+
+      wrapper.appendChild(svg);
+    }
+
+    function createBorrowArrowPath(start, target, index, total) {
+      const startX = start.x;
+      const startY = start.y;
+      const endX = target.x;
+      const endY = target.y;
+      const dx = endX - startX;
+      const fanOffset = (index - (total - 1) / 2) * 2.5;
+      const c1x = startX + dx * 0.32;
+      const c1y = startY + fanOffset;
+      const c2x = endX - Math.max(28, Math.abs(dx) * 0.22);
+      const c2y = endY;
+      const arrowSize = 8;
+      const angle = Math.atan2(endY - c2y, endX - c2x);
+      const pathEndX = endX - Math.cos(angle) * arrowSize * 0.75;
+      const pathEndY = endY - Math.sin(angle) * arrowSize * 0.75;
+
+      return {
+        pathD: `M ${startX} ${startY} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${pathEndX} ${pathEndY}`,
+        tip: { x: endX, y: endY },
+        controlPoint: { x: c2x, y: c2y }
+      };
+    }
+
+    function getArrowHeadPoints(end, controlPoint, size = 8) {
+      const angle = Math.atan2(end.y - controlPoint.y, end.x - controlPoint.x);
+      const tip = {
+        x: end.x,
+        y: end.y
+      };
+      const back = {
+        x: end.x - Math.cos(angle) * size,
+        y: end.y - Math.sin(angle) * size
+      };
+      const normal = {
+        x: -Math.sin(angle),
+        y: Math.cos(angle)
+      };
+      const halfWidth = size * 0.45;
+      const p1 = {
+        x: back.x + normal.x * halfWidth,
+        y: back.y + normal.y * halfWidth
+      };
+      const p2 = {
+        x: back.x - normal.x * halfWidth,
+        y: back.y - normal.y * halfWidth
+      };
+
+      return `${tip.x},${tip.y} ${p1.x},${p1.y} ${p2.x},${p2.y}`;
+    }
+
+    function flushPendingCrossAnimations() {
+      const pending = appState.pendingCrossPlaces || {};
+      Object.keys(pending).forEach((place) => {
+        if (pending[place]) {
+          triggerCrossAnimation(Number(place));
+        }
+      });
+      appState.pendingCrossPlaces = {};
+    }
+
+    function triggerCrossAnimation(place) {
+      if (!appState.animatedCrossPlaces) {
+        appState.animatedCrossPlaces = {};
+      }
+      if (appState.animatedCrossPlaces[place]) {
+        return;
+      }
+
+      const column = document.querySelector(`.bead-column[data-place="${place}"]`);
+      if (!column) {
+        return;
+      }
+
+      const crossedBeads = Array.from(column.querySelectorAll(".bead.crossed"))
+        .sort((a, b) => Number(a.dataset.crossOrder || 0) - Number(b.dataset.crossOrder || 0));
+
+      appState.animatedCrossPlaces[place] = true;
+      crossedBeads.forEach((bead, index) => {
+        bead.style.setProperty("--cross-delay", `${index * 100}ms`);
+        bead.classList.add("cross-animate");
+      });
+
+      window.setTimeout(() => {
+        crossedBeads.forEach((bead) => bead.classList.remove("cross-animate"));
+      }, crossedBeads.length * 100 + 260);
+    }
+
+    function renderVerticalSubtraction() {
+      const wrapper = document.getElementById("verticalSubtraction");
+      const visibleDigits = getVisibleWorkingDigits();
+      const borrowRow = hasBorrowDisplayChange(visibleDigits)
+        ? `
+          <tr class="borrow-row">
+            <td class="row-label">借位後</td>
+            ${DISPLAY_PLACES.map((place) => `<td class="${cellClass(place)}">${visibleDigits[place]}</td>`).join("")}
+          </tr>
+        `
+        : "";
+
+      function cellClass(place, extraClass) {
+        const classes = ["digit-cell"];
+        if (extraClass) {
+          classes.push(extraClass);
+        }
+        if (appState.phase !== "complete" && appState.currentPlace === place) {
+          classes.push("focus");
+        } else if (!appState.completedPlaces[place]) {
+          classes.push("dim");
+        }
+        return classes.join(" ");
+      }
+
+      function originalCellClass(place) {
+        const classes = [cellClass(place)];
+        if (appState.model.minuendDigits[place] !== visibleDigits[place]) {
+          classes.push("original-changed");
+        }
+        return classes.join(" ");
+      }
+
+      function answerValue(place) {
+        if (Object.prototype.hasOwnProperty.call(appState.revealedAnswers, place)) {
+          return appState.revealedAnswers[place];
+        }
+        return appState.inputAnswers[place] || "";
+      }
+
+      wrapper.innerHTML = `
+        <table class="vertical-table" aria-label="直式">
+          <tr>
+            <th></th>
+            ${DISPLAY_PLACES.map((place) => `<th>${PLACE_SHORT[place]}</th>`).join("")}
+          </tr>
+          ${borrowRow}
+          <tr class="original-row">
+            <td class="row-label">原數字</td>
+            ${DISPLAY_PLACES.map((place) => `<td class="${originalCellClass(place)}">${appState.model.minuendDigits[place]}</td>`).join("")}
+          </tr>
+          <tr>
+            <td class="row-label minus-sign">-</td>
+            ${DISPLAY_PLACES.map((place) => `<td class="${cellClass(place)}">${appState.model.subtrahendDigits[place]}</td>`).join("")}
+          </tr>
+          <tr>
+            <td class="row-label">答案</td>
+            ${DISPLAY_PLACES.map((place) => `
+              <td class="${cellClass(place, "answer-cell")}">
+                <input class="answer-digit" data-answer-place="${place}" inputmode="numeric" maxlength="1" value="${answerValue(place)}" ${appState.completedPlaces[place] ? "readonly" : ""} aria-label="${PLACE_NAMES[place]}答案">
+              </td>
+            `).join("")}
+          </tr>
+        </table>
+      `;
+
+      wrapper.querySelectorAll("[data-answer-place]").forEach((input) => {
+        input.addEventListener("input", (event) => {
+          const place = event.target.getAttribute("data-answer-place");
+          const cleanValue = event.target.value.replace(/\D/g, "").slice(0, 1);
+          event.target.value = cleanValue;
+          appState.inputAnswers[place] = cleanValue;
+        });
+      });
+    }
+
+    function renderStepPanel() {
+      const panel = document.getElementById("stepPanel");
+
+      panel.innerHTML = `
+        <div class="panel-title">
+          <h2>步驟判斷區</h2>
+          <span class="small-note">${getPhaseLabel()}</span>
+        </div>
+        <div class="step-list">
+          ${appState.model.steps.map((step) => renderSingleStep(step)).join("")}
+        </div>
+      `;
+
+      panel.querySelectorAll("[data-judgement]").forEach((button) => {
+        button.addEventListener("click", (event) => {
+          const value = event.currentTarget.getAttribute("data-judgement") === "true";
+          handleJudgementChoice(value);
+        });
+      });
+
+      const confirmButton = panel.querySelector("[data-confirm-digit]");
+      if (confirmButton) {
+        confirmButton.addEventListener("click", confirmCurrentDigitAnswer);
+      }
+
+      const calcInput = panel.querySelector("[data-calc-input]");
+      if (calcInput) {
+        calcInput.addEventListener("input", (event) => {
+          const cleanValue = event.target.value.replace(/\D/g, "").slice(0, 1);
+          event.target.value = cleanValue;
+          appState.inputAnswers[appState.currentPlace] = cleanValue;
+          const verticalInput = document.querySelector(`[data-answer-place="${appState.currentPlace}"]`);
+          if (verticalInput) {
+            verticalInput.value = cleanValue;
+          }
+        });
+      }
+    }
+
+    function renderSingleStep(step) {
+      const place = step.place;
+      const isCurrent = appState.phase !== "complete" && appState.currentPlace === place;
+      const isCompleted = Boolean(appState.completedPlaces[place]);
+      const className = [
+        "step-card",
+        isCurrent ? "current" : "",
+        isCompleted ? "completed" : "",
+        !isCurrent && !isCompleted ? "collapsed" : ""
+      ].filter(Boolean).join(" ");
+      const tick = isCompleted ? `<span class="tick">✓</span>` : "";
+
+      if (!isCurrent) {
+        return `
+          <div class="${className}">
+            <div class="step-head">
+              <h3>${step.placeName}</h3>
+              ${tick || `<span class="phase-pill">未處理</span>`}
+            </div>
+          </div>
+        `;
+      }
+
+      return `
+        <div class="${className}">
+          <div class="step-head">
+            <h3>${step.placeName}</h3>
+            <span class="phase-pill">${getPhaseLabel()}</span>
+          </div>
+          <div class="step-body">
+            ${renderCurrentStepBody(step)}
+          </div>
+        </div>
+      `;
+    }
+
+    function renderCurrentStepBody(step) {
+      if (appState.phase === "judge") {
+        return renderJudgeBody(step);
+      }
+      if (appState.phase === "borrowExplanation") {
+        return renderBorrowBody(step);
+      }
+      if (appState.phase === "calculate") {
+        return renderCalculateBody(step);
+      }
+      return `<div class="message ok">全部完成！可以檢查橫式答案。</div>`;
+    }
+
+    function renderJudgeBody(step) {
+      const selected = appState.selectedJudgement[step.place];
+      const result = appState.judgementResults[step.place];
+      const message = appState.stepMessage
+        ? `<div class="message ${appState.stepMessageType}">${appState.stepMessage}</div>`
+        : `<div class="message">看看 ${step.beforeBorrowValue} 夠不夠減 ${step.subtrahendValue}。</div>`;
+
+      function buttonClass(value) {
+        const classes = ["choice-button"];
+        if (selected === value) {
+          classes.push("selected");
+          if (result === "correct") {
+            classes.push("correct");
+          }
+          if (result === "wrong") {
+            classes.push("wrong");
+          }
+        }
+        return classes.join(" ");
+      }
+
+      const tick = result === "correct" ? `<span class="tick">✓</span>` : "";
+
+      return `
+        <div class="message">判斷：${step.beforeBorrowValue} - ${step.subtrahendValue}</div>
+        <div class="choice-row">
+          <button class="${buttonClass(true)}" type="button" data-judgement="true">需要借位</button>
+          <button class="${buttonClass(false)}" type="button" data-judgement="false">不需要借位</button>
+          ${tick}
+        </div>
+        ${message}
+      `;
+    }
+
+    function renderBorrowBody(step) {
+      const chainText = step.borrowChain.map((item) => `
+        <span class="borrow-chip">
+          ${item.fromPlaceName} ${item.fromBefore}→${item.fromAfter}
+          <span class="arrow">➜</span>
+          ${item.toPlaceName} ${item.toBefore}→${item.toAfter}
+        </span>
+      `).join("");
+
+      const explanation = step.borrowChain.length > 1
+        ? "連續借位：中間位值不夠借，先向更高位借，再往目前位值傳下來。"
+        : "普通借位：目前位值不夠減，向左邊位值借 1。";
+
+      return `
+        <div class="borrow-box">
+          <div>${explanation}</div>
+          <div class="borrow-chain">${chainText}</div>
+          <div>${step.placeName} 借位後變成 ${step.afterBorrowValue}，接著可以計算。</div>
+        </div>
+        <div class="message ok">借位後數值已更新到算柱和直式。</div>
+      `;
+    }
+
+    function renderCalculateBody(step) {
+      const storedInput = appState.inputAnswers[step.place] || "";
+      const calculationResult = appState.calculationResults[step.place];
+      const revealed = appState.revealedAnswers[step.place];
+      const message = appState.stepMessage
+        ? `<div class="message ${appState.stepMessageType}">${appState.stepMessage}</div>`
+        : `<div class="message">輸入這一位的答案，或直接按下一步。</div>`;
+      const tick = calculationResult === "correct" ? `<span class="tick">✓</span>` : "";
+      const revealedText = Object.prototype.hasOwnProperty.call(appState.revealedAnswers, step.place)
+        ? `<div class="message ok">正確答案：${revealed}</div>`
+        : "";
+
+      return `
+        <div class="calc-row">
+          <strong>${step.afterBorrowValue} - ${step.subtrahendValue} =</strong>
+          <input data-calc-input inputmode="numeric" maxlength="1" value="${storedInput}" aria-label="${step.placeName}計算答案">
+          <button type="button" data-confirm-digit>確認</button>
+          ${tick}
+        </div>
+        ${message}
+        ${revealedText}
+      `;
+    }
+
+    function renderFocusState() {
+      document.body.setAttribute("data-current-place", String(appState.currentPlace));
+      document.body.setAttribute("data-phase", appState.phase);
+      const previous = document.getElementById("previousButton");
+      const next = document.getElementById("nextButton");
+      previous.disabled = appState.history.length === 0;
+      next.disabled = appState.phase === "complete";
+      next.textContent = appState.phase === "complete" ? "已完成" : "下一步";
+    }
+
+    function handleStart() {
+      const minuend = clampProblemValue(document.getElementById("minuendInput").value);
+      const subtrahend = clampProblemValue(document.getElementById("subtrahendInput").value);
+
+      if (minuend < subtrahend) {
+        showError("目前只支援答案不為負數的減法，請輸入被減數 ≥ 減數。");
+        return;
+      }
+
+      appState = createInitialState(minuend, subtrahend);
+      renderAll();
+    }
+
+    function handleNext() {
+      if (appState.phase === "complete") {
+        return;
+      }
+
+      const step = getCurrentStep();
+
+      if (appState.phase === "judge") {
+        const selected = appState.selectedJudgement[step.place];
+        if (selected !== true && selected !== false) {
+          appState.stepMessage = "請先選擇需要借位或不需要借位。";
+          appState.stepMessageType = "error";
+          renderAll();
+          return;
+        }
+        if (selected !== step.needBorrow) {
+          appState.stepMessage = "這個判斷還不對，請再試一次。";
+          appState.stepMessageType = "error";
+          appState.judgementResults[step.place] = "wrong";
+          renderAll();
+          return;
+        }
+
+        pushHistory();
+        appState.stepMessage = "";
+        appState.stepMessageType = "";
+        appState.borrowAnimationPending = step.needBorrow;
+        appState.borrowAnimationRunning = false;
+        appState.phase = "calculate";
+        renderAll();
+        return;
+      }
+
+      if (appState.phase === "borrowExplanation") {
+        pushHistory();
+        appState.phase = "calculate";
+        appState.stepMessage = "";
+        appState.stepMessageType = "";
+        renderAll();
+        return;
+      }
+
+      if (appState.phase === "calculate") {
+        pushHistory();
+        finalizeCurrentCalculation(true);
+        moveToNextPlace();
+        renderAll();
+      }
+    }
+
+    function handlePrevious() {
+      if (!appState.history.length) {
+        return;
+      }
+      const previousState = appState.history.pop();
+      const remainingHistory = appState.history;
+      appState = previousState;
+      appState.history = remainingHistory;
+      renderAll();
+    }
+
+    function handleJudgementChoice(needsBorrow) {
+      const step = getCurrentStep();
+      if (appState.phase !== "judge") {
+        return;
+      }
+
+      pushHistory();
+      appState.selectedJudgement[step.place] = needsBorrow;
+      if (needsBorrow === step.needBorrow) {
+        appState.judgementResults[step.place] = "correct";
+        appState.stepMessage = "判斷正確！";
+        appState.stepMessageType = "ok";
+      } else {
+        appState.judgementResults[step.place] = "wrong";
+        appState.stepMessage = step.needBorrow
+          ? "目前位值不夠減，需要借位。"
+          : "目前位值已經夠減，不需要借位。";
+        appState.stepMessageType = "error";
+      }
+      renderAll();
+    }
+
+    function handleAnswerCheck() {
+      const input = document.getElementById("horizontalAnswerInput");
+      const value = Number.parseInt(input.value, 10);
+      appState.horizontalAnswer = input.value;
+
+      if (Number.isNaN(value)) {
+        appState.answerCheckMessage = "請先輸入橫式答案。";
+        appState.answerCheckType = "error";
+      } else if (value === appState.model.answer) {
+        appState.answerCheckMessage = "答對了！";
+        appState.answerCheckType = "ok";
+      } else {
+        appState.answerCheckMessage = `再檢查一次。正確答案是 ${appState.model.answer}。`;
+        appState.answerCheckType = "error";
+      }
+
+      renderAll();
+    }
+
+    function showError(message) {
+      appState.headerMessage = message;
+      appState.headerMessageType = "error";
+      renderAll();
+    }
+
+    function confirmCurrentDigitAnswer() {
+      if (appState.phase !== "calculate") {
+        return;
+      }
+      pushHistory();
+      finalizeCurrentCalculation(false);
+      renderAll();
+    }
+
+    function finalizeCurrentCalculation(isAutoAdvance) {
+      const step = getCurrentStep();
+      const rawValue = appState.inputAnswers[step.place];
+      const hasInput = rawValue !== undefined && rawValue !== "";
+      const numberValue = Number.parseInt(rawValue, 10);
+      const isCorrect = hasInput && numberValue === step.resultDigit;
+
+      appState.revealedAnswers[step.place] = step.resultDigit;
+      appState.completedPlaces[step.place] = true;
+      if (!appState.animatedCrossPlaces[step.place]) {
+        appState.pendingCrossPlaces[step.place] = true;
+      }
+
+      if (isCorrect) {
+        appState.calculationResults[step.place] = "correct";
+        appState.stepMessage = "計算正確！";
+        appState.stepMessageType = "ok";
+      } else if (!hasInput && isAutoAdvance) {
+        appState.calculationResults[step.place] = "auto";
+        appState.stepMessage = `沒有輸入也沒關係，這一位是 ${step.resultDigit}。`;
+        appState.stepMessageType = "ok";
+      } else {
+        appState.calculationResults[step.place] = "wrong";
+        appState.stepMessage = `這一位的正確答案是 ${step.resultDigit}。`;
+        appState.stepMessageType = "error";
+      }
+    }
+
+    function moveToNextPlace() {
+      if (appState.currentPlace < 2) {
+        appState.currentPlace += 1;
+        appState.phase = "judge";
+        appState.stepMessage = "";
+        appState.stepMessageType = "";
+        appState.headerMessage = `請繼續判斷${PLACE_NAMES[appState.currentPlace]}。`;
+        appState.headerMessageType = "";
+      } else {
+        appState.phase = "complete";
+        appState.headerMessage = `完成！${appState.minuend} - ${appState.subtrahend} = ${appState.model.answer}`;
+        appState.headerMessageType = "ok";
+        appState.stepMessage = "全部完成！";
+        appState.stepMessageType = "ok";
+      }
+    }
+
+    function runTests() {
+      const cases = [
+        { minuend: 817, subtrahend: 725, answer: 92 },
+        { minuend: 91, subtrahend: 5, answer: 86 },
+        { minuend: 100, subtrahend: 11, answer: 89 },
+        { minuend: 100, subtrahend: 1, answer: 99 },
+        { minuend: 305, subtrahend: 178, answer: 127 },
+        { minuend: 900, subtrahend: 456, answer: 444 },
+        { minuend: 250, subtrahend: 89, answer: 161 },
+        { minuend: 402, subtrahend: 39, answer: 363 }
+      ];
+
+      for (const testCase of cases) {
+        const model = computeSubtractionSteps(testCase.minuend, testCase.subtrahend);
+        const expectedDigits = toDigits(testCase.answer);
+
+        if (model.answer !== testCase.answer) {
+          console.error("TEST FAILED", { testCase, reason: "answer", model });
+          return;
+        }
+
+        if (!arraysEqual(model.resultDigits, expectedDigits)) {
+          console.error("TEST FAILED", { testCase, reason: "resultDigits", expectedDigits, model });
+          return;
+        }
+
+        for (const step of model.steps) {
+          if (step.resultDigit !== expectedDigits[step.place]) {
+            console.error("TEST FAILED", { testCase, reason: "step resultDigit", step, expectedDigits });
+            return;
+          }
+        }
+
+        if (testCase.minuend === 100 && testCase.subtrahend === 11) {
+          if (!arraysEqual(model.steps[0].workingDigitsAfterBorrow, [10, 9, 0])) {
+            console.error("TEST FAILED", {
+              testCase,
+              reason: "100-11 workingDigitsAfterBorrow",
+              actual: model.steps[0].workingDigitsAfterBorrow
+            });
+            return;
+          }
+        }
+
+        if (testCase.minuend === 305 && testCase.subtrahend === 178) {
+          if (!arraysEqual(model.steps[0].workingDigitsAfterBorrow, [15, 9, 2])) {
+            console.error("TEST FAILED", {
+              testCase,
+              reason: "305-178 workingDigitsAfterBorrow",
+              actual: model.steps[0].workingDigitsAfterBorrow
+            });
+            return;
+          }
+        }
+
+        if (testCase.minuend === 817 && testCase.subtrahend === 725) {
+          if (!arraysEqual(model.steps[1].workingDigitsAfterBorrow, [7, 11, 7])) {
+            console.error("TEST FAILED", {
+              testCase,
+              reason: "817-725 tens borrow",
+              actual: model.steps[1].workingDigitsAfterBorrow
+            });
+            return;
+          }
+        }
+
+        if (testCase.minuend === 100 && testCase.subtrahend === 11) {
+          if (hasBorrowDisplayChange(model.steps[0].workingDigitsBefore, model.minuendDigits)) {
+            console.error("TEST FAILED", {
+              testCase,
+              reason: "borrow row should be hidden before borrow"
+            });
+            return;
+          }
+
+          if (!hasBorrowDisplayChange(model.steps[0].workingDigitsAfterBorrow, model.minuendDigits)) {
+            console.error("TEST FAILED", {
+              testCase,
+              reason: "borrow row should show after borrow"
+            });
+            return;
+          }
+        }
+      }
+
+      console.log("ALL TESTS PASSED");
+    }
+
+    function initializeApp() {
+      appState = createInitialState(100, 11);
+      document.getElementById("previousButton").addEventListener("click", handlePrevious);
+      document.getElementById("nextButton").addEventListener("click", handleNext);
+      renderAll();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      try {
+        initLDLSourceReference();
+        runTests();
+        initializeApp();
+      } catch (error) {
+        console.error(error);
+        document.body.classList.add("has-js-error");
+      }
+    });
+  </script>
+  <script src="../../assets/tool-home-nav.js"></script>
+</body>
+</html>

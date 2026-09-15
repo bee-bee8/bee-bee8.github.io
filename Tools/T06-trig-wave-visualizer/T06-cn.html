@@ -1,0 +1,1826 @@
+<!doctype html>
+<html lang="zh-Hant" data-ldl-tool-id="T06-trig-wave-visualizer" data-ldl-fingerprint="ldl-yfc-t06-trig-wave-visualizer-v1">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Yung Fu Chuen">
+  <meta name="company" content="Yung Fu Chuen">
+  <meta name="copyright" content="© 2026 Yung Fu Chuen. All rights reserved.">
+  <meta name="license" content="Free classroom use only. Redistribution, resale, cloning, re-hosting, modification, or derivative use without written permission is prohibited.">
+  <meta name="ldl-product-name" content="三角函數波形視覺化工具">
+  <meta name="ldl-product-name-en" content="Trigonometric Wave Visualizer">
+  <meta name="ldl-product-code" content="LDL-MATH-T06-2026-001">
+  <meta name="ldl-tool-id" content="T06-trig-wave-visualizer">
+  <meta name="ldl-module-id" content="ldl-t06-trig-wave-visualizer">
+  <meta name="ldl-release-year" content="2026">
+  <meta name="ldl-version" content="1.1.0">
+  <meta name="ldl-build-id" content="LDL-MATH-T06-2026-001">
+  <meta name="ldl-fingerprint" content="ldl-yfc-t06-trig-wave-visualizer-v1">
+  <meta name="ldl-source-reference" content="LDL Source Reference v1.1 - Yung Fu Chuen - Yung Fu Chuen">
+  <title>三角函數波形視覺化工具</title>
+  <!-- copy-cost marker: head-alpha YFC -->
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --ink: #142033;
+      --muted: #667085;
+      --line: #d8e0eb;
+      --axis: #263449;
+      --soft: #eef3f9;
+      --point: #2563eb;
+      --sin: #e8662d;
+      --cos: #12805c;
+      --tan: #7c3aed;
+      --cursor: #0f172a;
+      --warn: #c62828;
+      --shadow: 0 18px 38px rgba(20, 32, 51, 0.08);
+      --radius: 8px;
+      font-family: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    button,
+    input,
+    select {
+      font: inherit;
+    }
+
+    .app {
+      width: min(1540px, calc(100vw - 28px));
+      margin: 0 auto;
+      padding: 92px 0 26px;
+    }
+
+    .app:fullscreen,
+    .app:-webkit-full-screen {
+      width: 100vw;
+      min-height: 100dvh;
+      margin: 0;
+      padding: 92px 14px 26px;
+      overflow: auto;
+      background: var(--bg);
+    }
+
+    .top-button {
+      position: fixed;
+      z-index: 2147483647;
+      top: max(14px, env(safe-area-inset-top));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: auto;
+      min-width: 0;
+      min-height: 38px;
+      padding: 0 12px;
+      border: 1px solid rgba(255, 255, 255, 0.82);
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: 0;
+      white-space: nowrap;
+      cursor: pointer;
+      box-shadow: 0 12px 24px rgba(14, 31, 58, 0.24), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+      transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+    }
+
+    .top-button:hover,
+    .top-button:focus-visible {
+      outline: none;
+      transform: translateY(-2px);
+      box-shadow: 0 16px 28px rgba(14, 31, 58, 0.28), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+    }
+
+    .top-button:active {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    .exit-fullscreen {
+      left: max(158px, calc(env(safe-area-inset-left) + 158px));
+      background: linear-gradient(135deg, #3949ab, #1e2d66);
+    }
+
+    .enter-fullscreen {
+      right: max(14px, env(safe-area-inset-right));
+      background: linear-gradient(135deg, #1d78d6, #124c91);
+    }
+
+    #tool-home-link {
+      position: fixed;
+      z-index: 2147483647;
+      top: max(14px, env(safe-area-inset-top));
+      left: max(14px, env(safe-area-inset-left));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: auto;
+      min-height: 38px;
+      padding: 0 14px;
+      border: 1px solid rgba(255, 255, 255, 0.82);
+      border-radius: 8px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #0f766e, #134e4a);
+      box-shadow: 0 12px 24px rgba(14, 31, 58, 0.24), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+      font-size: 15px !important;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: 0;
+      text-decoration: none;
+      white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform 160ms ease, filter 160ms ease, box-shadow 160ms ease;
+    }
+
+    #tool-home-link:hover,
+    #tool-home-link:focus-visible {
+      outline: none;
+      transform: translateY(-2px);
+      box-shadow: 0 16px 28px rgba(14, 31, 58, 0.28), inset 0 -4px 0 rgba(0, 0, 0, 0.12);
+    }
+
+    #tool-home-link:active {
+      transform: scale(0.97);
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: flex-end;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(28px, 3vw, 42px);
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.55;
+    }
+
+    .function-tabs {
+      display: flex;
+      gap: 8px;
+      padding: 6px;
+      background: #e8eef7;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      flex: 0 0 auto;
+    }
+
+    .tab {
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: #344054;
+      padding: 10px 16px;
+      min-width: 88px;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 160ms ease, color 160ms ease, box-shadow 160ms ease;
+    }
+
+    .tab[aria-selected="true"] {
+      background: var(--active-color);
+      color: #ffffff;
+      box-shadow: 0 8px 18px rgba(20, 32, 51, 0.16);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(420px, 0.9fr) minmax(520px, 1.1fr);
+      gap: 16px;
+      align-items: start;
+    }
+
+    .layout > article:first-of-type {
+      grid-row: 1 / span 2;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 18px 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-title {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.25;
+    }
+
+    .panel-note {
+      color: var(--muted);
+      font-size: 15px;
+      white-space: nowrap;
+    }
+
+    .canvas-wrap {
+      padding: 14px;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfdff;
+    }
+
+    #circleCanvas {
+      aspect-ratio: 1 / 1;
+    }
+
+    #graphCanvas {
+      aspect-ratio: 16 / 10;
+    }
+
+    .control-panel {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    .controls,
+    .values,
+    .explain {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .controls {
+      grid-column: 2;
+      padding: 16px;
+      display: grid;
+      gap: 14px;
+    }
+
+    .controls .row:first-child {
+      display: grid;
+      grid-template-columns: auto minmax(360px, 1fr) 112px;
+      align-items: center;
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .row label,
+    .group-label {
+      font-size: 16px;
+      font-weight: 700;
+      color: #344054;
+    }
+
+    .angle-slider {
+      flex: 1 1 360px;
+      accent-color: var(--active-color);
+      min-width: 220px;
+    }
+
+    .angle-input {
+      width: 112px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 9px 10px;
+      color: var(--ink);
+      background: #ffffff;
+    }
+
+    .btn {
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #ffffff;
+      color: var(--ink);
+      padding: 9px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      min-height: 42px;
+      transition: transform 120ms ease, border-color 160ms ease, background 160ms ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      border-color: #b8c4d5;
+      background: #f8fafc;
+    }
+
+    .btn.primary {
+      background: var(--active-color);
+      border-color: var(--active-color);
+      color: #ffffff;
+      min-width: 116px;
+    }
+
+    .speed-group {
+      display: inline-flex;
+      padding: 4px;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: #eef3f9;
+    }
+
+    .speed-btn {
+      border: 0;
+      background: transparent;
+      color: #475467;
+      border-radius: 5px;
+      padding: 8px 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .speed-btn[aria-pressed="true"] {
+      background: #ffffff;
+      color: var(--ink);
+      box-shadow: 0 5px 12px rgba(20, 32, 51, 0.12);
+    }
+
+    .check {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      color: #344054;
+      cursor: pointer;
+    }
+
+    .check input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--active-color);
+    }
+
+    .side-stack {
+      grid-column: 1 / -1;
+      display: grid;
+      gap: 16px;
+      grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+      align-items: stretch;
+    }
+
+    .values {
+      padding: 16px;
+    }
+
+    .value-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .value-item {
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      padding: 10px 12px;
+      background: #fbfdff;
+      min-height: 68px;
+    }
+
+    .value-label {
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .value-data {
+      font-size: clamp(20px, 1.55vw, 26px);
+      font-weight: 800;
+      line-height: 1.15;
+      color: var(--ink);
+      word-break: break-word;
+    }
+
+    .value-data.warn {
+      color: var(--warn);
+    }
+
+    .explain {
+      padding: 16px 18px;
+    }
+
+    .explain h2 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+
+    .explain ul {
+      margin: 0;
+      padding-left: 1.2em;
+      color: #344054;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    .legend {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      color: var(--muted);
+      font-size: 14px;
+      flex-wrap: wrap;
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      background: var(--active-color);
+      display: inline-block;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    body[data-function="sin"] {
+      --active-color: var(--sin);
+    }
+
+    body[data-function="cos"] {
+      --active-color: var(--cos);
+    }
+
+    body[data-function="tan"] {
+      --active-color: var(--tan);
+    }
+
+    @media (max-width: 1050px) {
+      .topbar,
+      .layout,
+      .control-panel {
+        grid-template-columns: 1fr;
+      }
+
+      .controls,
+      .side-stack {
+        grid-column: auto;
+      }
+
+      .layout > article:first-of-type {
+        grid-row: auto;
+      }
+
+      .side-stack {
+        grid-template-columns: 1fr;
+      }
+
+      .value-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .topbar {
+        display: grid;
+        align-items: start;
+      }
+
+      .function-tabs {
+        width: 100%;
+      }
+
+      .tab {
+        flex: 1;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .app {
+        width: min(100vw - 18px, 1540px);
+        padding: 82px 0 18px;
+      }
+
+      .app:fullscreen,
+      .app:-webkit-full-screen {
+        width: 100vw;
+        min-height: 100dvh;
+        padding: 82px 9px 18px;
+        background: var(--bg);
+      }
+
+      .top-button,
+      #tool-home-link {
+        width: auto;
+        min-height: 34px;
+        padding: 0 9px;
+        font-size: 13px !important;
+      }
+
+      #tool-home-link {
+        left: max(8px, env(safe-area-inset-left));
+      }
+
+      .exit-fullscreen {
+        left: max(118px, calc(env(safe-area-inset-left) + 118px));
+      }
+
+      .enter-fullscreen {
+        right: max(8px, env(safe-area-inset-right));
+      }
+
+      .panel-header,
+      .row {
+        align-items: flex-start;
+      }
+
+      .panel-note {
+        white-space: normal;
+      }
+
+      .function-tabs,
+      .row {
+        width: 100%;
+      }
+
+      .tab,
+      .btn,
+      .speed-group,
+      .speed-btn {
+        flex: 1;
+      }
+
+      .angle-input {
+        width: 100%;
+      }
+
+      .value-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .controls .row:first-child {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .ldl-visible-watermark {
+      position: fixed;
+      z-index: 35;
+      left: max(10px, env(safe-area-inset-left));
+      right: auto;
+      top: max(70px, calc(env(safe-area-inset-top) + 66px));
+      bottom: auto;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 5px;
+      max-width: min(190px, calc(100vw - 20px));
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      color: rgba(23, 32, 51, 0.56);
+      background: transparent;
+      box-shadow: none;
+      font-size: 8px;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: 0;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-select: none;
+      backdrop-filter: none;
+    }
+
+    /* copy-cost marker: style-beta LD */
+
+    .ldl-visible-watermark img {
+      width: 16px;
+      height: 16px;
+      flex: 0 0 auto;
+      object-fit: contain;
+      opacity: 0.88;
+    }
+
+    .ldl-visible-watermark span {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .ldl-offscreen-source-reference {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      margin: -1px !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+      clip: rect(0 0 0 0) !important;
+      clip-path: inset(50%) !important;
+      border: 0 !important;
+      white-space: nowrap !important;
+    }
+
+    @media (max-width: 520px) {
+      .ldl-visible-watermark {
+        left: max(8px, env(safe-area-inset-left));
+        right: auto;
+        top: max(58px, calc(env(safe-area-inset-top) + 54px));
+        bottom: auto;
+        font-size: 7px;
+      }
+
+      .ldl-visible-watermark img {
+        width: 14px;
+        height: 14px;
+      }
+    }
+  </style>
+</head>
+<body
+  data-function="sin"
+  data-ldl-product-name="三角函數波形視覺化工具"
+  data-ldl-product-name-en="Trigonometric Wave Visualizer"
+  data-ldl-product-code="LDL-MATH-T06-2026-001"
+  data-ldl-tool-id="T06-trig-wave-visualizer"
+  data-ldl-module-id="ldl-t06-trig-wave-visualizer"
+  data-ldl-build-id="LDL-MATH-T06-2026-001"
+  data-ldl-fingerprint="ldl-yfc-t06-trig-wave-visualizer-v1"
+>
+  <main class="app" data-tool-home-nav-root>
+    <a id="tool-home-link" href="../../index.html" target="_top" aria-label="前往工具總覽">工具總覽</a>
+    <button class="top-button exit-fullscreen" id="exitFullscreen" type="button" aria-label="退出">退出</button>
+    <button class="top-button enter-fullscreen" id="enterFullscreen" type="button" aria-label="進入全螢幕">全螢幕</button>
+
+    <header class="topbar">
+      <div>
+        <h1>三角函數波形視覺化工具</h1>
+        <p class="subtitle">拖動圓上的點或調整角度，觀察單位圓如何生成 sin θ、cos θ、tan θ 的圖像。</p>
+      </div>
+      <nav class="function-tabs" aria-label="函數選擇">
+        <button class="tab" type="button" data-function="sin" aria-selected="true">sin θ</button>
+        <button class="tab" type="button" data-function="cos" aria-selected="false">cos θ</button>
+        <button class="tab" type="button" data-function="tan" aria-selected="false">tan θ</button>
+      </nav>
+    </header>
+
+    <section class="layout" aria-label="三角函數視覺化">
+      <article class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">單位圓</h2>
+          <div class="panel-note">逆時針由正 x 軸開始量度</div>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="circleCanvas" width="720" height="720" aria-label="單位圓與目前函數投影"></canvas>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-header">
+          <h2 class="panel-title">函數圖像</h2>
+          <div class="legend"><span class="legend-dot"></span><span id="graphLegend">目前顯示：sin θ</span></div>
+        </div>
+        <div class="canvas-wrap">
+          <canvas id="graphCanvas" width="900" height="560" aria-label="目前函數由 0 度到 360 度的圖像"></canvas>
+        </div>
+      </article>
+
+      <div class="controls">
+        <div class="row">
+          <label for="angleSlider">角度</label>
+          <input id="angleSlider" class="angle-slider" type="range" min="0" max="360" step="0.001" value="0">
+          <input id="angleInput" class="angle-input" type="number" step="0.1" value="0" aria-label="直接輸入角度">
+        </div>
+        <div class="row">
+          <button id="playPauseBtn" class="btn primary" type="button">播放</button>
+          <button id="resetBtn" class="btn" type="button">重設</button>
+          <span class="group-label">速度</span>
+          <div class="speed-group" aria-label="播放速度">
+            <button class="speed-btn" type="button" data-speed="slow" aria-pressed="false">慢</button>
+            <button class="speed-btn" type="button" data-speed="medium" aria-pressed="true">中</button>
+            <button class="speed-btn" type="button" data-speed="fast" aria-pressed="false">快</button>
+          </div>
+          <label class="check">
+            <input id="trailCheck" type="checkbox">
+            顯示軌跡
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <section class="control-panel" aria-label="數值與說明">
+      <div class="side-stack">
+        <aside class="values" aria-label="即時數值">
+          <div class="value-grid">
+            <div class="value-item">
+              <span class="value-label">角度</span>
+              <span id="angleValue" class="value-data">0.000°</span>
+            </div>
+            <div class="value-item">
+              <span class="value-label">弧度</span>
+              <span id="radianValue" class="value-data">0.000（0）</span>
+            </div>
+            <div class="value-item">
+              <span class="value-label">目前函數</span>
+              <span id="functionValue" class="value-data">sin θ</span>
+            </div>
+            <div class="value-item">
+              <span class="value-label">目前數值</span>
+              <span id="currentValue" class="value-data">0.000</span>
+            </div>
+          </div>
+        </aside>
+
+        <aside class="explain" aria-label="教學說明">
+          <h2>連結重點</h2>
+          <ul>
+            <li>sin θ 來自圓上點的垂直位置。</li>
+            <li>cos θ 來自圓上點的水平位置。</li>
+            <li>tan θ 是垂直位置 ÷ 水平位置。</li>
+            <li>圓上的點轉一圈，右邊就形成一條函數圖像。</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const state = {
+      angle: 0,
+      selectedFunction: "sin",
+      isPlaying: false,
+      speed: "medium",
+      showTrail: false,
+      animationId: null,
+      lastFrameTime: null,
+      isDraggingPoint: false
+    };
+
+    const colors = {
+      ink: "#142033",
+      muted: "#667085",
+      line: "#d8e0eb",
+      axis: "#263449",
+      grid: "#e8eef6",
+      point: "#2563eb",
+      sin: "#e8662d",
+      cos: "#12805c",
+      tan: "#7c3aed",
+      cursor: "#0f172a",
+      warn: "#c62828",
+      softWarn: "rgba(198, 40, 40, 0.12)"
+    };
+
+    const speeds = {
+      slow: 28,
+      medium: 62,
+      fast: 125
+    };
+
+    const functionLabels = {
+      sin: "sin θ",
+      cos: "cos θ",
+      tan: "tan θ"
+    };
+
+    const circleCanvas = document.getElementById("circleCanvas");
+    const graphCanvas = document.getElementById("graphCanvas");
+    const circleCtx = circleCanvas.getContext("2d");
+    const graphCtx = graphCanvas.getContext("2d");
+    const angleSlider = document.getElementById("angleSlider");
+    const angleInput = document.getElementById("angleInput");
+    const playPauseBtn = document.getElementById("playPauseBtn");
+    const resetBtn = document.getElementById("resetBtn");
+    const trailCheck = document.getElementById("trailCheck");
+    const angleValue = document.getElementById("angleValue");
+    const radianValue = document.getElementById("radianValue");
+    const functionValue = document.getElementById("functionValue");
+    const currentValue = document.getElementById("currentValue");
+    const graphLegend = document.getElementById("graphLegend");
+    const tabs = Array.from(document.querySelectorAll(".tab"));
+    const speedButtons = Array.from(document.querySelectorAll(".speed-btn"));
+
+    function degToRad(deg) {
+      return deg * Math.PI / 180;
+    }
+
+    function normalizeAngle(angle) {
+      const normalized = ((Number(angle) % 360) + 360) % 360;
+      return Math.abs(normalized - 360) < 0.000001 ? 0 : normalized;
+    }
+
+    function formatNumber(value) {
+      if (!Number.isFinite(value)) {
+        return "無定義";
+      }
+      const rounded = Math.round(value * 1000) / 1000;
+      const fixed = Object.is(rounded, -0) || Math.abs(rounded) < 0.0005 ? 0 : rounded;
+      return fixed.toFixed(3);
+    }
+
+    function getPiLabel(angle) {
+      const rounded = Math.round(normalizeAngle(angle) * 1000) / 1000;
+      const common = {
+        0: "0",
+        30: "π/6",
+        45: "π/4",
+        60: "π/3",
+        90: "π/2",
+        120: "2π/3",
+        135: "3π/4",
+        150: "5π/6",
+        180: "π",
+        210: "7π/6",
+        225: "5π/4",
+        240: "4π/3",
+        270: "3π/2",
+        300: "5π/3",
+        315: "7π/4",
+        330: "11π/6"
+      };
+      const key = Object.keys(common).find(item => Math.abs(Number(item) - rounded) < 0.001);
+      return key ? common[key] : "";
+    }
+
+    function calculateTrigValue(fn, angle) {
+      const rad = degToRad(angle);
+      const sinValue = Math.sin(rad);
+      const cosValue = Math.cos(rad);
+
+      if (fn === "sin") {
+        return { value: Math.abs(sinValue) < 0.0000001 ? 0 : sinValue, undefined: false };
+      }
+
+      if (fn === "cos") {
+        return { value: Math.abs(cosValue) < 0.0000001 ? 0 : cosValue, undefined: false };
+      }
+
+      if (Math.abs(cosValue) < 0.0001) {
+        return { value: null, undefined: true };
+      }
+
+      const tanValue = sinValue / cosValue;
+      return { value: Math.abs(tanValue) < 0.0000001 ? 0 : tanValue, undefined: false };
+    }
+
+    function resizeCanvasToDisplaySize(canvas) {
+      const rect = canvas.getBoundingClientRect();
+      const ratio = window.devicePixelRatio || 1;
+      const width = Math.max(1, Math.round(rect.width * ratio));
+      const height = Math.max(1, Math.round(rect.height * ratio));
+
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+      }
+    }
+
+    function activeColor() {
+      return colors[state.selectedFunction];
+    }
+
+    function updateFromAngle(rawAngle, options = {}) {
+      const normalized = normalizeAngle(rawAngle);
+      state.angle = normalized;
+
+      angleSlider.value = normalized;
+      if (!options.preserveInput) {
+        angleInput.value = formatNumber(normalized);
+      }
+      angleValue.textContent = `${formatNumber(normalized)}°`;
+
+      const piLabel = getPiLabel(normalized);
+      const radians = formatNumber(degToRad(normalized));
+      radianValue.textContent = piLabel ? `${radians}（${piLabel}）` : radians;
+
+      const result = calculateTrigValue(state.selectedFunction, normalized);
+      functionValue.textContent = functionLabels[state.selectedFunction];
+      currentValue.textContent = result.undefined ? "無定義" : formatNumber(result.value);
+      currentValue.classList.toggle("warn", result.undefined);
+      graphLegend.textContent = `目前顯示：${functionLabels[state.selectedFunction]}`;
+
+      updateCircle();
+      updateGraph();
+    }
+
+    function updateCircle() {
+      resizeCanvasToDisplaySize(circleCanvas);
+      drawUnitCircle(circleCtx, circleCanvas);
+    }
+
+    function updateGraph() {
+      resizeCanvasToDisplaySize(graphCanvas);
+      graphCtx.clearRect(0, 0, graphCanvas.width, graphCanvas.height);
+      drawGraphAxes(graphCtx, graphCanvas);
+      drawFunctionCurve(graphCtx, graphCanvas);
+      drawGraphCursor(graphCtx, graphCanvas);
+    }
+
+    function drawRoundedLabel(ctx, text, x, y, options = {}) {
+      const paddingX = options.paddingX || 10;
+      const paddingY = options.paddingY || 6;
+      const radius = options.radius || 6;
+      ctx.save();
+      ctx.font = options.font || "700 18px Microsoft JhengHei, Arial";
+      const metrics = ctx.measureText(text);
+      const width = metrics.width + paddingX * 2;
+      const height = (options.height || 30);
+      const left = Math.min(Math.max(x, 8), ctx.canvas.width - width - 8);
+      const top = Math.min(Math.max(y, 8), ctx.canvas.height - height - 8);
+      ctx.beginPath();
+      ctx.roundRect(left, top, width, height, radius);
+      ctx.fillStyle = options.background || "#ffffff";
+      ctx.fill();
+      ctx.strokeStyle = options.border || colors.line;
+      ctx.lineWidth = options.lineWidth || 2;
+      ctx.stroke();
+      ctx.fillStyle = options.color || colors.ink;
+      ctx.textBaseline = "middle";
+      ctx.fillText(text, left + paddingX, top + height / 2 + 1);
+      ctx.restore();
+    }
+
+    function drawUnitCircle(ctx, canvas) {
+      const width = canvas.width;
+      const height = canvas.height;
+      const minSide = Math.min(width, height);
+      const centerX = width / 2;
+      const centerY = height / 2;
+      const scale = minSide * 0.34;
+      const tick = scale * 0.04;
+      const angleRad = degToRad(state.angle);
+      const mathX = Math.cos(angleRad);
+      const mathY = Math.sin(angleRad);
+      const pointX = centerX + mathX * scale;
+      const pointY = centerY - mathY * scale;
+      const projectionColor = activeColor();
+      const result = calculateTrigValue(state.selectedFunction, state.angle);
+
+      ctx.clearRect(0, 0, width, height);
+      ctx.save();
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+
+      ctx.strokeStyle = colors.grid;
+      ctx.lineWidth = 1;
+      for (let value = -1; value <= 1.01; value += 0.5) {
+        const x = centerX + value * scale;
+        const y = centerY - value * scale;
+        ctx.beginPath();
+        ctx.moveTo(x, centerY - scale * 1.18);
+        ctx.lineTo(x, centerY + scale * 1.18);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(centerX - scale * 1.18, y);
+        ctx.lineTo(centerX + scale * 1.18, y);
+        ctx.stroke();
+      }
+
+      ctx.strokeStyle = colors.axis;
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(centerX - scale * 1.25, centerY);
+      ctx.lineTo(centerX + scale * 1.28, centerY);
+      ctx.moveTo(centerX + scale * 1.22, centerY - tick * 2.2);
+      ctx.lineTo(centerX + scale * 1.28, centerY);
+      ctx.lineTo(centerX + scale * 1.22, centerY + tick * 2.2);
+      ctx.moveTo(centerX, centerY + scale * 1.25);
+      ctx.lineTo(centerX, centerY - scale * 1.28);
+      ctx.moveTo(centerX - tick * 2.2, centerY - scale * 1.22);
+      ctx.lineTo(centerX, centerY - scale * 1.28);
+      ctx.lineTo(centerX + tick * 2.2, centerY - scale * 1.22);
+      ctx.stroke();
+
+      ctx.fillStyle = colors.axis;
+      ctx.font = "700 18px Microsoft JhengHei, Arial";
+      ctx.fillText("x", centerX + scale * 1.31, centerY + 6);
+      ctx.fillText("y", centerX + 8, centerY - scale * 1.31);
+
+      ctx.strokeStyle = colors.line;
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, scale, 0, Math.PI * 2);
+      ctx.stroke();
+
+      if (state.showTrail && state.angle > 0.1) {
+        ctx.strokeStyle = projectionColor;
+        ctx.globalAlpha = 0.25;
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, scale, 0, -angleRad, true);
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+      }
+
+      ctx.strokeStyle = colors.point;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.lineTo(pointX, pointY);
+      ctx.stroke();
+
+      ctx.setLineDash([8, 7]);
+      ctx.lineWidth = 1.6;
+      ctx.strokeStyle = "#94a3b8";
+      ctx.beginPath();
+      ctx.moveTo(pointX, pointY);
+      ctx.lineTo(pointX, centerY);
+      ctx.moveTo(pointX, pointY);
+      ctx.lineTo(centerX, pointY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      if (state.selectedFunction === "sin") {
+        drawProjectionSegment(ctx, pointX, centerY, pointX, pointY, projectionColor, "sin θ = y", pointX + 12, (pointY + centerY) / 2 - 16);
+      } else if (state.selectedFunction === "cos") {
+        drawProjectionSegment(ctx, centerX, pointY, pointX, pointY, projectionColor, "cos θ = x", (centerX + pointX) / 2 - 50, pointY - 38);
+      } else {
+        drawTangentProjection(ctx, centerX, centerY, scale, mathX, mathY, pointX, pointY, projectionColor, result);
+      }
+
+      ctx.strokeStyle = projectionColor;
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, scale * 0.24, 0, -angleRad, true);
+      ctx.stroke();
+
+      const arcLabelX = centerX + Math.cos(-angleRad / 2) * scale * 0.34;
+      const arcLabelY = centerY + Math.sin(-angleRad / 2) * scale * 0.34;
+      drawRoundedLabel(ctx, `θ = ${formatNumber(state.angle)}°`, arcLabelX - 46, arcLabelY - 18, {
+        background: "#ffffff",
+        border: projectionColor,
+        color: projectionColor,
+        font: "800 17px Microsoft JhengHei, Arial"
+      });
+
+      ctx.fillStyle = colors.point;
+      ctx.beginPath();
+      ctx.arc(pointX, pointY, 9, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+
+      const pointLabel = `(${formatNumber(mathX)}, ${formatNumber(mathY)})`;
+      drawRoundedLabel(ctx, pointLabel, pointX + 14, pointY - 42, {
+        background: "#ffffff",
+        border: colors.line,
+        color: colors.ink,
+        font: "700 16px Microsoft JhengHei, Arial"
+      });
+
+      const valueText = result.undefined ? "目前數值：無定義" : `目前數值：${formatNumber(result.value)}`;
+      drawRoundedLabel(ctx, valueText, 18, 18, {
+        background: result.undefined ? "#fff4f4" : "#ffffff",
+        border: result.undefined ? colors.warn : projectionColor,
+        color: result.undefined ? colors.warn : projectionColor,
+        font: "800 20px Microsoft JhengHei, Arial",
+        height: 34
+      });
+
+      drawRoundedLabel(ctx, "單位圓半徑 = 1", width - 172, height - 50, {
+        background: "#ffffff",
+        border: colors.line,
+        color: colors.muted,
+        font: "700 15px Microsoft JhengHei, Arial"
+      });
+
+      ctx.restore();
+    }
+
+    function drawProjectionSegment(ctx, x1, y1, x2, y2, color, label, labelX, labelY) {
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 5;
+      ctx.globalAlpha = 0.88;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+      drawRoundedLabel(ctx, label, labelX, labelY, {
+        background: "#ffffff",
+        border: color,
+        color,
+        font: "800 18px Microsoft JhengHei, Arial"
+      });
+      ctx.restore();
+    }
+
+    function drawTangentProjection(ctx, centerX, centerY, scale, mathX, mathY, pointX, pointY, color, result) {
+      ctx.save();
+      const tangentX = centerX + scale;
+      const tanValue = result.undefined ? null : result.value;
+      const cappedTan = result.undefined ? (mathY >= 0 ? 1.45 : -1.45) : Math.max(-1.45, Math.min(1.45, tanValue));
+      const tangentY = centerY - cappedTan * scale;
+
+      ctx.strokeStyle = "#94a3b8";
+      ctx.lineWidth = 1.6;
+      ctx.setLineDash([7, 7]);
+      ctx.beginPath();
+      ctx.moveTo(tangentX, centerY - scale * 1.5);
+      ctx.lineTo(tangentX, centerY + scale * 1.5);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY);
+      ctx.lineTo(tangentX, tangentY);
+      ctx.stroke();
+
+      ctx.lineWidth = 5;
+      ctx.globalAlpha = 0.86;
+      ctx.beginPath();
+      ctx.moveTo(tangentX, centerY);
+      ctx.lineTo(tangentX, tangentY);
+      ctx.stroke();
+      ctx.globalAlpha = 1;
+
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(tangentX, tangentY, 7, 0, Math.PI * 2);
+      ctx.fill();
+
+      const label = result.undefined ? "tan θ = y ÷ x：無定義" : `tan θ = y ÷ x = ${formatNumber(tanValue)}`;
+      drawRoundedLabel(ctx, label, 18, ctx.canvas.height - 58, {
+        background: result.undefined ? "#fff4f4" : "#ffffff",
+        border: result.undefined ? colors.warn : color,
+        color: result.undefined ? colors.warn : color,
+        font: "800 18px Microsoft JhengHei, Arial",
+        height: 34
+      });
+
+      drawRoundedLabel(ctx, "x 接近 0 時不能相除", tangentX - 96, tangentY - 44, {
+        background: "#ffffff",
+        border: colors.line,
+        color: colors.muted,
+        font: "700 14px Microsoft JhengHei, Arial",
+        height: 28
+      });
+
+      ctx.restore();
+    }
+
+    function graphMetrics(canvas) {
+      const padding = {
+        left: Math.max(112, canvas.width * 0.105),
+        right: Math.max(34, canvas.width * 0.04),
+        top: Math.max(28, canvas.height * 0.06),
+        bottom: Math.max(54, canvas.height * 0.1)
+      };
+      const plotWidth = canvas.width - padding.left - padding.right;
+      const plotHeight = canvas.height - padding.top - padding.bottom;
+      const yLimit = state.selectedFunction === "tan" ? 5 : 1;
+      return { padding, plotWidth, plotHeight, yLimit };
+    }
+
+    function angleToX(angle, metrics) {
+      return metrics.padding.left + (angle / 360) * metrics.plotWidth;
+    }
+
+    function valueToY(value, metrics) {
+      const capped = Math.max(-metrics.yLimit, Math.min(metrics.yLimit, value));
+      return metrics.padding.top + (metrics.yLimit - capped) / (metrics.yLimit * 2) * metrics.plotHeight;
+    }
+
+    function drawGraphAxes(ctx, canvas) {
+      const metrics = graphMetrics(canvas);
+      const { padding, plotWidth, plotHeight, yLimit } = metrics;
+      const left = padding.left;
+      const right = padding.left + plotWidth;
+      const top = padding.top;
+      const bottom = padding.top + plotHeight;
+      const midY = valueToY(0, metrics);
+
+      ctx.save();
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#fbfdff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.strokeStyle = colors.grid;
+      ctx.lineWidth = 1;
+      ctx.font = "700 14px Microsoft JhengHei, Arial";
+      ctx.fillStyle = colors.muted;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+
+      const angleTicks = [0, 90, 180, 270, 360];
+      angleTicks.forEach(tick => {
+        const x = angleToX(tick, metrics);
+        ctx.beginPath();
+        ctx.moveTo(x, top);
+        ctx.lineTo(x, bottom);
+        ctx.stroke();
+        ctx.fillText(`${tick}°`, x, bottom + 12);
+      });
+
+      const yTicks = state.selectedFunction === "tan" ? [-5, -2.5, 0, 2.5, 5] : [-1, -0.5, 0, 0.5, 1];
+      ctx.textAlign = "right";
+      ctx.textBaseline = "middle";
+      yTicks.forEach(tick => {
+        const y = valueToY(tick, metrics);
+        ctx.beginPath();
+        ctx.moveTo(left, y);
+        ctx.lineTo(right, y);
+        ctx.stroke();
+        ctx.fillText(formatNumber(tick), left - 10, y);
+      });
+
+      ctx.strokeStyle = colors.axis;
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(left, bottom);
+      ctx.lineTo(right, bottom);
+      ctx.moveTo(left, top);
+      ctx.lineTo(left, bottom);
+      ctx.stroke();
+
+      ctx.strokeStyle = "#8da0b8";
+      ctx.lineWidth = 1.6;
+      ctx.setLineDash([8, 7]);
+      ctx.beginPath();
+      ctx.moveTo(left, midY);
+      ctx.lineTo(right, midY);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      if (state.selectedFunction === "tan") {
+        [90, 270].forEach(deg => {
+          const x = angleToX(deg, metrics);
+          ctx.strokeStyle = colors.warn;
+          ctx.lineWidth = 1.6;
+          ctx.setLineDash([7, 6]);
+          ctx.beginPath();
+          ctx.moveTo(x, top);
+          ctx.lineTo(x, bottom);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.fillStyle = colors.warn;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "bottom";
+          ctx.fillText("漸近線", x, top - 6);
+        });
+      }
+
+      ctx.fillStyle = colors.axis;
+      ctx.textAlign = "right";
+      ctx.textBaseline = "bottom";
+      ctx.font = "800 16px Microsoft JhengHei, Arial";
+      ctx.fillText("角度 θ", right, canvas.height - 10);
+      ctx.textBaseline = "middle";
+      ctx.textAlign = "right";
+      ctx.fillText("函數值", left - 58, midY);
+
+      ctx.strokeStyle = colors.line;
+      ctx.lineWidth = 1.4;
+      ctx.strokeRect(left, top, plotWidth, plotHeight);
+      ctx.restore();
+    }
+
+    function drawFunctionCurve(ctx, canvas) {
+      const metrics = graphMetrics(canvas);
+      const color = activeColor();
+      const step = state.selectedFunction === "tan" ? 0.25 : 0.5;
+      let drawing = false;
+      let previousY = null;
+
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 3;
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      ctx.beginPath();
+
+      for (let angle = 0; angle <= 360.0001; angle += step) {
+        const result = calculateTrigValue(state.selectedFunction, angle);
+        const x = angleToX(angle, metrics);
+
+        if (result.undefined) {
+          drawing = false;
+          previousY = null;
+          continue;
+        }
+
+        const value = result.value;
+        const y = valueToY(value, metrics);
+        const clipped = Math.abs(value) > metrics.yLimit;
+        const nearBreak = state.selectedFunction === "tan" && (
+          Math.abs(Math.cos(degToRad(angle))) < 0.015 ||
+          (previousY !== null && Math.abs(y - previousY) > metrics.plotHeight * 0.72)
+        );
+
+        if (!drawing || nearBreak) {
+          ctx.moveTo(x, y);
+          drawing = true;
+        } else {
+          ctx.lineTo(x, y);
+        }
+
+        if (clipped) {
+          drawing = false;
+        }
+
+        previousY = y;
+      }
+
+      ctx.stroke();
+
+      if (state.showTrail) {
+        ctx.globalAlpha = 0.2;
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        let trailDrawing = false;
+        let trailPreviousY = null;
+        for (let angle = 0; angle <= state.angle; angle += step) {
+          const result = calculateTrigValue(state.selectedFunction, angle);
+          const x = angleToX(angle, metrics);
+          if (result.undefined) {
+            trailDrawing = false;
+            trailPreviousY = null;
+            continue;
+          }
+          const y = valueToY(result.value, metrics);
+          const nearBreak = state.selectedFunction === "tan" && (
+            Math.abs(Math.cos(degToRad(angle))) < 0.015 ||
+            (trailPreviousY !== null && Math.abs(y - trailPreviousY) > metrics.plotHeight * 0.72)
+          );
+          if (!trailDrawing || nearBreak) {
+            ctx.moveTo(x, y);
+            trailDrawing = true;
+          } else {
+            ctx.lineTo(x, y);
+          }
+          trailPreviousY = y;
+        }
+        ctx.stroke();
+      }
+
+      ctx.restore();
+    }
+
+    function drawGraphCursor(ctx, canvas) {
+      const metrics = graphMetrics(canvas);
+      const x = angleToX(state.angle, metrics);
+      const top = metrics.padding.top;
+      const bottom = metrics.padding.top + metrics.plotHeight;
+      const result = calculateTrigValue(state.selectedFunction, state.angle);
+      const color = result.undefined ? colors.warn : activeColor();
+
+      ctx.save();
+      ctx.strokeStyle = result.undefined ? colors.warn : colors.cursor;
+      ctx.lineWidth = 2;
+      ctx.setLineDash([6, 6]);
+      ctx.beginPath();
+      ctx.moveTo(x, top);
+      ctx.lineTo(x, bottom);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      if (result.undefined) {
+        const warningY = top + metrics.plotHeight * 0.18;
+        ctx.fillStyle = colors.softWarn;
+        ctx.fillRect(metrics.padding.left, top, metrics.plotWidth, metrics.plotHeight);
+        drawRoundedLabel(ctx, "無定義", x + 12, warningY, {
+          background: "#fff4f4",
+          border: colors.warn,
+          color: colors.warn,
+          font: "800 18px Microsoft JhengHei, Arial"
+        });
+      } else {
+        const y = valueToY(result.value, metrics);
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.arc(x, y, 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2.5;
+        ctx.stroke();
+
+        const label = `${functionLabels[state.selectedFunction]} = ${formatNumber(result.value)}`;
+        drawRoundedLabel(ctx, label, x + 12, y - 38, {
+          background: "#ffffff",
+          border: color,
+          color,
+          font: "800 16px Microsoft JhengHei, Arial"
+        });
+      }
+
+      drawRoundedLabel(ctx, `${formatNumber(state.angle)}°`, x - 36, bottom - 38, {
+        background: "#ffffff",
+        border: colors.line,
+        color: colors.ink,
+        font: "800 15px Microsoft JhengHei, Arial",
+        height: 28
+      });
+
+      ctx.restore();
+    }
+
+    function startAnimation() {
+      if (state.isPlaying) {
+        return;
+      }
+      state.isPlaying = true;
+      state.lastFrameTime = null;
+      playPauseBtn.textContent = "暫停";
+
+      const step = timestamp => {
+        if (!state.isPlaying) {
+          return;
+        }
+        if (state.lastFrameTime === null) {
+          state.lastFrameTime = timestamp;
+        }
+        const elapsed = Math.min(0.05, (timestamp - state.lastFrameTime) / 1000);
+        state.lastFrameTime = timestamp;
+        const nextAngle = normalizeAngle(state.angle + speeds[state.speed] * elapsed);
+        updateFromAngle(nextAngle);
+        state.animationId = requestAnimationFrame(step);
+      };
+
+      state.animationId = requestAnimationFrame(step);
+    }
+
+    function stopAnimation() {
+      state.isPlaying = false;
+      playPauseBtn.textContent = "播放";
+      if (state.animationId !== null) {
+        cancelAnimationFrame(state.animationId);
+        state.animationId = null;
+      }
+      state.lastFrameTime = null;
+    }
+
+    function canvasPointToAngle(event) {
+      const rect = circleCanvas.getBoundingClientRect();
+      const clientX = event.clientX;
+      const clientY = event.clientY;
+      const x = clientX - rect.left - rect.width / 2;
+      const y = rect.height / 2 - (clientY - rect.top);
+      return normalizeAngle(Math.atan2(y, x) * 180 / Math.PI);
+    }
+
+    function handleCirclePointer(event) {
+      event.preventDefault();
+      stopAnimation();
+      updateFromAngle(canvasPointToAngle(event));
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener("click", () => {
+        state.selectedFunction = tab.dataset.function;
+        document.body.dataset.function = state.selectedFunction;
+        tabs.forEach(item => item.setAttribute("aria-selected", String(item === tab)));
+        updateFromAngle(state.angle);
+      });
+    });
+
+    speedButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        state.speed = button.dataset.speed;
+        speedButtons.forEach(item => item.setAttribute("aria-pressed", String(item === button)));
+      });
+    });
+
+    angleSlider.addEventListener("input", event => {
+      stopAnimation();
+      updateFromAngle(event.target.value);
+    });
+
+    angleInput.addEventListener("input", event => {
+      const value = event.target.value.trim();
+      if (value === "" || value === "-" || value === "." || value === "-.") {
+        return;
+      }
+      stopAnimation();
+      updateFromAngle(value, { preserveInput: true });
+    });
+
+    angleInput.addEventListener("change", event => {
+      stopAnimation();
+      updateFromAngle(event.target.value);
+    });
+
+    angleInput.addEventListener("blur", event => {
+      if (event.target.value.trim() !== "") {
+        updateFromAngle(event.target.value);
+      }
+    });
+
+    angleInput.addEventListener("keydown", event => {
+      if (event.key === "Enter") {
+        stopAnimation();
+        updateFromAngle(angleInput.value);
+        angleInput.blur();
+      }
+    });
+
+    playPauseBtn.addEventListener("click", () => {
+      if (state.isPlaying) {
+        stopAnimation();
+      } else {
+        startAnimation();
+      }
+    });
+
+    resetBtn.addEventListener("click", () => {
+      stopAnimation();
+      updateFromAngle(0);
+    });
+
+    trailCheck.addEventListener("change", event => {
+      state.showTrail = event.target.checked;
+      updateFromAngle(state.angle);
+    });
+
+    circleCanvas.addEventListener("pointerdown", event => {
+      state.isDraggingPoint = true;
+      circleCanvas.setPointerCapture(event.pointerId);
+      handleCirclePointer(event);
+    });
+
+    circleCanvas.addEventListener("pointermove", event => {
+      if (state.isDraggingPoint) {
+        handleCirclePointer(event);
+      }
+    });
+
+    circleCanvas.addEventListener("pointerup", event => {
+      state.isDraggingPoint = false;
+      circleCanvas.releasePointerCapture(event.pointerId);
+    });
+
+    circleCanvas.addEventListener("pointercancel", () => {
+      state.isDraggingPoint = false;
+    });
+
+    window.addEventListener("resize", () => updateFromAngle(state.angle));
+
+    if (!CanvasRenderingContext2D.prototype.roundRect) {
+      CanvasRenderingContext2D.prototype.roundRect = function(x, y, width, height, radius) {
+        const r = Math.min(radius, width / 2, height / 2);
+        this.beginPath();
+        this.moveTo(x + r, y);
+        this.lineTo(x + width - r, y);
+        this.quadraticCurveTo(x + width, y, x + width, y + r);
+        this.lineTo(x + width, y + height - r);
+        this.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
+        this.lineTo(x + r, y + height);
+        this.quadraticCurveTo(x, y + height, x, y + height - r);
+        this.lineTo(x, y + r);
+        this.quadraticCurveTo(x, y, x + r, y);
+        this.closePath();
+        return this;
+      };
+    }
+
+    updateFromAngle(0);
+  </script>
+  <template id="ldl-copy-cost-markers" hidden>
+    <!-- copy-cost marker: body-gamma YFC -->
+    <!-- copy-cost marker: body-delta LD -->
+  </template>
+  <script src="../../assets/tool-home-nav.js"></script>
+  <script>
+    (() => {
+      "use strict";
+
+      const root = document.querySelector("[data-tool-home-nav-root]") || document.documentElement;
+      const homeLink = document.getElementById("tool-home-link");
+      const enterFullscreenButton = document.getElementById("enterFullscreen");
+      const exitFullscreenButton = document.getElementById("exitFullscreen");
+
+      if (homeLink) {
+        homeLink.textContent = "工具總覽";
+        homeLink.href = "../../index.html";
+        homeLink.target = "_top";
+        homeLink.setAttribute("aria-label", "前往工具總覽");
+      }
+
+      async function enterFullscreen() {
+        try {
+          if (!document.fullscreenElement && root.requestFullscreen) {
+            await root.requestFullscreen();
+          }
+        } catch (error) {
+          if (enterFullscreenButton) enterFullscreenButton.style.filter = "grayscale(0.4)";
+        }
+      }
+
+      async function exitFullscreen() {
+        try {
+          if (document.fullscreenElement && document.exitFullscreen) {
+            await document.exitFullscreen();
+          }
+        } catch (error) {
+          if (exitFullscreenButton) exitFullscreenButton.style.filter = "grayscale(0.4)";
+        }
+      }
+
+      if (enterFullscreenButton) enterFullscreenButton.addEventListener("click", enterFullscreen);
+      if (exitFullscreenButton) exitFullscreenButton.addEventListener("click", exitFullscreen);
+      window.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") exitFullscreen();
+      });
+
+      const record = Object.freeze({
+        productName: "三角函數波形視覺化工具",
+        productNameEn: "Trigonometric Wave Visualizer",
+        productCode: "LDL-MATH-T06-2026-001",
+        toolId: "t06-trig-wave-visualizer",
+        moduleId: "ldl-t06-trig-wave-visualizer",
+        company: "Yung Fu Chuen",
+        author: "Yung Fu Chuen",
+        releaseYear: 2026,
+        version: "1.1.0",
+        copyright: "© 2026 Yung Fu Chuen. All rights reserved.",
+        license: "Free classroom use only. Redistribution, resale, cloning, re-hosting, modification, or derivative use without written permission is prohibited.",
+        buildId: "LDL-MATH-T06-2026-001",
+        fingerprint: "ldl-yfc-t06-trig-wave-visualizer-v1",
+        markerSignature: "LDL-SOURCE-REFERENCE-v1.1::Yung-Fu-Chuen::2026::t06-trig-wave-visualizer"
+      });
+
+      function setCssCustomProperties() {
+        const html = document.documentElement;
+        html.style.setProperty("--ldl-product-name", JSON.stringify(record.productName));
+        html.style.setProperty("--ldl-product-name-en", JSON.stringify(record.productNameEn));
+        html.style.setProperty("--ldl-product-code", JSON.stringify(record.productCode));
+        html.style.setProperty("--ldl-tool-id", JSON.stringify(record.toolId));
+        html.style.setProperty("--ldl-module-id", JSON.stringify(record.moduleId));
+        html.style.setProperty("--ldl-company", JSON.stringify(record.company));
+        html.style.setProperty("--ldl-author", JSON.stringify(record.author));
+        html.style.setProperty("--ldl-release-year", String(record.releaseYear));
+        html.style.setProperty("--ldl-version", JSON.stringify(record.version));
+        html.style.setProperty("--ldl-build-id", JSON.stringify(record.buildId));
+        html.style.setProperty("--ldl-fingerprint", JSON.stringify(record.fingerprint));
+      }
+
+      function upsertMetaTags() {
+        Object.entries({
+          author: record.author,
+          company: record.company,
+          copyright: record.copyright,
+          license: record.license,
+          "ldl-product-name": record.productName,
+          "ldl-product-name-en": record.productNameEn,
+          "ldl-product-code": record.productCode,
+          "ldl-tool-id": record.toolId,
+          "ldl-module-id": record.moduleId,
+          "ldl-release-year": String(record.releaseYear),
+          "ldl-version": record.version,
+          "ldl-build-id": record.buildId,
+          "ldl-fingerprint": record.fingerprint,
+          "ldl-source-reference": `LDL Source Reference ${record.version} - ${record.company} - ${record.author}`
+        }).forEach(([name, content]) => {
+          let meta = document.head.querySelector(`meta[name="${name}"]`);
+          if (!meta) {
+            meta = document.createElement("meta");
+            meta.name = name;
+            document.head.appendChild(meta);
+          }
+          meta.content = content;
+        });
+      }
+
+      function upsertBodyAttributes() {
+        Object.entries({
+          "data-ldl-product-name": record.productName,
+          "data-ldl-product-name-en": record.productNameEn,
+          "data-ldl-product-code": record.productCode,
+          "data-ldl-tool-id": record.toolId,
+          "data-ldl-module-id": record.moduleId,
+          "data-ldl-build-id": record.buildId,
+          "data-ldl-fingerprint": record.fingerprint,
+          "data-ldl-marker-signature": record.markerSignature
+        }).forEach(([name, value]) => document.body.setAttribute(name, value));
+      }
+
+      function getOrCreateElement(tagName, id, parent) {
+        let element = document.getElementById(id);
+        if (!element) {
+          element = document.createElement(tagName);
+          element.id = id;
+          parent.appendChild(element);
+        }
+        return element;
+      }
+
+      function upsertJsonRecord() {
+        const script = getOrCreateElement("script", "ldl-source-reference", document.body);
+        script.type = "application/json";
+        script.textContent = JSON.stringify(record, null, 2);
+      }
+
+      function upsertHiddenDomReference() {
+        const hidden = getOrCreateElement("div", "ldl-hidden-source-reference", document.body);
+        hidden.className = "ldl-offscreen-source-reference";
+        hidden.setAttribute("aria-hidden", "true");
+        Object.entries({
+          "data-ldl-product-name": record.productName,
+          "data-ldl-product-name-en": record.productNameEn,
+          "data-ldl-product-code": record.productCode,
+          "data-ldl-tool-id": record.toolId,
+          "data-ldl-module-id": record.moduleId,
+          "data-ldl-company": record.company,
+          "data-ldl-author": record.author,
+          "data-ldl-release-year": String(record.releaseYear),
+          "data-ldl-version": record.version,
+          "data-ldl-build-id": record.buildId,
+          "data-ldl-fingerprint": record.fingerprint,
+          "data-ldl-marker-signature": record.markerSignature
+        }).forEach(([name, value]) => hidden.setAttribute(name, value));
+        hidden.textContent = Object.values(record).join(" | ");
+      }
+
+      function upsertSvgMetadata() {
+        let svg = document.getElementById("ldl-hidden-svg-source-reference");
+        if (!svg) {
+          svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+          svg.id = "ldl-hidden-svg-source-reference";
+          document.body.appendChild(svg);
+        }
+        svg.setAttribute("class", "ldl-offscreen-source-reference");
+        svg.setAttribute("width", "0");
+        svg.setAttribute("height", "0");
+        svg.setAttribute("aria-hidden", "true");
+        svg.setAttribute("focusable", "false");
+
+        let metadata = svg.querySelector("metadata");
+        if (!metadata) {
+          metadata = document.createElementNS("http://www.w3.org/2000/svg", "metadata");
+          svg.appendChild(metadata);
+        }
+        metadata.textContent = JSON.stringify(record);
+      }
+
+      function upsertVisibleWatermark() {
+        const watermark = getOrCreateElement("div", "ldl-visible-watermark", document.body);
+        watermark.className = "ldl-visible-watermark";
+        watermark.setAttribute("aria-hidden", "true");
+        watermark.innerHTML = "";
+
+        const text = document.createElement("span");
+        text.textContent = `© ${record.releaseYear} - Yung Fu Chuen`;
+
+        watermark.append(text);
+      }
+
+      try {
+        setCssCustomProperties();
+        upsertMetaTags();
+        upsertBodyAttributes();
+        upsertJsonRecord();
+        upsertHiddenDomReference();
+        upsertSvgMetadata();
+        upsertVisibleWatermark();
+        Object.defineProperty(window, "__LDL_SOURCE_REFERENCE__", {
+          value: record,
+          writable: false,
+          configurable: true,
+          enumerable: false
+        });
+        console.info(`© ${record.releaseYear} Yung Fu Chuen - Created by ${record.author} - LDL Source Reference v${record.version}`);
+      } catch (error) {
+        console.warn("LDL Source Reference failed to initialize.", error);
+      }
+    })();
+  </script>
+</body>
+</html>

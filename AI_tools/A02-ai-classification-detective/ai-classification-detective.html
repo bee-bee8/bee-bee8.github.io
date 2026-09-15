@@ -1,0 +1,2180 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-ldl-tool-id="A02-ai-classification-detective">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="company" content="Yung Fu Chuen">
+  <meta name="author" content="Yung Fu Chuen">
+  <meta name="copyright" content="© 2026 · Yung Fu Chuen. All rights reserved.">
+  <meta name="ldl-tool-id" content="A02-ai-classification-detective">
+  <meta name="ldl-subject" content="AI;教學">
+  <meta name="ldl-category" content="Tools">
+  <meta name="ldl-chinese-name" content="AI 分類偵探：資料教會 AI 甚麼？">
+  <meta name="ldl-access-level" content="free">
+  <meta name="ldl-fingerprint" content="ldl-yfc-a02-ai-classification-detective-v1">
+  <title>AI 分類偵探：資料教會 AI 甚麼？</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+
+    :root {
+      --ldl-watermark-line: max(61px, calc(env(safe-area-inset-top) + 47px));
+      --ldl-page-content-start: calc(var(--ldl-watermark-line) + 25px);
+      --bg-main: #f8fafc;
+      --panel-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --primary: #2563eb;
+      --primary-light: #eff6ff;
+      --color-paper: #2563eb;
+      --color-paper-bg: #eff6ff;
+      --color-metal: #eab308;
+      --color-metal-bg: #fefce8;
+      --color-plastic: #b45309;
+      --color-plastic-bg: #fff7ed;
+      --border-color: #cbd5e1;
+      --brain-bg: #0f172a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding: var(--ldl-page-content-start) 24px 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    html:fullscreen,
+    html:fullscreen body {
+      overflow-y: auto;
+    }
+
+    header {
+      background-color: #ffffff;
+      color: #1e293b;
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      text-align: left;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #0f172a;
+      letter-spacing: -0.025em;
+    }
+
+    header p {
+      font-size: 0.95rem;
+      color: #475569;
+      max-width: 1000px;
+      line-height: 1.6;
+    }
+
+    .student-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      align-items: start;
+      gap: 8px;
+      margin-top: 8px;
+      padding-left: 0;
+      list-style: none;
+      counter-reset: step;
+    }
+
+    .student-steps li {
+      counter-increment: step;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 9px 10px 9px 38px;
+      font-size: 0.84rem;
+      color: #334155;
+      position: relative;
+    }
+
+    .student-steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 10px;
+      top: 9px;
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      background: var(--primary);
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .student-reminder {
+      margin-top: 6px;
+      padding: 10px 12px;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      color: #78350f;
+      font-size: 0.88rem;
+      max-width: 1000px;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    @media(min-width: 1024px) {
+      .main-grid {
+        grid-template-columns: 1.15fr 0.85fr;
+      }
+    }
+
+    /* Column Styles */
+    .col-left, .col-right {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .card {
+      background-color: var(--panel-bg);
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+      padding: 24px;
+      transition: all 0.3s ease;
+    }
+
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f1f5f9;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #1e293b;
+    }
+
+    .card-title span.badge {
+      font-size: 0.75rem;
+      padding: 2px 10px;
+      border-radius: 9999px;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Deck Container */
+    .pool-container {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      min-height: 100px;
+      max-height: 380px;
+      overflow-y: auto;
+      padding: 4px;
+    }
+
+    @media(max-width: 720px) {
+      .pool-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    /* Object cards */
+    .item-card {
+      background-color: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 14px;
+      text-align: center;
+      cursor: grab;
+      user-select: none;
+      position: relative;
+      transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    }
+
+    .item-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      border-color: var(--primary);
+    }
+
+    .item-card:active {
+      cursor: grabbing;
+      transform: scale(0.95);
+    }
+
+    .item-card.selected {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+      background-color: var(--primary-light);
+    }
+
+    .item-icon {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background-color: #f8fafc;
+      margin-bottom: 4px;
+      transition: background-color 0.2s;
+    }
+
+    .item-card:hover .item-icon {
+      background-color: #eff6ff;
+    }
+
+    .item-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #1e293b;
+    }
+
+    .item-features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 3px;
+      font-size: 0.65rem;
+    }
+
+    .feature-tag {
+      background: #f1f5f9;
+      color: var(--text-muted);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
+
+    .feature-tag.danger {
+      background-color: #fee2e2;
+      color: #ef4444;
+    }
+
+    .feature-tag.elec {
+      background-color: #ede9fe;
+      color: #8b5cf6;
+    }
+
+    /* Action triggers on Touch */
+    .touch-actions {
+      display: none;
+      width: 100%;
+      margin-top: 8px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4px;
+    }
+
+    .item-card.selected .touch-actions {
+      display: grid;
+    }
+
+    .touch-btn {
+      font-size: 0.65rem;
+      padding: 6px 2px;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      cursor: pointer;
+      font-weight: bold;
+      transition: opacity 0.2s;
+    }
+
+    .touch-btn:hover {
+      opacity: 0.9;
+    }
+
+    .touch-btn.rec { background-color: var(--color-paper); }
+    .touch-btn.non { background-color: var(--color-metal); }
+    .touch-btn.spe { background-color: var(--color-plastic); }
+
+    /* Dropzones */
+    .zones-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    @media(min-width: 640px) {
+      .zones-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .dropzone {
+      border: 2px dashed #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      min-height: 250px;
+      transition: background-color 0.3s, border-color 0.3s;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .dropzone-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 10px;
+    }
+
+    .bin-icon {
+      width: 28px;
+      height: 28px;
+      flex: 0 0 28px;
+      display: inline-block;
+      color: currentColor;
+    }
+
+    .bin-icon .bin-body {
+      fill: currentColor;
+    }
+
+    .bin-icon .bin-lid {
+      fill: currentColor;
+      filter: brightness(0.9);
+    }
+
+    .bin-icon .bin-detail {
+      fill: rgba(255, 255, 255, 0.92);
+    }
+
+    .bin-title {
+      display: inline-flex;
+      align-items: center;
+      line-height: 1.2;
+    }
+
+    .dropzone-count {
+      margin-left: auto;
+      background: #f1f5f9;
+      color: #475569;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-weight: 600;
+    }
+
+    /* Color States of Dropzones */
+    .dropzone.paper-zone {
+      background-color: rgba(37, 99, 235, 0.03);
+      border-color: #bfdbfe;
+    }
+    
+    .dropzone.paper-zone.drag-hover {
+      background-color: rgba(37, 99, 235, 0.12);
+      border-color: var(--color-paper);
+    }
+
+    .dropzone.paper-zone .dropzone-header {
+      color: #1d4ed8;
+      border-bottom-color: #dbeafe;
+    }
+
+    .dropzone.metal-zone {
+      background-color: rgba(234, 179, 8, 0.04);
+      border-color: #fde68a;
+    }
+    
+    .dropzone.metal-zone.drag-hover {
+      background-color: rgba(234, 179, 8, 0.14);
+      border-color: var(--color-metal);
+    }
+
+    .dropzone.metal-zone .dropzone-header {
+      color: #854d0e;
+      border-bottom-color: #fef3c7;
+    }
+
+    .dropzone.plastic-zone {
+      background-color: rgba(180, 83, 9, 0.04);
+      border-color: #fed7aa;
+    }
+    
+    .dropzone.plastic-zone.drag-hover {
+      background-color: rgba(180, 83, 9, 0.12);
+      border-color: var(--color-plastic);
+    }
+
+    .dropzone.plastic-zone .dropzone-header {
+      color: #9a3412;
+      border-bottom-color: #ffedd5;
+    }
+
+    .dropzone-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-grow: 1;
+      overflow-y: auto;
+      max-height: 280px;
+    }
+
+    .dropzone-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 14px;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+      transition: border-color 0.2s;
+    }
+
+    .dropzone-item:hover {
+      border-color: #cbd5e1;
+    }
+
+    .dropzone-item span {
+      font-weight: 600;
+      color: #334155;
+    }
+
+    .remove-btn {
+      color: var(--text-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.2rem;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    .remove-btn:hover {
+      background-color: #fee2e2;
+      color: #ef4444;
+    }
+
+    /* AI Brain & Stats Panel */
+    .ai-brain-panel {
+      background-color: #0f172a;
+      color: white;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+      position: relative;
+    }
+
+    .brain-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.25fr;
+      gap: 20px;
+      align-items: center;
+    }
+
+    @media(max-width: 640px) {
+      .brain-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .brain-animation-box {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 140px;
+      position: relative;
+    }
+
+    .brain-node-center {
+      width: 48px;
+      height: 48px;
+      background: radial-gradient(circle, #3b82f6 0%, #1d4ed8 100%);
+      border-radius: 50%;
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+      position: relative;
+      z-index: 2;
+      animation: pulse 2s infinite ease-in-out;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+      50% { transform: scale(1.08); box-shadow: 0 0 25px rgba(59, 130, 246, 0.8); }
+      100% { transform: scale(1); box-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
+    }
+
+    .brain-network {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    .brain-stat-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .stat-bar-item {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .stat-bar-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.86rem;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .stat-bar-container {
+      height: 8px;
+      background-color: #1e293b;
+      border-radius: 9999px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .stat-bar-fill {
+      height: 100%;
+      border-radius: 9999px;
+      width: 0%;
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .stat-bar-fill.paper { background-color: var(--color-paper); }
+    .stat-bar-fill.metal { background-color: var(--color-metal); }
+    .stat-bar-fill.plastic { background-color: var(--color-plastic); }
+
+    /* Alert Banner and Data bias alerts */
+    .bias-alert-banner {
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.85rem;
+      margin-top: 16px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      line-height: 1.5;
+      transition: all 0.3s ease;
+    }
+
+    .bias-alert-banner.ok {
+      background-color: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      color: #34d399;
+    }
+
+    .bias-alert-banner.warn {
+      background-color: rgba(245, 158, 11, 0.1);
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      color: #fbbf24;
+    }
+
+    .bias-alert-banner.danger {
+      background-color: rgba(244, 63, 94, 0.1);
+      border: 1px solid rgba(244, 63, 94, 0.2);
+      color: #fca5a5;
+    }
+
+    /* Diagnostics Lab Section */
+    .test-lab-tabs {
+      display: flex;
+      border-bottom: 2px solid #f1f5f9;
+      margin-bottom: 16px;
+    }
+
+    .tab-btn {
+      padding: 10px 18px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--text-muted);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .preset-test-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px 6px;
+      margin-bottom: 16px;
+    }
+
+    @media(max-width: 720px) {
+      .preset-test-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media(min-width: 721px) and (max-width: 1180px) {
+      .preset-test-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    .preset-test-btn {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 600;
+      font-size: 1rem;
+      color: #475569;
+      white-space: nowrap;
+    }
+
+    .preset-test-btn:hover {
+      background-color: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .preset-test-btn.active {
+      background-color: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: 0 2px 4px rgba(37, 99, 235, 0.1);
+    }
+
+    /* Constructor inputs */
+    .constructor-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    @media(min-width: 640px) {
+      .constructor-grid {
+        grid-template-columns: 1.2fr 1fr;
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #475569;
+    }
+
+    .form-group input,
+    .form-group select {
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid #e2e8f0;
+      background: white;
+      font-size: 0.85rem;
+      color: #334155;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--primary);
+    }
+
+    .toggles-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .toggle-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f8fafc;
+      padding: 10px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      color: #334155;
+      cursor: pointer;
+      user-select: none;
+      transition: border-color 0.2s, background-color 0.2s;
+    }
+
+    .toggle-item:hover {
+      background-color: #f1f5f9;
+      border-color: #cbd5e1;
+    }
+
+    .toggle-item input {
+      cursor: pointer;
+    }
+
+    .reusable-group {
+      display: flex;
+      gap: 6px;
+    }
+
+    .reusable-btn {
+      flex: 1;
+      padding: 8px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .reusable-btn:hover {
+      background-color: #f1f5f9;
+    }
+
+    .reusable-btn.active {
+      background-color: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* Diagnostics Scan chamber & results */
+    .chamber-box {
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      background-color: #f8fafc;
+      margin-bottom: 16px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    @media(min-width: 640px) {
+      .chamber-box {
+        grid-template-columns: 140px 1fr;
+      }
+    }
+
+    .scan-card-container {
+      height: 150px;
+      border: 2px dashed #cbd5e1;
+      border-radius: 10px;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Scan animation overlay */
+    .scan-beam {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+      animation: scan 2s infinite linear;
+      display: none;
+    }
+
+    @keyframes scan {
+      0% { top: 0%; }
+      100% { top: 100%; }
+    }
+
+    .chamber-preview-name {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-top: 6px;
+      color: #1e293b;
+    }
+
+    .scan-actions-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .scan-btn {
+      background: #2563eb;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .scan-btn:hover {
+      background-color: #1d4ed8;
+      box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
+    }
+
+    .scan-btn:active {
+      transform: translateY(1px);
+    }
+
+    /* Report Card */
+    .diagnostic-report {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 20px;
+      display: none; /* Shows on scan */
+      animation: fadeIn 0.3s forwards ease-out;
+    }
+
+    .result-label {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .report-badge-result {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      max-width: 100%;
+      padding: 6px 16px;
+      border-radius: 9999px;
+      font-size: 1.45rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      line-height: 1.35;
+      white-space: normal;
+    }
+
+    .report-badge-result.paper { background-color: var(--color-paper-bg); color: var(--color-paper); }
+    .report-badge-result.metal { background-color: var(--color-metal-bg); color: #854d0e; }
+    .report-badge-result.plastic { background-color: var(--color-plastic-bg); color: var(--color-plastic); }
+
+    .confidence-wrapper {
+      margin-bottom: 14px;
+    }
+
+    .confidence-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .confidence-wrapper .stat-bar-container {
+      height: 10px;
+    }
+
+    .reason-toggle-btn {
+      background: #ffffff;
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    .reason-toggle-btn:hover {
+      background-color: var(--primary-light);
+    }
+
+    .reason-details {
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 12px;
+      font-size: 1rem;
+      line-height: 1.55;
+    }
+
+    .reason-details[hidden] {
+      display: none;
+    }
+
+    .reasoning-text {
+      font-size: 1rem;
+      color: #334155;
+      background-color: transparent;
+      padding: 0;
+      border-radius: 0;
+      border-left: none;
+      margin-top: 0;
+      line-height: 1.55;
+    }
+
+    .reasoning-text p {
+      margin-bottom: 8px;
+    }
+
+    .reasoning-text p:last-child {
+      margin-bottom: 0;
+    }
+
+    .diagnostic-report ul,
+    .diagnostic-report ol {
+      margin: 6px 0 10px;
+      padding-left: 1.35rem;
+      list-style-position: outside;
+    }
+
+    .diagnostic-report li {
+      padding-left: 0.15rem;
+      margin-bottom: 4px;
+    }
+
+    .reasoning-text > ul {
+      padding-left: 1.45rem;
+    }
+
+    .reasoning-neighbors {
+      margin-top: 12px;
+      font-size: 1rem;
+      color: #334155;
+      line-height: 1.45;
+    }
+
+    .reasoning-neighbors > ol {
+      list-style: none;
+      padding-left: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .reasoning-neighbors > ol > li {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 0;
+      white-space: nowrap;
+    }
+
+    .reasoning-neighbors ul {
+      padding-left: 1rem;
+      margin-top: 3px;
+      margin-bottom: 0;
+    }
+
+    @media(max-width: 720px) {
+      .reasoning-neighbors > ol > li {
+        white-space: normal;
+      }
+    }
+
+    /* Teacher's section */
+    .teacher-guide-section {
+      background-color: #ffffff;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      padding: 24px;
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+    }
+
+    .teacher-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #0f172a;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .teacher-title:hover {
+      color: var(--primary);
+    }
+
+    .teacher-toggle-icon {
+      margin-left: auto;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .preset-scenarios {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .preset-scenarios.top-scenarios {
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .scenario-btn {
+      background-color: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .scenario-btn:hover {
+      background-color: var(--primary-light);
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .guide-points {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-size: 0.85rem;
+      color: #334155;
+      margin-top: 16px;
+    }
+
+    .guide-points[hidden] {
+      display: none;
+    }
+
+    .guide-point {
+      display: flex;
+      gap: 12px;
+      line-height: 1.5;
+    }
+
+    .guide-point ul {
+      margin-top: 6px;
+      padding-left: 18px;
+    }
+
+    .guide-point li {
+      margin-bottom: 5px;
+    }
+
+    .guide-num {
+      background: #334155;
+      color: white;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+
+    /* SVG Node stream lines */
+    .data-stream-line {
+      stroke-dasharray: 8;
+      animation: dash 1s linear infinite;
+    }
+
+    @keyframes dash {
+      to {
+        stroke-dashoffset: -16;
+      }
+    }
+
+    #ldl-visible-watermark,
+    #ldl-visible-watermark span {
+      font-size: 8px !important;
+      line-height: 1.25 !important;
+    }
+
+    #ldl-visible-watermark img {
+      width: 16px !important;
+      height: 16px !important;
+    }
+
+    @media (max-width: 520px) {
+      :root {
+        --ldl-watermark-line: max(57px, calc(env(safe-area-inset-top) + 43px));
+        --ldl-page-content-start: calc(var(--ldl-watermark-line) + 23px);
+      }
+
+      #ldl-visible-watermark,
+      #ldl-visible-watermark span {
+        font-size: 7px !important;
+      }
+
+      #ldl-visible-watermark img {
+        width: 14px !important;
+        height: 14px !important;
+      }
+    }
+  </style>
+</head>
+<body
+  data-ldl-tool-id="A02-ai-classification-detective"
+  data-ldl-subject="AI;教學"
+  data-ldl-category="Tools"
+  data-ldl-chinese-name="AI 分類偵探：資料教會 AI 甚麼？"
+  data-ldl-access-level="free"
+  data-ldl-fingerprint="ldl-yfc-a02-ai-classification-detective-v1"
+  data-ldl-reserve-top-space="true"
+>
+  <script id="ldl-tool-metadata" type="application/json">
+    {
+      "company": "Yung Fu Chuen",
+      "author": "Yung Fu Chuen",
+      "toolId": "A02-ai-classification-detective",
+      "subject": "AI;教學",
+      "category": "Tools",
+      "chineseName": "AI 分類偵探：資料教會 AI 甚麼？",
+      "accessLevel": "free",
+      "releaseYear": "2026",
+      "visibleWatermarkText": "© 2026 · Yung Fu Chuen"
+    }
+  </script>
+
+  <header>
+    <h1>《AI 分類偵探：資料教會 AI 甚麼？》</h1>
+    <p>拖拉物件卡，教 AI 分類。再看看 AI 會不會判斷新物件。</p>
+    <ol class="student-steps">
+      <li>把物件卡拖到正確分類區。</li>
+      <li>每拖一張卡，AI 就多一個學習例子。</li>
+      <li>按「AI 判斷新物件」，看看 AI 學成怎樣。</li>
+      <li>觀察信心和原因，判斷對錯。</li>
+    </ol>
+    <div class="student-reminder">
+      AI 會根據你給它的資料學習，如果資料錯，AI 也會學錯。
+    </div>
+  </header>
+
+  <div class="main-grid">
+    <!-- LEFT COLUMN: PRESETS, CLASSIFICATION ZONES -->
+    <div class="col-left">
+      <!-- Card Deck (Object Pool) -->
+      <div class="card">
+        <div class="preset-scenarios top-scenarios">
+          <span style="font-size: 0.8rem; font-weight: 700; color: #475569; display: flex; align-items: center; margin-right: 10px;">快速課堂情境：</span>
+          <button class="scenario-btn" onclick="applyPresetScenario('balanced')">🎯 情境一：所有資料正確</button>
+          <button class="scenario-btn" onclick="applyPresetScenario('bias')">⚠️ 情境二：缺失廢紙資料</button>
+          <button class="scenario-btn" onclick="applyPresetScenario('mislabeled')">😵 情境三：所有資料錯誤</button>
+        </div>
+
+        <div class="card-title">
+          <span>📦 物件卡：教 AI 分辨三色回收箱</span>
+          <span class="badge" id="pool-count">0 / 12 剩餘</span>
+        </div>
+        <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -10px; margin-bottom: 15px;">
+          把物件卡放入正確的三色回收箱。今次只學習三類常見回收物：廢紙、金屬、塑膠。這個活動重點是分辨物件的主要材料，而不是處理廚餘、電池、電子產品或藥物。
+        </p>
+        <div class="pool-container" id="pool-container">
+          <!-- Item cards rendered by JS -->
+        </div>
+      </div>
+
+      <!-- Classification Zones -->
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin: -2px 0 10px;">
+        先看物件主要是什麼材料，再放入對應的回收箱。
+      </p>
+      <div class="zones-grid">
+        <!-- Zone 1: Paper -->
+        <div class="dropzone paper-zone" id="zone-paper" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'paper')">
+          <div class="dropzone-header">
+            <svg class="bin-icon" viewBox="0 0 32 32" aria-hidden="true">
+              <path class="bin-lid" d="M9 6h14l2 3H7l2-3Z"/>
+              <path class="bin-body" d="M8 10h16l-1.4 17.5A2.7 2.7 0 0 1 19.9 30h-7.8a2.7 2.7 0 0 1-2.7-2.5L8 10Z"/>
+              <rect class="bin-detail" x="11" y="13" width="10" height="2.2" rx="1.1"/>
+              <path class="bin-detail" d="M16 18.1l1.6 2.6h-1l1.7 2.9h-4.6l1.7-2.9h-1l1.6-2.6Z"/>
+            </svg>
+            <span class="bin-title">藍色桶｜廢紙</span>
+            <span class="dropzone-count" id="count-paper">0</span>
+          </div>
+          <div class="dropzone-list" id="list-paper"></div>
+        </div>
+
+        <!-- Zone 2: Metal -->
+        <div class="dropzone metal-zone" id="zone-metal" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'metal')">
+          <div class="dropzone-header">
+            <svg class="bin-icon" viewBox="0 0 32 32" aria-hidden="true">
+              <path class="bin-lid" d="M9 6h14l2 3H7l2-3Z"/>
+              <path class="bin-body" d="M8 10h16l-1.4 17.5A2.7 2.7 0 0 1 19.9 30h-7.8a2.7 2.7 0 0 1-2.7-2.5L8 10Z"/>
+              <rect class="bin-detail" x="11" y="13" width="10" height="2.2" rx="1.1"/>
+              <path class="bin-detail" d="M16 18.1l1.6 2.6h-1l1.7 2.9h-4.6l1.7-2.9h-1l1.6-2.6Z"/>
+            </svg>
+            <span class="bin-title">黃色桶｜金屬</span>
+            <span class="dropzone-count" id="count-metal">0</span>
+          </div>
+          <div class="dropzone-list" id="list-metal"></div>
+        </div>
+
+        <!-- Zone 3: Plastic -->
+        <div class="dropzone plastic-zone" id="zone-plastic" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'plastic')">
+          <div class="dropzone-header">
+            <svg class="bin-icon" viewBox="0 0 32 32" aria-hidden="true">
+              <path class="bin-lid" d="M9 6h14l2 3H7l2-3Z"/>
+              <path class="bin-body" d="M8 10h16l-1.4 17.5A2.7 2.7 0 0 1 19.9 30h-7.8a2.7 2.7 0 0 1-2.7-2.5L8 10Z"/>
+              <rect class="bin-detail" x="11" y="13" width="10" height="2.2" rx="1.1"/>
+              <path class="bin-detail" d="M16 18.1l1.6 2.6h-1l1.7 2.9h-4.6l1.7-2.9h-1l1.6-2.6Z"/>
+            </svg>
+            <span class="bin-title">啡色桶｜塑膠</span>
+            <span class="dropzone-count" id="count-plastic">0</span>
+          </div>
+          <div class="dropzone-list" id="list-plastic"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: AI BRAIN, TESTING LAB -->
+    <div class="col-right">
+      <!-- AI Brain and Training Status -->
+      <div class="ai-brain-panel">
+        <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; display: flex; align-items: center; gap: 8px;">
+          <span>🧠 AI 正在學甚麼？</span>
+        </h3>
+        <div class="brain-grid">
+          <div class="brain-animation-box">
+            <svg class="brain-network" viewBox="0 0 200 140">
+              <!-- Feature nodes connection -->
+              <line x1="30" y1="30" x2="100" y2="70" stroke="#475569" stroke-width="1.5" />
+              <line x1="30" y1="70" x2="100" y2="70" stroke="#475569" stroke-width="1.5" />
+              <line x1="30" y1="110" x2="100" y2="70" stroke="#475569" stroke-width="1.5" />
+              
+              <!-- Label nodes connection -->
+              <line id="line-paper" x1="100" y1="70" x2="170" y2="30" stroke="#475569" stroke-width="1.5" />
+              <line id="line-metal" x1="100" y1="70" x2="170" y2="70" stroke="#475569" stroke-width="1.5" />
+              <line id="line-plastic" x1="100" y1="70" x2="170" y2="110" stroke="#475569" stroke-width="1.5" />
+
+              <!-- Left Feature Nodes -->
+              <circle cx="30" cy="30" r="5" fill="#38bdf8" />
+              <text x="4" y="22" fill="#ffffff" font-size="10" font-weight="700">主要材料</text>
+              <circle cx="30" cy="70" r="5" fill="#38bdf8" />
+              <text x="4" y="62" fill="#ffffff" font-size="10" font-weight="700">物件種類</text>
+              <circle cx="30" cy="110" r="5" fill="#38bdf8" />
+              <text x="4" y="102" fill="#ffffff" font-size="10" font-weight="700">回收桶</text>
+
+              <!-- Right Category Nodes -->
+              <circle cx="170" cy="30" r="6" fill="#2563eb" />
+              <circle cx="170" cy="70" r="6" fill="#eab308" />
+              <circle cx="170" cy="110" r="6" fill="#b45309" />
+            </svg>
+            <div class="brain-node-center">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/>
+                <path d="M12 16v-4"/>
+                <path d="M12 8h.01"/>
+              </svg>
+            </div>
+          </div>
+
+          <div class="brain-stat-bars">
+            <div class="stat-bar-item">
+              <div class="stat-bar-labels">
+                <span>[廢紙] 訓練樣本</span>
+                <span id="label-bar-paper">0筆 (0%)</span>
+              </div>
+              <div class="stat-bar-container">
+                <div class="stat-bar-fill paper" id="bar-paper"></div>
+              </div>
+            </div>
+            <div class="stat-bar-item">
+              <div class="stat-bar-labels">
+                <span>[金屬] 訓練樣本</span>
+                <span id="label-bar-metal">0筆 (0%)</span>
+              </div>
+              <div class="stat-bar-container">
+                <div class="stat-bar-fill metal" id="bar-metal"></div>
+              </div>
+            </div>
+            <div class="stat-bar-item">
+              <div class="stat-bar-labels">
+                <span>[塑膠] 訓練樣本</span>
+                <span id="label-bar-plastic">0筆 (0%)</span>
+              </div>
+              <div class="stat-bar-container">
+                <div class="stat-bar-fill plastic" id="bar-plastic"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bias-alert-banner ok" id="bias-alert">
+          <span>💡 先把卡片拖到左方分類區。AI 會記住這些例子，作為訓練資料。</span>
+        </div>
+      </div>
+
+      <!-- Test Lab -->
+      <div class="card" style="flex-grow: 1;">
+        <div class="card-title">
+          <span>🧪 AI 判斷新物件</span>
+          <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-muted)">看 AI 學成怎樣</span>
+        </div>
+
+        <!-- Preset Test Items -->
+        <div id="tab-preset-content">
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">
+            這些物件沒有放入訓練資料。選一個，看看 AI 會怎樣分類。
+          </p>
+          <div class="preset-test-grid">
+            <div class="preset-test-btn active" id="test-preset-takeaway" data-test-id="takeaway" onclick="selectPresetTest('takeaway')">
+              🧾 廣告單張
+            </div>
+            <div class="preset-test-btn" id="test-preset-pizzabox" data-test-id="pizzabox" onclick="selectPresetTest('pizzabox')">
+              🥄 金屬匙羹
+            </div>
+            <div class="preset-test-btn" id="test-preset-mouse" data-test-id="mouse" onclick="selectPresetTest('mouse')">
+              🧴 膠水樽
+            </div>
+            <div class="preset-test-btn" id="test-preset-thermometer" data-test-id="thermometer" onclick="selectPresetTest('thermometer')">
+              📄 紙袋
+            </div>
+            <div class="preset-test-btn" id="test-preset-exerciseBookTest" data-test-id="exerciseBookTest" onclick="selectPresetTest('exerciseBookTest')">
+              📚 練習簿
+            </div>
+            <div class="preset-test-btn" id="test-preset-paperClipTest" data-test-id="paperClipTest" onclick="selectPresetTest('paperClipTest')">
+              🧲 金屬萬字夾
+            </div>
+            <div class="preset-test-btn" id="test-preset-plasticStrawTest" data-test-id="plasticStrawTest" onclick="selectPresetTest('plasticStrawTest')">
+              🧃 膠飲管
+            </div>
+            <div class="preset-test-btn" id="test-preset-paperShoppingBagTest" data-test-id="paperShoppingBagTest" onclick="selectPresetTest('paperShoppingBagTest')">
+              🛍️ 紙購物袋
+            </div>
+            <div class="preset-test-btn" id="test-preset-metalHangerTest" data-test-id="metalHangerTest" onclick="selectPresetTest('metalHangerTest')">
+              🧥 金屬衣架
+            </div>
+            <div class="preset-test-btn" id="test-preset-keyTest" data-test-id="keyTest" onclick="selectPresetTest('keyTest')">
+              🔑 鎖匙
+            </div>
+            <div class="preset-test-btn" id="test-preset-plasticRulerTest" data-test-id="plasticRulerTest" onclick="selectPresetTest('plasticRulerTest')">
+              📏 膠尺
+            </div>
+            <div class="preset-test-btn" id="test-preset-plasticFolderTest" data-test-id="plasticFolderTest" onclick="selectPresetTest('plasticFolderTest')">
+              🗂️ 膠文件套
+            </div>
+          </div>
+        </div>
+
+        <!-- Scan chamber -->
+        <div class="chamber-box">
+          <div class="scan-card-container">
+            <div class="scan-beam" id="scan-beam"></div>
+            <!-- Dynamic Icon of Active Specimen -->
+            <div id="chamber-icon" style="font-size: 2.2rem;">🧾</div>
+            <div class="chamber-preview-name" id="chamber-name">廣告單張</div>
+          </div>
+
+          <div class="scan-actions-panel">
+            <button class="scan-btn" onclick="startDiagnostic()">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <span>AI 判斷新物件</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Diagnostic Report (Fades in) -->
+        <div class="diagnostic-report" id="diagnostic-report">
+          <div class="result-main">
+            <div class="result-label">AI 最可能認為這是：</div>
+            <div class="report-badge-result paper" id="report-result-badge">廢紙</div>
+
+            <div class="confidence-wrapper">
+              <div class="confidence-row">
+                <span>AI 的信心：</span>
+                <span id="report-confidence">0%</span>
+              </div>
+              <div class="stat-bar-container" style="background-color: #f1f5f9;">
+                <div class="stat-bar-fill" id="report-confidence-bar" style="background-color: var(--primary);"></div>
+              </div>
+            </div>
+
+            <button id="toggle-reason-btn" class="reason-toggle-btn" onclick="toggleReasonDetails()">
+              查看 AI 為甚麼這樣猜 ▾
+            </button>
+          </div>
+
+          <div id="ai-reason-details" class="reason-details" hidden>
+            <div class="reasoning-text" id="report-reasoning">
+              先給 AI 一些訓練資料，再按「AI 判斷新物件」。
+            </div>
+
+            <div class="reasoning-neighbors" id="report-neighbors">
+              <!-- Neighbors list -->
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Teacher Instructions Section -->
+  <div class="teacher-guide-section" style="margin-top: 20px;">
+    <button class="teacher-title" type="button" onclick="toggleTeacherGuide()" aria-expanded="false" aria-controls="teacher-guide-content">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1e293b" stroke-width="2">
+        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+        <path d="M6 12v5c0 2 2 3 6 3s6-1 6-3v-5"/>
+      </svg>
+      <span>🍎 老師教學說明：用分類遊戲理解 AI 怎樣學習</span>
+      <span class="teacher-toggle-icon" id="teacher-toggle-label">展開</span>
+    </button>
+
+    <div class="guide-points" id="teacher-guide-content" hidden>
+      <div class="guide-point">
+        <div class="guide-num">1</div>
+        <div>
+          <b>建立訓練資料</b>
+          <ul>
+            <li><b>老師做甚麼：</b>請學生把物件卡拖到「藍色桶｜廢紙」、「黃色桶｜金屬」或「啡色桶｜塑膠」。提醒學生，這些卡就是 AI 的學習例子。</li>
+            <li><b>學生做甚麼：</b>觀察物件的主要材料，然後替物件加上三色回收箱分類標籤。</li>
+            <li><b>學生學到甚麼：</b>訓練資料是人類給 AI 學習的例子；標籤是人類告訴 AI 物件應放入哪一個回收箱。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="guide-point">
+        <div class="guide-num">2</div>
+        <div>
+          <b>讓 AI 判斷新物件</b>
+          <ul>
+            <li><b>老師做甚麼：</b>選擇一個新物件，按「AI 判斷新物件」，再帶學生閱讀答案、信心和原因。</li>
+            <li><b>學生做甚麼：</b>比較 AI 的答案和自己的想法，找出 AI 主要參考了哪些特徵。</li>
+            <li><b>學生學到甚麼：</b>AI 會根據已學過的例子推測新物件；信心表示 AI 對自己答案有多肯定，但高信心也不代表一定正確。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="guide-point">
+        <div class="guide-num">3</div>
+        <div>
+          <b>觀察資料偏差</b>
+          <ul>
+            <li><b>老師做甚麼：</b>按「情境二：缺失廢紙資料」，再測試「廣告單張」或其他紙類物件。</li>
+            <li><b>學生做甚麼：</b>留意 AI 沒有學過廢紙資料時，是否仍能正確判斷。</li>
+            <li><b>學生學到甚麼：</b>資料偏差是指某些例子太少或不完整。AI 可能因此看不見某些情況，判斷會不穩定。</li>
+          </ul>
+        </div>
+      </div>
+      <div class="guide-point">
+        <div class="guide-num">4</div>
+        <div>
+          <b>觀察錯誤標籤</b>
+          <ul>
+            <li><b>老師做甚麼：</b>按「情境三：所有資料錯誤」，讓學生觀察 AI 會怎樣跟着錯誤資料學習。</li>
+            <li><b>學生做甚麼：</b>再讓 AI 判斷新物件，觀察它會否跟着錯誤例子學錯。</li>
+            <li><b>學生學到甚麼：</b>錯誤標籤會把錯誤答案教給 AI。資料錯，AI 也可能學錯。</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Constants for features mapping
+    const MATERIAL_MAP = {
+      '紙質': 1, '金屬': 2, '塑膠': 3
+    };
+
+    // Predefined items
+    const ALL_ITEMS = [
+      { id: 'newspaper', name: '報紙', emoji: '📰', material: '紙質', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 2 },
+      { id: 'magazine', name: '雜誌', emoji: '📖', material: '紙質', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 1 },
+      { id: 'cardboardBox', name: '紙皮箱', emoji: '📦', material: '紙質', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 2 },
+      { id: 'envelope', name: '信封', emoji: '✉️', material: '紙質', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 0 },
+      { id: 'aluminumCan', name: '鋁罐', emoji: '🥫', material: '金屬', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 1 },
+      { id: 'tinCan', name: '罐頭罐', emoji: '🥫', material: '金屬', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 1 },
+      { id: 'biscuitTin', name: '餅乾鐵罐', emoji: '🍪', material: '金屬', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 2 },
+      { id: 'metalCap', name: '金屬樽蓋', emoji: '🔩', material: '金屬', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 0 },
+      { id: 'drinkBottle', name: '飲品膠樽', emoji: '🥤', material: '塑膠', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 1 },
+      { id: 'shampooBottle', name: '洗頭水膠樽', emoji: '🧴', material: '塑膠', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 1 },
+      { id: 'detergentBottle', name: '洗潔精膠樽', emoji: '🧼', material: '塑膠', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 1 },
+      { id: 'plasticFoodBox', name: '膠食物盒', emoji: '🍱', material: '塑膠', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 2 }
+    ];
+
+    // Presets for Test items
+    const PRESET_TEST_ITEMS = {
+      'takeaway': { name: '廣告單張', emoji: '🧾', material: '紙質', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 0, expectedLabel: 'paper', expectedLabelName: '藍色桶｜廢紙' },
+      'thermometer': { name: '紙袋', emoji: '📄', material: '紙質', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 1, expectedLabel: 'paper', expectedLabelName: '藍色桶｜廢紙' },
+      'exerciseBookTest': { name: '練習簿', emoji: '📚', material: '紙質', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 1, expectedLabel: 'paper', expectedLabelName: '藍色桶｜廢紙' },
+      'paperShoppingBagTest': { name: '紙購物袋', emoji: '🛍️', material: '紙質', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 1, expectedLabel: 'paper', expectedLabelName: '藍色桶｜廢紙' },
+      'pizzabox': { name: '金屬匙羹', emoji: '🥄', material: '金屬', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 1, expectedLabel: 'metal', expectedLabelName: '黃色桶｜金屬' },
+      'paperClipTest': { name: '金屬萬字夾', emoji: '🧲', material: '金屬', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 0, expectedLabel: 'metal', expectedLabelName: '黃色桶｜金屬' },
+      'metalHangerTest': { name: '金屬衣架', emoji: '🧥', material: '金屬', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 2, expectedLabel: 'metal', expectedLabelName: '黃色桶｜金屬' },
+      'keyTest': { name: '鎖匙', emoji: '🔑', material: '金屬', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 0, expectedLabel: 'metal', expectedLabelName: '黃色桶｜金屬' },
+      'mouse': { name: '膠水樽', emoji: '🧴', material: '塑膠', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 1, expectedLabel: 'plastic', expectedLabelName: '啡色桶｜塑膠' },
+      'plasticStrawTest': { name: '膠飲管', emoji: '🧃', material: '塑膠', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 0, expectedLabel: 'plastic', expectedLabelName: '啡色桶｜塑膠' },
+      'plasticRulerTest': { name: '膠尺', emoji: '📏', material: '塑膠', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 1, expectedLabel: 'plastic', expectedLabelName: '啡色桶｜塑膠' },
+      'plasticFolderTest': { name: '膠文件套', emoji: '🗂️', material: '塑膠', clean: 1, food: 0, dangerous: 0, electronic: 0, reusable: 1, expectedLabel: 'plastic', expectedLabelName: '啡色桶｜塑膠' }
+    };
+
+    // App State
+    let state = {
+      pool: [...ALL_ITEMS.map(item => item.id)],
+      paper: [],
+      metal: [],
+      plastic: [],
+      selectedId: null, // For mobile select-click action
+      activePresetTestKey: 'takeaway'
+    };
+
+    const LABEL_NAMES = {
+      paper: '藍色桶｜廢紙',
+      metal: '黃色桶｜金屬',
+      plastic: '啡色桶｜塑膠'
+    };
+
+    function getConfidenceText(confidence) {
+      if (confidence >= 90) return '很有信心';
+      if (confidence >= 60) return '有一些信心';
+      return '不太肯定';
+    }
+
+    function describeFeatures(item) {
+      return `
+        <ul>
+          <li>主要材料：${item.material}</li>
+        </ul>
+      `;
+    }
+
+    function getSizeText(sizeValue) {
+      if (sizeValue === 2) return '大';
+      if (sizeValue === 1) return '中';
+      return '小';
+    }
+
+    function getSimilarityText(closenessScore) {
+      if (closenessScore <= 0.5) return '很像';
+      if (closenessScore <= 2) return '有點像';
+      return '不太像';
+    }
+
+    function getDataWarning(trainingSet, testItem, winnerLabel) {
+      const labels = ['paper', 'metal', 'plastic'];
+      const missingLabels = labels.filter(label => !trainingSet.some(item => item.label === label));
+      const expectedLabel = materialToLabel(testItem.material);
+      const isMislabeled = ALL_ITEMS.some(item => {
+        const expected = materialToLabel(item.material);
+        return expected && state[expected] && !state[expected].includes(item.id) && labels.some(label => state[label].includes(item.id));
+      });
+
+      if (trainingSet.length < 3) {
+        return `這次只有 ${trainingSet.length} 個訓練資料。資料太少，AI 的判斷可能不穩定。`;
+      }
+      if (expectedLabel && !trainingSet.some(item => item.label === expectedLabel)) {
+        return `這個新物件主要是${testItem.material}，但訓練資料沒有「${LABEL_NAMES[expectedLabel]}」例子。這是資料偏差，AI 可能被迫選錯桶。`;
+      }
+      if (isMislabeled) {
+        return '有些例子可能被放錯分類。這是錯誤標籤，AI 可能因此學錯。';
+      }
+      if (missingLabels.length > 0) {
+        return `訓練資料缺少「${missingLabels.map(label => LABEL_NAMES[label]).join('、')}」的例子。AI 對這些類別可能不熟。`;
+      }
+      return '目前沒有明顯資料不足或錯誤標籤提示，但 AI 的答案仍要用人類判斷檢查。';
+    }
+
+    function materialToLabel(material) {
+      if (material === '紙質') return 'paper';
+      if (material === '金屬') return 'metal';
+      if (material === '塑膠') return 'plastic';
+      return null;
+    }
+
+    // Init App
+    window.onload = function() {
+      renderAll();
+      setupDragEvents();
+    };
+
+    function getItemById(id) {
+      return ALL_ITEMS.find(item => item.id === id);
+    }
+
+    function renderAll() {
+      renderPool();
+      renderDropzones();
+      updateBrainStats();
+    }
+
+    // Render Cards inside pool
+    function renderPool() {
+      const poolEl = document.getElementById('pool-container');
+      poolEl.innerHTML = '';
+      
+      const poolItems = state.pool.map(id => getItemById(id)).filter(Boolean);
+      document.getElementById('pool-count').textContent = `${poolItems.length} / 12 剩餘`;
+
+      if (poolItems.length === 0) {
+        poolEl.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); font-size: 0.85rem; padding: 20px;">卡片皆已分配！可以進行右方的 AI 診斷實驗囉。</div>`;
+        return;
+      }
+
+      poolItems.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'item-card';
+        card.draggable = true;
+        card.id = `card-${item.id}`;
+        attachDragHandlers(card, item.id);
+
+        card.innerHTML = `
+          <div class="item-icon" style="font-size: 1.5rem;">${item.emoji}</div>
+          <div class="item-name">${item.name}</div>
+        `;
+
+        poolEl.appendChild(card);
+      });
+    }
+
+    // Render classified Dropzones
+    function renderDropzones() {
+      const zones = ['paper', 'metal', 'plastic'];
+      
+      zones.forEach(zone => {
+        const listEl = document.getElementById(`list-${zone}`);
+        const countEl = document.getElementById(`count-${zone}`);
+        const itemIds = state[zone];
+
+        countEl.textContent = itemIds.length;
+        listEl.innerHTML = '';
+
+        if (itemIds.length === 0) {
+          listEl.innerHTML = `<div style="text-align: center; color: var(--text-muted); font-size: 0.75rem; padding: 20px; border: 1px dashed var(--border-color); border-radius: 8px;">拖放物件至此區</div>`;
+          return;
+        }
+
+        itemIds.forEach(id => {
+          const item = getItemById(id);
+          if (!item) return;
+
+          const itemEl = document.createElement('div');
+          itemEl.className = 'dropzone-item';
+          itemEl.draggable = true;
+          attachDragHandlers(itemEl, item.id);
+          itemEl.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 6px;">
+              <span>${item.emoji}</span>
+              <span>${item.name}</span>
+            </div>
+            <button class="remove-btn" onclick="removeItemFromZone('${id}', '${zone}')" title="移回卡池">×</button>
+          `;
+          listEl.appendChild(itemEl);
+        });
+      });
+    }
+
+    function attachDragHandlers(element, itemId) {
+      element.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('text/plain', itemId);
+        e.dataTransfer.effectAllowed = 'move';
+        element.style.opacity = '0.5';
+      });
+
+      element.addEventListener('dragend', () => {
+        element.style.opacity = '1';
+      });
+    }
+
+    // Touch friendly selection action
+    function selectItemForTouch(id) {
+      if (state.selectedId === id) {
+        state.selectedId = null;
+      } else {
+        state.selectedId = id;
+      }
+      renderPool();
+    }
+
+    // Programmatic move via fast-click button
+    function moveItemDirect(id, targetZone, event) {
+      if (event) event.stopPropagation();
+      moveToZone(id, targetZone);
+      state.selectedId = null;
+      renderAll();
+    }
+
+    // Drag Over support
+    function allowDrop(ev) {
+      ev.preventDefault();
+      const zoneEl = ev.currentTarget;
+      if (!zoneEl.classList.contains('drag-hover')) {
+        zoneEl.classList.add('drag-hover');
+      }
+    }
+
+    // Handle Drop action
+    function handleDrop(ev, targetZone) {
+      ev.preventDefault();
+      const zoneEl = ev.currentTarget;
+      zoneEl.classList.remove('drag-hover');
+      
+      const id = ev.dataTransfer.getData('text/plain');
+      if (id) {
+        moveToZone(id, targetZone);
+        renderAll();
+      }
+    }
+
+    // Setup remove hover listener
+    function setupDragEvents() {
+      const zones = ['zone-paper', 'zone-metal', 'zone-plastic'];
+      zones.forEach(zoneId => {
+        const el = document.getElementById(zoneId);
+        el.addEventListener('dragleave', () => {
+          el.classList.remove('drag-hover');
+        });
+      });
+    }
+
+    // Logical move
+    function moveToZone(id, targetZone) {
+      // Remove from pool
+      state.pool = state.pool.filter(item => item !== id);
+      // Remove from any other zones to prevent duplicates
+      state.paper = state.paper.filter(item => item !== id);
+      state.metal = state.metal.filter(item => item !== id);
+      state.plastic = state.plastic.filter(item => item !== id);
+
+      // Add to target
+      state[targetZone].push(id);
+    }
+
+    // Remove item and place it back into the deck
+    function removeItemFromZone(id, currentZone) {
+      state[currentZone] = state[currentZone].filter(item => item !== id);
+      if (!state.pool.includes(id)) {
+        state.pool.push(id);
+      }
+      renderAll();
+    }
+
+    // Statistical analyzer and Bias checks
+    function updateBrainStats() {
+      const paperLen = state.paper.length;
+      const metalLen = state.metal.length;
+      const plasticLen = state.plastic.length;
+      const total = paperLen + metalLen + plasticLen;
+
+      // Update progress bar percent
+      const pPaper = total > 0 ? Math.round((paperLen / total) * 100) : 0;
+      const pMetal = total > 0 ? Math.round((metalLen / total) * 100) : 0;
+      const pPlastic = total > 0 ? Math.round((plasticLen / total) * 100) : 0;
+
+      document.getElementById('bar-paper').style.width = `${pPaper}%`;
+      document.getElementById('label-bar-paper').textContent = `${paperLen}筆 (${pPaper}%)`;
+
+      document.getElementById('bar-metal').style.width = `${pMetal}%`;
+      document.getElementById('label-bar-metal').textContent = `${metalLen}筆 (${pMetal}%)`;
+
+      document.getElementById('bar-plastic').style.width = `${pPlastic}%`;
+      document.getElementById('label-bar-plastic').textContent = `${plasticLen}筆 (${pPlastic}%)`;
+
+      // Draw active brain nodes glowing connection
+      document.getElementById('line-paper').setAttribute('stroke', paperLen > 0 ? '#2563eb' : '#475569');
+      document.getElementById('line-paper').setAttribute('stroke-width', paperLen > 0 ? '3' : '1.5');
+      if (paperLen > 0) document.getElementById('line-paper').classList.add('data-stream-line');
+      else document.getElementById('line-paper').classList.remove('data-stream-line');
+
+      document.getElementById('line-metal').setAttribute('stroke', metalLen > 0 ? '#eab308' : '#475569');
+      document.getElementById('line-metal').setAttribute('stroke-width', metalLen > 0 ? '3' : '1.5');
+      if (metalLen > 0) document.getElementById('line-metal').classList.add('data-stream-line');
+      else document.getElementById('line-metal').classList.remove('data-stream-line');
+
+      document.getElementById('line-plastic').setAttribute('stroke', plasticLen > 0 ? '#b45309' : '#475569');
+      document.getElementById('line-plastic').setAttribute('stroke-width', plasticLen > 0 ? '3' : '1.5');
+      if (plasticLen > 0) document.getElementById('line-plastic').classList.add('data-stream-line');
+      else document.getElementById('line-plastic').classList.remove('data-stream-line');
+
+      // Bias alert logic
+      const alertEl = document.getElementById('bias-alert');
+      if (total === 0) {
+        alertEl.className = 'bias-alert-banner warn';
+        alertEl.innerHTML = `<span>💡 先拖放幾張物件卡，讓 AI 學習。</span>`;
+      } else if (total < 3) {
+        alertEl.className = 'bias-alert-banner warn';
+        alertEl.innerHTML = `<span>⚠️ 例子太少，AI 可能不準。</span>`;
+      } else {
+        // Detect major bias cases
+        const zeroPaper = paperLen === 0;
+        const zeroMetal = metalLen === 0;
+        const zeroPlastic = plasticLen === 0;
+
+        if (zeroPaper && state.pool.some(id => ['newspaper', 'magazine', 'cardboardBox', 'envelope'].includes(id))) {
+          alertEl.className = 'bias-alert-banner danger';
+          alertEl.innerHTML = `<span>⚠️ 缺少「廢紙」例子，AI 可能猜錯。</span>`;
+        } else if (zeroMetal && state.pool.some(id => ['aluminumCan', 'tinCan', 'biscuitTin', 'metalCap'].includes(id))) {
+          alertEl.className = 'bias-alert-banner danger';
+          alertEl.innerHTML = `<span>⚠️ 缺少「金屬」例子，AI 可能猜錯。</span>`;
+        } else if (zeroPlastic && state.pool.some(id => ['drinkBottle', 'shampooBottle', 'detergentBottle', 'plasticFoodBox'].includes(id))) {
+          alertEl.className = 'bias-alert-banner danger';
+          alertEl.innerHTML = `<span>⚠️ 缺少「塑膠」例子，AI 可能猜錯。</span>`;
+        } else if (zeroPaper || zeroMetal || zeroPlastic) {
+          alertEl.className = 'bias-alert-banner warn';
+          alertEl.innerHTML = `<span>⚠️ 有些分類未有例子，AI 可能猜錯。</span>`;
+        } else {
+          const isMislabeled = ALL_ITEMS.some(item => {
+            const expected = materialToLabel(item.material);
+            return expected && !state[expected].includes(item.id);
+          });
+
+          if (isMislabeled) {
+            alertEl.className = 'bias-alert-banner warn';
+            alertEl.innerHTML = `<span>😵 有些例子可能放錯，AI 也會學錯。</span>`;
+          } else {
+            alertEl.className = 'bias-alert-banner ok';
+            alertEl.innerHTML = `<span>🟢 資料較平均，可以測試新物件。</span>`;
+          }
+        }
+      }
+    }
+
+    // Select preset test items
+    function selectPresetTest(key) {
+      state.activePresetTestKey = key;
+      const presetBtns = document.querySelectorAll('.preset-test-btn');
+      presetBtns.forEach(btn => btn.classList.remove('active'));
+      
+      const targetBtnId = `test-preset-${key}`;
+      document.getElementById(targetBtnId).classList.add('active');
+
+      updateChamberPreview();
+    }
+
+    // Dynamic chamber cards update
+    function updateChamberPreview() {
+      const iconEl = document.getElementById('chamber-icon');
+      const nameEl = document.getElementById('chamber-name');
+      const item = PRESET_TEST_ITEMS[state.activePresetTestKey];
+      iconEl.textContent = item.emoji;
+      nameEl.textContent = item.name;
+
+      // Reset report panel when test target switches
+      document.getElementById('diagnostic-report').style.display = 'none';
+    }
+
+    // Classification logic
+    function getDistance(itemA, itemB) {
+      // Weights
+      const wMat = 2.0;
+      const wClean = 2.0;
+      const wFood = 2.0;
+      const wDang = 4.0;
+      const wElec = 4.0;
+      const wReus = 1.0;
+
+      // Extract attributes values
+      const matA = MATERIAL_MAP[itemA.material] || 0;
+      const matB = MATERIAL_MAP[itemB.material] || 0;
+      
+      const cleanA = itemA.clean;
+      const cleanB = itemB.clean;
+
+      const foodA = itemA.food;
+      const foodB = itemB.food;
+
+      const dangA = itemA.dangerous;
+      const dangB = itemB.dangerous;
+
+      const elecA = itemA.electronic;
+      const elecB = itemB.electronic;
+
+      const reusA = itemA.reusable;
+      const reusB = itemB.reusable;
+
+      // Absolute difference calculation (Manhattan Space)
+      const dMat = matA === matB ? 0 : 1;
+      const dClean = Math.abs(cleanA - cleanB);
+      const dFood = Math.abs(foodA - foodB);
+      const dDang = Math.abs(dangA - dangB);
+      const dElec = Math.abs(elecA - elecB);
+      const dReus = Math.abs(reusA - reusB);
+
+      return (dMat * wMat) + (dClean * wClean) + (dFood * wFood) + (dDang * wDang) + (dElec * wElec) + (dReus * wReus);
+    }
+
+    // Main scan click trigger
+    function startDiagnostic() {
+      const beam = document.getElementById('scan-beam');
+      beam.style.display = 'block';
+
+      // 1.2s Artificial Scan delay to simulate AI computing scanning
+      setTimeout(() => {
+        beam.style.display = 'none';
+        executeClassification();
+      }, 1200);
+    }
+
+    function executeClassification() {
+      // Assemble current training dataset from zones
+      const trainingSet = [];
+      
+      state.paper.forEach(id => {
+        const item = getItemById(id);
+        if (item) trainingSet.push({ ...item, label: 'paper', labelName: '藍色桶｜廢紙' });
+      });
+
+      state.metal.forEach(id => {
+        const item = getItemById(id);
+        if (item) trainingSet.push({ ...item, label: 'metal', labelName: '黃色桶｜金屬' });
+      });
+
+      state.plastic.forEach(id => {
+        const item = getItemById(id);
+        if (item) trainingSet.push({ ...item, label: 'plastic', labelName: '啡色桶｜塑膠' });
+      });
+
+      const reportEl = document.getElementById('diagnostic-report');
+      reportEl.style.display = 'block';
+      resetReasonDetails();
+
+      // Safeguard: If training set is completely empty
+      if (trainingSet.length === 0) {
+        document.getElementById('report-result-badge').className = 'report-badge-result paper';
+        document.getElementById('report-result-badge').textContent = '未能判斷';
+        document.getElementById('report-confidence').textContent = '0%';
+        document.getElementById('report-confidence-bar').style.width = '0%';
+        document.getElementById('report-reasoning').innerHTML = `
+          <p><b>AI 還不能判斷。</b></p>
+          <p>原因：你還未給 AI 任何訓練資料。訓練資料就是你給 AI 學習的例子。</p>
+          <p>請先把物件卡拖到分類區，再讓 AI 判斷新物件。</p>
+        `;
+        document.getElementById('report-neighbors').innerHTML = '';
+        return;
+      }
+
+      // Gather attributes of the selected test object.
+      const testItem = PRESET_TEST_ITEMS[state.activePresetTestKey];
+
+      // Compare the new item with all learned examples.
+      const comparedExamples = trainingSet.map(trainItem => {
+        return {
+          item: trainItem,
+          closenessScore: getDistance(testItem, trainItem)
+        };
+      });
+
+      // Put the closest learned examples first.
+      comparedExamples.sort((a, b) => a.closenessScore - b.closenessScore);
+
+      // Use up to three learned examples for the final choice.
+      const examplesUsed = Math.min(3, comparedExamples.length);
+      const nearestNeighbors = comparedExamples.slice(0, examplesUsed);
+
+      // Voting counting
+      const votes = { paper: 0, metal: 0, plastic: 0 };
+      nearestNeighbors.forEach(neigh => {
+        votes[neigh.item.label]++;
+      });
+
+      // Find winner
+      let winnerLabel = 'paper';
+      let maxVotes = -1;
+      
+      const labelsKeys = ['paper', 'metal', 'plastic'];
+      labelsKeys.forEach(l => {
+        if (votes[l] > maxVotes) {
+          maxVotes = votes[l];
+          winnerLabel = l;
+        } else if (votes[l] === maxVotes && maxVotes > 0) {
+          // Tiebreaker: compare average closeness for tied classes.
+          const getAvgDist = (lbl) => {
+            const matches = nearestNeighbors.filter(n => n.item.label === lbl);
+            if (matches.length === 0) return Infinity;
+            return matches.reduce((sum, current) => sum + current.closenessScore, 0) / matches.length;
+          };
+          if (getAvgDist(l) < getAvgDist(winnerLabel)) {
+            winnerLabel = l;
+          }
+        }
+      });
+
+      // Calculate confidence percent
+      const confidence = Math.round((votes[winnerLabel] / examplesUsed) * 100);
+
+      // Output Results mapping HTML
+      const badgeEl = document.getElementById('report-result-badge');
+      if (winnerLabel === 'paper') {
+        badgeEl.className = 'report-badge-result paper';
+        badgeEl.textContent = '藍色桶｜廢紙';
+      } else if (winnerLabel === 'metal') {
+        badgeEl.className = 'report-badge-result metal';
+        badgeEl.textContent = '黃色桶｜金屬';
+      } else {
+        badgeEl.className = 'report-badge-result plastic';
+        badgeEl.textContent = '啡色桶｜塑膠';
+      }
+
+      document.getElementById('report-confidence').textContent = `${confidence}%（${getConfidenceText(confidence)}）`;
+      document.getElementById('report-confidence-bar').style.width = `${confidence}%`;
+
+      const isCorrect = winnerLabel === testItem.expectedLabel;
+
+      // Format student-friendly reasoning
+      const exampleText = nearestNeighbors
+        .map(n => `「${n.item.name}」`)
+        .join('、');
+      const reasonHtml = `
+        <p><b>AI 為甚麼這樣猜？</b></p>
+        <ul>
+          <li>它會找以前學過的例子作比較。</li>
+          <li>這個新物件最像 ${exampleText}。</li>
+          <li>所以 AI 猜它應該放入「${LABEL_NAMES[winnerLabel]}」。</li>
+        </ul>
+        <p><b>AI 看到的重點：</b></p>
+        ${describeFeatures(testItem)}
+        <p><b>要留意：</b></p>
+        <ul>
+          <li>AI 是根據學過的例子來猜。</li>
+          <li>信心高，不代表一定正確。</li>
+          <li>如果學習例子放錯，AI 也可能跟着學錯。</li>
+          ${isCorrect ? '' : '<li>這可能是因為訓練資料不足、資料不平均，或例子被放錯分類。</li>'}
+        </ul>
+      `;
+
+      document.getElementById('report-reasoning').innerHTML = reasonHtml;
+
+      // Render learned examples in student-friendly language.
+      let neighborsHtml = `<b>AI 參考了這些學習例子：</b><ol>`;
+      nearestNeighbors.forEach((n, idx) => {
+        neighborsHtml += `
+          <li>
+            <b>${n.item.emoji} ${n.item.name}</b><br>
+            <span>AI 學到：${n.item.labelName}</span><br>
+            <span>接近程度：${getSimilarityText(n.closenessScore)}</span>
+          </li>
+        `;
+      });
+      neighborsHtml += `</ol>`;
+      document.getElementById('report-neighbors').innerHTML = neighborsHtml;
+    }
+
+    function resetReasonDetails() {
+      const details = document.getElementById('ai-reason-details');
+      const btn = document.getElementById('toggle-reason-btn');
+      if (!details || !btn) return;
+      details.hidden = true;
+      btn.textContent = '查看 AI 為甚麼這樣猜 ▾';
+    }
+
+    function toggleReasonDetails() {
+      const details = document.getElementById('ai-reason-details');
+      const btn = document.getElementById('toggle-reason-btn');
+      const isOpen = !details.hidden;
+
+      details.hidden = isOpen;
+      btn.textContent = isOpen ? '查看 AI 為甚麼這樣猜 ▾' : '收起 AI 的原因 ▴';
+    }
+
+    function toggleTeacherGuide() {
+      const contentEl = document.getElementById('teacher-guide-content');
+      const labelEl = document.getElementById('teacher-toggle-label');
+      const buttonEl = document.querySelector('.teacher-title');
+      const isOpening = contentEl.hidden;
+
+      contentEl.hidden = !isOpening;
+      buttonEl.setAttribute('aria-expanded', String(isOpening));
+      labelEl.textContent = isOpening ? '收合' : '展開';
+    }
+
+    // Teacher Preset Scenarios click actions
+    function applyPresetScenario(type) {
+      if (type === 'balanced') {
+        // All training examples are placed in their correct categories.
+        state.pool = [];
+        state.paper = ['newspaper', 'magazine', 'cardboardBox', 'envelope'];
+        state.metal = ['aluminumCan', 'tinCan', 'biscuitTin', 'metalCap'];
+        state.plastic = ['drinkBottle', 'shampooBottle', 'detergentBottle', 'plasticFoodBox'];
+        state.selectedId = null;
+      } else if (type === 'bias') {
+        // Paper examples are missing; the other two categories are correct.
+        state.pool = ['newspaper', 'magazine', 'cardboardBox', 'envelope'];
+        state.paper = [];
+        state.metal = ['aluminumCan', 'tinCan', 'biscuitTin', 'metalCap'];
+        state.plastic = ['drinkBottle', 'shampooBottle', 'detergentBottle', 'plasticFoodBox'];
+        state.selectedId = null;
+      } else if (type === 'mislabeled') {
+        // Every training example is placed in the wrong category.
+        state.pool = [];
+        state.paper = ['aluminumCan', 'tinCan', 'drinkBottle', 'shampooBottle'];
+        state.metal = ['newspaper', 'magazine', 'detergentBottle', 'plasticFoodBox'];
+        state.plastic = ['cardboardBox', 'envelope', 'biscuitTin', 'metalCap'];
+        state.selectedId = null;
+      }
+      renderAll();
+      // Refresh the selected test object preview.
+      updateChamberPreview();
+    }
+  </script>
+  <script src="../../assets/tool-home-nav.js"></script>
+</body>
+</html>
